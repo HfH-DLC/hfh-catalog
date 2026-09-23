@@ -57,7 +57,7 @@ class Menu
             AdminPage::CAPABILITY,
             CatalogsPage::SLUG,
             [$this->catalogs, 'render'],
-            'dashicons-category'
+            'none'
         );
         add_action('load-' . $hook, [$this->catalogs, 'load']);
 

@@ -1,3 +1,7 @@
 #hfh-catalog-site {
   line-height: normal;
 }
+
+#adminmenu #toplevel_page_hfh-catalogs .dashicons-before::before {
+  content: var(--heroicon-outline-rectangle-stack, "\f318") !important;
+}
