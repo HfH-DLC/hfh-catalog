@@ -133,6 +133,13 @@ class Frontend
             return;
         }
 
+        wp_enqueue_style(
+            'hfh-catalog',
+            HFH__CATALOG_PLUGIN_URL . 'assets/catalog.css',
+            [],
+            HFH_CATALOG_PLUGIN_VERSION
+        );
+
         wp_enqueue_script(
             'hfh-catalog',
             HFH__CATALOG_PLUGIN_URL . 'assets/catalog.js',

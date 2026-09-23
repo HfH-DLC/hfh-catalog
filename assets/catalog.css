@@ -1,0 +1,38 @@
+.hfh-catalog__list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(14rem, 1fr));
+  gap: 2rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.hfh-catalog__book-link {
+  display: block;
+  text-decoration: none;
+}
+
+.hfh-catalog__cover {
+  display: block;
+  width: 100%;
+  max-width: 10rem;
+  height: auto;
+}
+
+.hfh-catalog__authors {
+  margin: 0.75rem 0 0;
+  font-size: 0.875rem;
+}
+
+.hfh-catalog__title {
+  margin: 0.125rem 0 0;
+  font-size: 1.125rem;
+}
+
+.hfh-catalog__excerpt {
+  font-size: 0.875rem;
+}
+
+.hfh-catalog__filter {
+  margin: 0 0 1rem;
+}

@@ -64,8 +64,8 @@ class Menu
         // Replaces the duplicated top-level entry in the submenu.
         add_submenu_page(
             CatalogsPage::SLUG,
-            __('All catalogs', Plugin::TEXT_DOMAIN),
-            __('All catalogs', Plugin::TEXT_DOMAIN),
+            __('All Catalogs', Plugin::TEXT_DOMAIN),
+            __('All Catalogs', Plugin::TEXT_DOMAIN),
             AdminPage::CAPABILITY,
             CatalogsPage::SLUG,
             [$this->catalogs, 'render']
@@ -126,17 +126,10 @@ class Menu
 
     public function enqueue_assets(): void
     {
-        $slugs = [
-            CatalogsPage::SLUG,
-            NewCatalogPage::SLUG,
-            CatalogPage::SLUG,
-            FilterPage::SLUG,
-            FilterOptionPage::SLUG,
-            SitePage::SLUG,
-        ];
-        if (!in_array($_GET['page'] ?? '', $slugs, true)) {
+        if (!is_network_admin()) {
             return;
         }
+
 
         wp_enqueue_style(
             'hfh-catalog-admin',
