@@ -1,0 +1,220 @@
+<?php
+
+namespace HfH\Catalog\Admin\Page;
+
+use HfH\Catalog\Admin\Table\FilterOptionsListTable;
+use HfH\Catalog\Plugin;
+use HfH\Catalog\Repository\Catalogs;
+use HfH\Catalog\Repository\FilterOptions;
+use HfH\Catalog\Repository\Filters;
+
+/**
+ * One filter: its name and its filter options.
+ */
+class FilterPage extends AdminPage
+{
+    const SLUG = 'hfh-catalog-filter';
+
+    const ACTION_UPDATE = 'hfh_filter_update';
+    const ACTION_ADD_OPTION = 'hfh_filter_option_add';
+    const ACTION_DELETE_OPTION = 'hfh_filter_option_delete';
+    const ACTION_MOVE_OPTION = 'hfh_filter_option_move';
+
+    const NOTICE_UPDATED = 'hfh_filter_updated';
+    const NOTICE_OPTION_ADDED = 'hfh_filter_option_added';
+    const NOTICE_OPTION_UPDATED = 'hfh_filter_option_updated';
+    const NOTICE_OPTION_DELETED = 'hfh_filter_option_deleted';
+    const NOTICE_OPTION_MOVED = 'hfh_filter_option_moved';
+
+    const NOTICES = [
+        self::NOTICE_UPDATED,
+        self::NOTICE_OPTION_ADDED,
+        self::NOTICE_OPTION_UPDATED,
+        self::NOTICE_OPTION_DELETED,
+        self::NOTICE_OPTION_MOVED,
+    ];
+
+    const ERROR_INVALID = 'invalid';
+    const ERROR_FILTER_EXISTS = 'filter_exists';
+    const ERROR_INVALID_OPTION = 'invalid_option';
+    const ERROR_OPTION_EXISTS = 'option_exists';
+
+    public function page_title(): string
+    {
+        return __('Edit Filter', Plugin::TEXT_DOMAIN);
+    }
+
+    public function menu_title(): string
+    {
+        return __('Edit Filter', Plugin::TEXT_DOMAIN);
+    }
+
+    protected function handlers(): array
+    {
+        return [
+            self::ACTION_UPDATE        => 'update_filter',
+            self::ACTION_ADD_OPTION    => 'add_filter_option',
+            self::ACTION_DELETE_OPTION => 'delete_filter_option',
+            self::ACTION_MOVE_OPTION   => 'move_filter_option',
+        ];
+    }
+
+    public function render(): void
+    {
+        $filter = $this->current_filter();
+        $catalog = Catalogs::findById((int) $filter->catalog_id);
+        if (!$catalog) {
+            $this->not_found(__('Catalog not found.', Plugin::TEXT_DOMAIN));
+        }
+
+        $filter_url = self::url(['id' => $filter->id]);
+
+        $options_table = new FilterOptionsListTable(FilterOptions::findForFilter((int) $filter->id));
+        $options_table->prepare_items();
+
+        $errors = [
+            self::ERROR_INVALID        => __('Please enter a valid filter name.', Plugin::TEXT_DOMAIN),
+            self::ERROR_FILTER_EXISTS  => __('A filter with this name already exists.', Plugin::TEXT_DOMAIN),
+            self::ERROR_INVALID_OPTION => __('Please enter a valid option.', Plugin::TEXT_DOMAIN),
+            self::ERROR_OPTION_EXISTS  => __('This option already exists for this filter.', Plugin::TEXT_DOMAIN),
+            self::ERROR_DB             => __('Your changes could not be saved.', Plugin::TEXT_DOMAIN),
+        ];
+        $successes = [
+            self::NOTICE_UPDATED        => __('Filter updated.', Plugin::TEXT_DOMAIN),
+            self::NOTICE_OPTION_ADDED   => __('Option added.', Plugin::TEXT_DOMAIN),
+            self::NOTICE_OPTION_UPDATED => __('Option updated.', Plugin::TEXT_DOMAIN),
+            self::NOTICE_OPTION_DELETED => __('Option deleted.', Plugin::TEXT_DOMAIN),
+            self::NOTICE_OPTION_MOVED   => __('Option moved.', Plugin::TEXT_DOMAIN),
+        ];
+?>
+        <div class="wrap">
+            <h1><?php echo esc_html($filter->name); ?></h1>
+            <p>
+                <a href="<?php echo esc_url(CatalogPage::url(['id' => $catalog->id])); ?>">
+                    <?php
+                    /* translators: %s: catalog name */
+                    echo esc_html(sprintf(__('← Back to %s', Plugin::TEXT_DOMAIN), $catalog->name));
+                    ?>
+                </a>
+            </p>
+
+            <?php $this->render_notices($errors, $successes); ?>
+
+            <h2><?php esc_html_e('Settings', Plugin::TEXT_DOMAIN); ?></h2>
+            <form method="post" action="<?php echo esc_url($filter_url); ?>">
+                <?php wp_nonce_field(self::ACTION_UPDATE); ?>
+                <input type="hidden" name="hfh_action" value="<?php echo esc_attr(self::ACTION_UPDATE); ?>">
+                <table class="form-table" role="presentation">
+                    <tr class="form-field form-required">
+                        <th scope="row"><label for="hfh-filter-name"><?php esc_html_e('Name', Plugin::TEXT_DOMAIN); ?></label></th>
+                        <td><input type="text" id="hfh-filter-name" name="filter_name" required value="<?php echo esc_attr($this->values['filter_name'] ?? $filter->name); ?>"></td>
+                    </tr>
+                </table>
+                <?php submit_button(__('Update', Plugin::TEXT_DOMAIN)); ?>
+            </form>
+
+            <h2><?php esc_html_e('Options', Plugin::TEXT_DOMAIN); ?></h2>
+            <div class="tablenav top">
+                <form method="post" action="<?php echo esc_url($filter_url); ?>" class="alignleft actions">
+                    <?php wp_nonce_field(self::ACTION_ADD_OPTION); ?>
+                    <input type="hidden" name="hfh_action" value="<?php echo esc_attr(self::ACTION_ADD_OPTION); ?>">
+                    <label for="hfh-option-name" class="screen-reader-text"><?php esc_html_e('New option name', Plugin::TEXT_DOMAIN); ?></label>
+                    <input type="text" id="hfh-option-name" name="filter_option_name" required
+                        placeholder="<?php esc_attr_e('New option name', Plugin::TEXT_DOMAIN); ?>"
+                        value="<?php echo esc_attr($this->values['filter_option_name'] ?? ''); ?>">
+                    <?php submit_button(__('Add option', Plugin::TEXT_DOMAIN), '', 'submit', false); ?>
+                </form>
+                <br class="clear">
+            </div>
+
+            <?php
+            if ($options_table->has_items()) {
+                $options_table->display();
+            } else {
+                echo '<p>' . esc_html__('No options yet.', Plugin::TEXT_DOMAIN) . '</p>';
+            }
+            ?>
+        </div>
+<?php
+    }
+
+    /* -----------------------------------------------------------------
+     * Handlers
+     * ----------------------------------------------------------------- */
+
+    protected function update_filter(): void
+    {
+        $filter = $this->current_filter();
+
+        $this->values['filter_name'] = sanitize_text_field(wp_unslash($_POST['filter_name'] ?? ''));
+        $name = $this->values['filter_name'];
+        $slug = $name === $filter->name ? $filter->slug : sanitize_title($name);
+
+        if ($name === '' || $slug === '') {
+            $this->error = self::ERROR_INVALID;
+        } elseif (Filters::slugExists((int) $filter->catalog_id, $slug, (int) $filter->id)) {
+            $this->error = self::ERROR_FILTER_EXISTS;
+        } elseif (!Filters::update((int) $filter->id, $name, $slug)) {
+            $this->error = self::ERROR_DB;
+        }
+
+        if ($this->error === '') {
+            $this->redirect(self::url(['id' => $filter->id]), self::NOTICE_UPDATED);
+        }
+    }
+
+    protected function add_filter_option(): void
+    {
+        $filter = $this->current_filter();
+
+        $this->values['filter_option_name'] = sanitize_text_field(wp_unslash($_POST['filter_option_name'] ?? ''));
+        $name = $this->values['filter_option_name'];
+        $slug = sanitize_title($name);
+
+        if ($name === '' || $slug === '') {
+            $this->error = self::ERROR_INVALID_OPTION;
+        } elseif (FilterOptions::slugExists((int) $filter->id, $slug)) {
+            $this->error = self::ERROR_OPTION_EXISTS;
+        } elseif (!FilterOptions::create((int) $filter->id, $name, $slug)) {
+            $this->error = self::ERROR_DB;
+        }
+
+        if ($this->error === '') {
+            $this->redirect(self::url(['id' => $filter->id]), self::NOTICE_OPTION_ADDED);
+        }
+    }
+
+    protected function delete_filter_option(): void
+    {
+        $filter = $this->current_filter();
+
+        if (!FilterOptions::delete((int) $filter->id, absint($_GET['filter_option_id'] ?? 0))) {
+            $this->error = self::ERROR_DB;
+            return;
+        }
+
+        $this->redirect(self::url(['id' => $filter->id]), self::NOTICE_OPTION_DELETED);
+    }
+
+    protected function move_filter_option(): void
+    {
+        $filter = $this->current_filter();
+        $offset = ($_GET['direction'] ?? '') === 'up' ? -1 : 1;
+
+        if (!FilterOptions::move((int) $filter->id, absint($_GET['filter_option_id'] ?? 0), $offset)) {
+            $this->error = self::ERROR_DB;
+            return;
+        }
+
+        $this->redirect(self::url(['id' => $filter->id]), self::NOTICE_OPTION_MOVED);
+    }
+
+    protected function current_filter(): object
+    {
+        $filter = Filters::findById(absint($_GET['id'] ?? 0));
+        if (!$filter) {
+            $this->not_found(__('Filter not found.', Plugin::TEXT_DOMAIN));
+        }
+        return $filter;
+    }
+}
