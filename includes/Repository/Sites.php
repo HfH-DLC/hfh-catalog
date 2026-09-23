@@ -19,6 +19,7 @@ class Sites
     const META_SHORT_DESCRIPTION = 'pb_about_50';
     const META_LONG_DESCRIPTION = 'pb_about_unlimited';
     const META_URL = 'pb_book_url';
+    const META_BOOK_INFORMATION = 'pb_book_information_array';
 
     public static function findIdsForCatalog(int $catalog_id): array
     {
@@ -98,10 +99,40 @@ class Sites
             'deleted' => $site->deleted === '1',
             'url' => $meta(self::META_URL) ?: get_home_url($blog_id),
             'title' => $meta(self::META_TITLE) ?: $site->blogname,
-            'authors' => $meta(self::META_AUTHORS),
+            'authors' => self::authorNames($blog_id),
             'cover' => $meta(self::META_COVER),
             'excerpt' => wp_trim_words(wp_strip_all_tags($excerpt), 50),
         ];
+    }
+
+    /**
+     * Contributor terms are named when they are created, so a term can still be
+     * called "hmuster" while the book shows "Hans Muster". The real name lives in
+     * the contributor's fields, which pb_book_information_array carries along.
+     */
+    private static function authorNames(int $blog_id): string
+    {
+        $info = get_site_meta($blog_id, self::META_BOOK_INFORMATION, true);
+        $authors = is_array($info) ? ($info['pb_authors'] ?? []) : [];
+
+        $names = [];
+        foreach ((array) $authors as $author) {
+            if (is_string($author)) {
+                $names[] = $author;
+                continue;
+            }
+            if (!is_array($author)) {
+                continue;
+            }
+            $full = trim(($author['contributor_first_name'] ?? '') . ' ' . ($author['contributor_last_name'] ?? ''));
+            $names[] = $full !== '' ? $full : ($author['name'] ?? '');
+        }
+        $names = array_filter(array_map('trim', $names));
+
+        // Older syncs only wrote the term names.
+        return $names
+            ? implode(', ', $names)
+            : implode(', ', array_filter((array) get_site_meta($blog_id, self::META_AUTHORS, false)));
     }
 
     /**
