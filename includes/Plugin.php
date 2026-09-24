@@ -2,6 +2,7 @@
 
 namespace HfH\Catalog;
 
+use HfH\Catalog\Admin\SiteCatalogs;
 use HfH\Catalog\Admin\Menu;
 use HfH\Catalog\Repository\SiteFilterOptions;
 use HfH\Catalog\Repository\Sites;
@@ -38,6 +39,7 @@ class Plugin
         Frontend::get_instance();
         RestApi::get_instance();
         Menu::get_instance();
+        SiteCatalogs::get_instance();
     }
 
     public function load_textdomain(): void

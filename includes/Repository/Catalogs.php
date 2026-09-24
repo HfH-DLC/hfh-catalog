@@ -72,6 +72,24 @@ class Catalogs
         return $wpdb->get_row($wpdb->prepare("SELECT * FROM {$table} WHERE slug = %s", $slug)) ?: null;
     }
 
+    /**
+     * The catalogs a site belongs to, by name.
+     */
+    public static function findForSite(int $blog_id): array
+    {
+        global $wpdb;
+        $catalogs = DB::catalogsTable();
+        $catalog_sites = DB::catalogSitesTable();
+
+        return $wpdb->get_results($wpdb->prepare(
+            "SELECT c.* FROM {$catalogs} c
+            JOIN {$catalog_sites} cs ON cs.catalog_id = c.id
+            WHERE cs.blog_id = %d
+            ORDER BY c.name",
+            $blog_id
+        ));
+    }
+
     public static function slugExists(string $slug, int $exclude_id = 0): bool
     {
         global $wpdb;
