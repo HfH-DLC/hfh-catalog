@@ -39,6 +39,7 @@ class DB
             id bigint(20) unsigned NOT NULL AUTO_INCREMENT,
             name varchar(255) NOT NULL,
             slug varchar(191) NOT NULL,
+            description longtext NULL,
             PRIMARY KEY  (id),
             UNIQUE KEY slug (slug)
         ) {$charset};");
