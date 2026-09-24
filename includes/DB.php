@@ -40,6 +40,8 @@ class DB
             name varchar(255) NOT NULL,
             slug varchar(191) NOT NULL,
             description longtext NULL,
+            listed tinyint(1) NOT NULL DEFAULT 0,
+            sort_order int(11) NOT NULL DEFAULT 0,
             PRIMARY KEY  (id),
             UNIQUE KEY slug (slug)
         ) {$charset};");
