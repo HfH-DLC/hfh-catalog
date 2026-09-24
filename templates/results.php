@@ -12,19 +12,20 @@ use HfH\Catalog\Plugin;
 <?php if ($sites) : ?>
     <ul class="hfh-catalog__list">
         <?php foreach ($sites as $book) : ?>
-            <li class="hfh-catalog__book">
-                <a class="hfh-catalog__book-link" href="<?php echo esc_url($book->url); ?>">
+            <li>
+                <a class="hfh-catalog__card" href="<?php echo esc_url($book->url); ?>">
                     <?php if ($book->cover) : ?>
-                        <img class="hfh-catalog__cover" src="<?php echo esc_url($book->cover); ?>" alt="" loading="lazy">
+                        <div class="hfh-catalog__image">
+                            <img src="<?php echo esc_url($book->cover); ?>" alt="" loading="lazy">
+                        </div>
                     <?php endif; ?>
-                    <?php if ($book->authors) : ?>
-                        <p class="hfh-catalog__authors"><?php echo esc_html($book->authors); ?></p>
-                    <?php endif; ?>
-                    <h2 class="hfh-catalog__title"><?php echo esc_html($book->title); ?></h2>
+                    <div class="hfh-catalog__card-text">
+                        <?php if ($book->authors) : ?>
+                            <div class="hfh-catalog__pretitle"><?php echo esc_html($book->authors); ?></div>
+                        <?php endif; ?>
+                        <div class="hfh-catalog__title"><?php echo esc_html($book->title); ?></div>
+                    </div>
                 </a>
-                <?php if ($book->excerpt) : ?>
-                    <p class="hfh-catalog__excerpt"><?php echo esc_html($book->excerpt); ?></p>
-                <?php endif; ?>
             </li>
         <?php endforeach; ?>
     </ul>
