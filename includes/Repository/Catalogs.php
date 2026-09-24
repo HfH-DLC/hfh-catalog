@@ -123,14 +123,14 @@ class Catalogs
         );
     }
 
-    public static function update(int $catalog_id, string $name, string $slug): bool
+    public static function update(int $catalog_id, string $name, string $slug, string $description): bool
     {
         global $wpdb;
         return $wpdb->update(
             DB::catalogsTable(),
-            ['name' => $name, 'slug' => $slug],
+            ['name' => $name, 'slug' => $slug, 'description' => $description],
             ['id' => $catalog_id],
-            ['%s', '%s'],
+            ['%s', '%s', '%s'],
             ['%d']
         ) !== false;
     }

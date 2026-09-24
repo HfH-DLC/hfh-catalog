@@ -136,6 +136,23 @@ class CatalogPage extends AdminPage
                             </p>
                         </td>
                     </tr>
+                    <tr class="form-field">
+                        <th scope="row"><label for="hfh_catalog_description"><?php esc_html_e('Description', Plugin::TEXT_DOMAIN); ?></label></th>
+                        <td>
+                            <?php
+                            wp_editor(
+                                $this->values['catalog_description'] ?? $catalog->description ?? '',
+                                'hfh_catalog_description',
+                                [
+                                    'textarea_rows' => 8,
+                                    'media_buttons' => false,
+                                    'teeny' => true,
+                                ]
+                            );
+                            ?>
+                            <p class="description"><?php esc_html_e('Shown under the title on the catalog page.', Plugin::TEXT_DOMAIN); ?></p>
+                        </td>
+                    </tr>
                 </table>
                 <?php submit_button(__('Update', Plugin::TEXT_DOMAIN)); ?>
             </form>
@@ -201,6 +218,8 @@ class CatalogPage extends AdminPage
 
         $this->values['catalog_name'] = sanitize_text_field(wp_unslash($_POST['catalog_name'] ?? ''));
         $this->values['catalog_slug'] = sanitize_title(wp_unslash($_POST['catalog_slug'] ?? ''));
+        $this->values['catalog_description'] = wp_kses_post(wp_unslash($_POST['hfh_catalog_description'] ?? ''));
+
         $name = $this->values['catalog_name'];
         $slug = $this->values['catalog_slug'];
         $slug_generated = $slug === '';
@@ -218,7 +237,7 @@ class CatalogPage extends AdminPage
             }
         }
 
-        if ($this->error === '' && !Catalogs::update((int) $catalog->id, $name, $slug)) {
+        if ($this->error === '' && !Catalogs::update((int) $catalog->id, $name, $slug, $this->values['catalog_description'])) {
             $this->error = self::ERROR_DB;
         }
 

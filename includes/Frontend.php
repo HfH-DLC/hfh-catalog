@@ -13,10 +13,12 @@ class Frontend
 {
     const URL_BASE = 'kataloge';
     const QUERY_VAR_SLUG = 'hfh_catalog_slug';
-    const FILTER_PREFIX = 'hfh_';
+    const QUERY_VAR_INDEX = 'hfh_catalog_index';
+    const FILTER_PREFIX = 'hfhcat_';
 
     private static ?self $instance = null;
     private ?object $catalog = null;
+    private bool $is_index = false;
 
     public static function get_instance(): self
     {
@@ -51,6 +53,14 @@ class Frontend
         return get_home_url(get_main_site_id(), user_trailingslashit(self::URL_BASE . '/' . $slug));
     }
 
+    /**
+     * The public URL of the catalog index.
+     */
+    public static function index_url(): string
+    {
+        return get_home_url(get_main_site_id(), user_trailingslashit(self::URL_BASE));
+    }
+
     public function get_catalog(): ?object
     {
         return $this->catalog;
@@ -66,16 +76,27 @@ class Frontend
             'index.php?' . self::QUERY_VAR_SLUG . '=$matches[1]',
             'top'
         );
+        add_rewrite_rule(
+            '^' . self::URL_BASE . '/?$',
+            'index.php?' . self::QUERY_VAR_INDEX . '=1',
+            'top'
+        );
     }
 
     public function add_query_vars(array $public_query_vars): array
     {
-        return [...$public_query_vars, self::QUERY_VAR_SLUG];
+        return [...$public_query_vars, self::QUERY_VAR_SLUG, self::QUERY_VAR_INDEX];
     }
 
     public function parse_query(\WP_Query $query): void
     {
         if (!$query->is_main_query()) {
+            return;
+        }
+
+        if ($query->get(self::QUERY_VAR_INDEX)) {
+            $query->is_home = false;
+            $this->is_index = true;
             return;
         }
 
@@ -96,11 +117,14 @@ class Frontend
 
     public function pre_handle_404(bool $preempt, \WP_Query $query): bool
     {
-        return $this->catalog ? true : $preempt;
+        return ($this->catalog || $this->is_index) ? true : $preempt;
     }
 
     public function template_include(string $template): string
     {
+        if ($this->is_index) {
+            return HFH__CATALOG_PLUGIN_DIR . 'templates/catalogs.php';
+        }
         return $this->catalog ? HFH__CATALOG_PLUGIN_DIR . 'templates/catalog.php' : $template;
     }
 
@@ -108,6 +132,8 @@ class Frontend
     {
         if ($this->catalog) {
             $parts['title'] = $this->catalog->name;
+        } elseif ($this->is_index) {
+            $parts['title'] = __('Catalogs', Plugin::TEXT_DOMAIN);
         }
         return $parts;
     }
@@ -117,19 +143,19 @@ class Frontend
      */
     public function render_canonical(): void
     {
-        if (!$this->catalog) {
+        if (!$this->catalog && !$this->is_index) {
             return;
         }
 
         printf(
             '<link rel="canonical" href="%s">' . "\n",
-            esc_url(self::catalog_url($this->catalog->slug))
+            esc_url($this->catalog ? self::catalog_url($this->catalog->slug) : self::index_url())
         );
     }
 
     public function enqueue_assets(): void
     {
-        if (!$this->catalog) {
+        if (!$this->catalog && !$this->is_index) {
             return;
         }
 
@@ -139,6 +165,10 @@ class Frontend
             [],
             HFH_CATALOG_PLUGIN_VERSION
         );
+
+        if (!$this->catalog) {
+            return;
+        }
 
         wp_enqueue_script(
             'hfh-catalog',

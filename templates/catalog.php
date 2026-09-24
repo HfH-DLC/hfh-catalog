@@ -14,7 +14,11 @@ get_header();
 ?>
 <main id="main" class="hfh-catalog">
     <h1><?php echo esc_html($catalog->name); ?></h1>
-
+    <?php if (!empty($catalog->description)) : ?>
+        <div class="hfh-catalog__description">
+            <?php echo wp_kses_post(wpautop($catalog->description)); ?>
+        </div>
+    <?php endif; ?>
     <?php if ($filters) : ?>
         <form class="hfh-catalog__filters" method="get" action="<?php echo esc_url(Frontend::catalog_url($catalog->slug)); ?>">
             <?php foreach ($filters as $filter) : ?>
