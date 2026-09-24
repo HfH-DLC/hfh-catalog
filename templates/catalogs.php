@@ -1,0 +1,28 @@
+<?php
+
+use HfH\Catalog\Frontend;
+use HfH\Catalog\Plugin;
+use HfH\Catalog\Repository\Catalogs;
+
+$catalogs = Catalogs::findListed();
+
+get_header();
+?>
+<main id="main" class="hfh-catalog">
+    <h1><?php esc_html_e('Catalogs', Plugin::TEXT_DOMAIN); ?></h1>
+    <?php if ($catalogs) : ?>
+        <ul class="hfh-catalog__index">
+            <?php foreach ($catalogs as $catalog) : ?>
+                <li>
+                    <a href="<?php echo esc_url(Frontend::catalog_url($catalog->slug)); ?>">
+                        <?php echo esc_html($catalog->name); ?>
+                    </a>
+                </li>
+            <?php endforeach; ?>
+        </ul>
+    <?php else : ?>
+        <p><?php esc_html_e('No catalogs yet.', Plugin::TEXT_DOMAIN); ?></p>
+    <?php endif; ?>
+</main>
+<?php
+get_footer();

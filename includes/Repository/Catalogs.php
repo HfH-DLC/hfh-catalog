@@ -6,11 +6,56 @@ use HfH\Catalog\DB;
 
 class Catalogs
 {
+    /**
+     * Every catalog: the ones on the index first, in their order, then the rest by name.
+     */
     public static function findAll(): array
     {
         global $wpdb;
         $table = DB::catalogsTable();
-        return $wpdb->get_results("SELECT * FROM {$table} ORDER BY name");
+        return $wpdb->get_results("SELECT * FROM {$table} ORDER BY listed DESC, sort_order, name");
+    }
+
+    /**
+     * The catalogs chosen for the public index, in the same order.
+     */
+    public static function findListed(): array
+    {
+        global $wpdb;
+        $table = DB::catalogsTable();
+        return $wpdb->get_results("SELECT * FROM {$table} WHERE listed = 1 ORDER BY sort_order, name");
+    }
+
+    public static function setListed(int $catalog_id, bool $listed): bool
+    {
+        global $wpdb;
+        $table = DB::catalogsTable();
+
+        // Listing puts it last on the index; unlisting drops its position.
+        $sort_order = $listed
+            ? 1 + (int) $wpdb->get_var("SELECT MAX(sort_order) FROM {$table} WHERE listed = 1")
+            : 0;
+
+        return $wpdb->update(
+            $table,
+            ['listed' => $listed ? 1 : 0, 'sort_order' => $sort_order],
+            ['id' => $catalog_id],
+            ['%d', '%d'],
+            ['%d']
+        ) !== false;
+    }
+
+    /**
+     * Only listed catalogs have an order, so only they are reordered.
+     */
+    public static function move(int $catalog_id, int $offset): bool
+    {
+        return DB::reorder(
+            DB::catalogsTable(),
+            wp_list_pluck(self::findListed(), 'id'),
+            $catalog_id,
+            $offset
+        );
     }
 
     public static function findById(int $id): ?object
