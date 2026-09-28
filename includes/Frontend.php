@@ -7,11 +7,12 @@ use HfH\Catalog\Repository\SiteFilterOptions;
 use HfH\Catalog\Repository\Sites;
 
 /**
- * Turns a /catalogs/{slug}/ request into a rendered catalog page.
+ * Turns a /{base}/{slug}/ request into a rendered catalog page.
  */
 class Frontend
 {
-    const URL_BASE = 'catalogs';
+    const DEFAULT_URL_BASE = 'catalogs';
+    const OPTION_URL_BASE = 'hfh_catalog_url_base';
     const QUERY_VAR_SLUG = 'hfh_catalog_slug';
     const QUERY_VAR_INDEX = 'hfh_catalog_index';
     const FILTER_PREFIX = 'hfhcat_';
@@ -45,20 +46,46 @@ class Frontend
         add_filter('document_title_parts', [$this, 'document_title_parts']);
     }
 
+    public function url_base(): string
+    {
+        return (string) get_site_option(self::OPTION_URL_BASE, self::DEFAULT_URL_BASE) ?: self::DEFAULT_URL_BASE;
+    }
+
+    public function update_url_base(string $base): bool
+    {
+        if ($base === $this->url_base()) {
+            return true;
+        }
+
+        if (!update_site_option(self::OPTION_URL_BASE, $base)) {
+            return false;
+        }
+
+        $this->reset_rewrite_rules();
+        return true;
+    }
+
+    public function reset_rewrite_rules(): void
+    {
+        switch_to_blog(get_main_site_id());
+        delete_option('rewrite_rules');
+        restore_current_blog();
+    }
+
     /**
      * The public URL of a catalog. Also used by the admin.
      */
-    public static function catalog_url(string $slug): string
+    public function catalog_url(string $slug): string
     {
-        return get_home_url(get_main_site_id(), user_trailingslashit(self::URL_BASE . '/' . $slug));
+        return get_home_url(get_main_site_id(), user_trailingslashit($this->url_base() . '/' . $slug));
     }
 
     /**
      * The public URL of the catalog index.
      */
-    public static function index_url(): string
+    public function index_url(): string
     {
-        return get_home_url(get_main_site_id(), user_trailingslashit(self::URL_BASE));
+        return get_home_url(get_main_site_id(), user_trailingslashit($this->url_base()));
     }
 
     public function get_catalog(): ?object
@@ -71,13 +98,16 @@ class Frontend
         if (!is_main_site()) {
             return;
         }
+
+        $base = preg_quote($this->url_base(), '#');
+
         add_rewrite_rule(
-            '^' . self::URL_BASE . '/([^/]+)/?$',
+            '^' . $base . '/([^/]+)/?$',
             'index.php?' . self::QUERY_VAR_SLUG . '=$matches[1]',
             'top'
         );
         add_rewrite_rule(
-            '^' . self::URL_BASE . '/?$',
+            '^' . $base . '/?$',
             'index.php?' . self::QUERY_VAR_INDEX . '=1',
             'top'
         );
@@ -146,11 +176,9 @@ class Frontend
         if (!$this->catalog && !$this->is_index) {
             return;
         }
-
-        printf(
-            '<link rel="canonical" href="%s">' . "\n",
-            esc_url($this->catalog ? self::catalog_url($this->catalog->slug) : self::index_url())
-        );
+?>
+        <link rel="canonical" href="<?= esc_url($this->catalog ? $this->catalog_url($this->catalog->slug) : $this->index_url()) ?>">
+<?php
     }
 
     public function enqueue_assets(): void
@@ -181,8 +209,8 @@ class Frontend
         wp_add_inline_script(
             'hfh-catalog',
             'window.hfhCatalog = ' . wp_json_encode([
-                'endpoint' => RestApi::results_url($this->catalog->slug),
-                'pageUrl'  => self::catalog_url($this->catalog->slug),
+                'endpoint' => RestApi::get_instance()->results_url($this->catalog->slug),
+                'pageUrl'  => $this->catalog_url($this->catalog->slug),
             ]) . ';',
             'before'
         );

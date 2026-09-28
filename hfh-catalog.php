@@ -38,6 +38,4 @@ spl_autoload_register(function (string $class): void {
     }
 });
 
-register_activation_hook(__FILE__, [DB::class, 'install']);
-
 Plugin::get_instance();

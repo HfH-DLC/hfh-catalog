@@ -31,6 +31,9 @@ class Plugin
 
     private function init(): void
     {
+        register_activation_hook(HFH_CATALOG_PLUGIN_FILE, [$this, 'activate']);
+        register_deactivation_hook(HFH_CATALOG_PLUGIN_FILE, [$this, 'deactivate']);
+
         add_action('init', [$this, 'load_textdomain']);
         add_action('admin_init', [DB::class, 'maybe_install']);
         add_action('init', [SitemapProvider::class, 'register']);
@@ -40,6 +43,17 @@ class Plugin
         RestApi::get_instance();
         Menu::get_instance();
         SiteCatalogs::get_instance();
+    }
+
+    public function activate(): void
+    {
+        DB::install();
+        Frontend::get_instance()->reset_rewrite_rules();
+    }
+
+    public function deactivate(): void
+    {
+        Frontend::get_instance()->reset_rewrite_rules();
     }
 
     public function load_textdomain(): void

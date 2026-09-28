@@ -77,7 +77,7 @@ class CatalogPage extends AdminPage
     {
         $catalog = $this->current_catalog();
         $catalog_url = self::url(['id' => $catalog->id]);
-        $public_url = Frontend::catalog_url($catalog->slug);
+        $public_url = Frontend::get_instance()->catalog_url($catalog->slug);
 
         $filters = Filters::findForCatalog((int) $catalog->id);
         $options_by_filter = FilterOptions::findForCatalog((int) $catalog->id);

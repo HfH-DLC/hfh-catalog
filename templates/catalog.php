@@ -23,7 +23,7 @@ get_header();
                     <?php do_action('hfh_catalog_before_filters', $catalog); ?>
 
                     <?php if ($filters) : ?>
-                        <form class="hfh-catalog__filters" method="get" action="<?php echo esc_url(Frontend::catalog_url($catalog->slug)); ?>">
+                        <form class="hfh-catalog__filters" method="get" action="<?php echo esc_url(Frontend::get_instance()->catalog_url($catalog->slug)); ?>">
                             <div class="hfh-catalog__filters-title"><?php esc_html_e('Filter by', Plugin::TEXT_DOMAIN); ?></div>
 
                             <?php foreach ($filters as $filter) : ?>
@@ -54,7 +54,7 @@ get_header();
                             <p class="hfh-catalog__filters-actions">
                                 <button type="submit"><?php esc_html_e('Apply filters', Plugin::TEXT_DOMAIN); ?></button>
                                 <?php if ($selection) : ?>
-                                    <a href="<?php echo esc_url(Frontend::catalog_url($catalog->slug)); ?>"><?php esc_html_e('Reset', Plugin::TEXT_DOMAIN); ?></a>
+                                    <a href="<?php echo esc_url(Frontend::get_instance()->catalog_url($catalog->slug)); ?>"><?php esc_html_e('Reset', Plugin::TEXT_DOMAIN); ?></a>
                                 <?php endif; ?>
                             </p>
                         </form>

@@ -8,6 +8,7 @@ use HfH\Catalog\Admin\Page\CatalogsPage;
 use HfH\Catalog\Admin\Page\FilterOptionPage;
 use HfH\Catalog\Admin\Page\FilterPage;
 use HfH\Catalog\Admin\Page\NewCatalogPage;
+use HfH\Catalog\Admin\Page\SettingsPage;
 use HfH\Catalog\Admin\Page\SitePage;
 use HfH\Catalog\Plugin;
 use HfH\Catalog\RestApi;
@@ -25,6 +26,7 @@ class Menu
     private FilterPage $filter;
     private FilterOptionPage $filter_option;
     private SitePage $site;
+    private SettingsPage $settings;
 
     public static function get_instance(): self
     {
@@ -42,6 +44,7 @@ class Menu
         $this->filter = new FilterPage();
         $this->filter_option = new FilterOptionPage();
         $this->site = new SitePage();
+        $this->settings = new SettingsPage();
 
         add_action('network_admin_menu', [$this, 'register']);
         add_action('admin_enqueue_scripts', [$this, 'enqueue_assets']);
@@ -62,7 +65,6 @@ class Menu
         );
         add_action('load-' . $hook, [$this->catalogs, 'load']);
 
-        // Replaces the duplicated top-level entry in the submenu.
         add_submenu_page(
             CatalogsPage::SLUG,
             __('All Catalogs', Plugin::TEXT_DOMAIN),
@@ -77,6 +79,7 @@ class Menu
         $this->add_page($this->filter, FilterPage::SLUG);
         $this->add_page($this->filter_option, FilterOptionPage::SLUG);
         $this->add_page($this->site, SitePage::SLUG);
+        $this->add_page($this->settings, SettingsPage::SLUG);
     }
 
     private function add_page(AdminPage $page, string $slug): void
@@ -122,6 +125,7 @@ class Menu
             ...CatalogsPage::NOTICES,
             ...CatalogPage::NOTICES,
             ...FilterPage::NOTICES,
+            ...SettingsPage::NOTICES,
         ];
     }
 

@@ -35,7 +35,7 @@ class RestApi
     /**
      * The endpoint URL for one catalog
      */
-    public static function results_url(string $slug): string
+    public function results_url(string $slug): string
     {
         return get_rest_url(get_main_site_id(), self::NAMESPACE . '/catalogs/' . $slug . '/results');
     }

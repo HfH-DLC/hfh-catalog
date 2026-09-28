@@ -41,7 +41,7 @@ class SiteCatalogsListTable extends \WP_List_Table
 
     protected function column_name($catalog): string
     {
-        $url = Frontend::catalog_url($catalog->slug);
+        $url = Frontend::get_instance()->catalog_url($catalog->slug);
 
         $actions = [
             'view' => sprintf(
