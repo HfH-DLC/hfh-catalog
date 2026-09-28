@@ -17,9 +17,9 @@ if (!defined('ABSPATH')) {
 }
 
 define('HFH_CATALOG_PLUGIN_VERSION', '1.0.0');
-define('HFH__CATALOG_PLUGIN_FILE', __FILE__);
-define('HFH__CATALOG_PLUGIN_URL', plugin_dir_url(__FILE__));
-define('HFH__CATALOG_PLUGIN_DIR', plugin_dir_path(__FILE__));
+define('HFH_CATALOG_PLUGIN_FILE', __FILE__);
+define('HFH_CATALOG_PLUGIN_URL', plugin_dir_url(__FILE__));
+define('HFH_CATALOG_PLUGIN_DIR', plugin_dir_path(__FILE__));
 
 /**
  * Maps HfH\Catalog\Foo\Bar to includes/Foo/Bar.php.
@@ -30,7 +30,7 @@ spl_autoload_register(function (string $class): void {
         return;
     }
 
-    $path = HFH__CATALOG_PLUGIN_DIR . 'includes/'
+    $path = HFH_CATALOG_PLUGIN_DIR . 'includes/'
         . str_replace('\\', '/', substr($class, strlen($prefix))) . '.php';
 
     if (file_exists($path)) {

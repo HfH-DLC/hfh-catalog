@@ -10,6 +10,7 @@ use HfH\Catalog\Admin\Page\FilterPage;
 use HfH\Catalog\Admin\Page\NewCatalogPage;
 use HfH\Catalog\Admin\Page\SitePage;
 use HfH\Catalog\Plugin;
+use HfH\Catalog\RestApi;
 
 /**
  * Registers the Network Admin pages and everything that spans all of them.
@@ -130,12 +131,33 @@ class Menu
             return;
         }
 
-
         wp_enqueue_style(
             'hfh-catalog-admin',
-            HFH__CATALOG_PLUGIN_URL . 'assets/admin.css',
+            HFH_CATALOG_PLUGIN_URL . 'assets/admin.css',
             [],
             HFH_CATALOG_PLUGIN_VERSION
+        );
+
+        if (!in_array($_GET['page'] ?? '', [CatalogsPage::SLUG, CatalogPage::SLUG, FilterPage::SLUG], true)) {
+            return;
+        }
+
+        wp_enqueue_script(
+            'hfh-catalog-admin-sortable',
+            HFH_CATALOG_PLUGIN_URL . 'assets/admin-sortable.js',
+            ['jquery-ui-sortable'],
+            HFH_CATALOG_PLUGIN_VERSION,
+            true
+        );
+
+        wp_add_inline_script(
+            'hfh-catalog-admin-sortable',
+            'window.hfhCatalogSortable = ' . wp_json_encode([
+                'restUrl'      => get_rest_url(get_main_site_id(), RestApi::NAMESPACE . RestApi::ROUTE_REORDER),
+                'nonce'        => wp_create_nonce('wp_rest'),
+                'errorMessage' => __('The order could not be saved. Reload the page and try again.', Plugin::TEXT_DOMAIN),
+            ]) . ';',
+            'before'
         );
     }
 }

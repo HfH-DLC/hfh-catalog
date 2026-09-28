@@ -6,6 +6,8 @@ use HfH\Catalog\DB;
 
 class FilterOptions
 {
+    const SORTABLE_TYPE = "filter_otions";
+
     public static function findForFilter(int $filter_id): array
     {
         global $wpdb;
@@ -129,5 +131,20 @@ class FilterOptions
             $filter_option_id,
             $offset
         );
+    }
+
+    /**
+     * Applies a new order to a filter's options.
+     *
+     * @param array $ids All of the filter's option ids, in the wanted order.
+     */
+    public static function reorder(int $filter_id, array $ids): bool
+    {
+        $current = wp_list_pluck(self::findForFilter($filter_id), 'id');
+        if (!DB::isSameSet($current, $ids)) {
+            return false;
+        }
+
+        return DB::applyOrder(DB::filterOptionsTable(), $ids);
     }
 }

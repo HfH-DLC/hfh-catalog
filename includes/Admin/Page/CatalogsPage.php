@@ -3,6 +3,7 @@
 namespace HfH\Catalog\Admin\Page;
 
 use HfH\Catalog\Admin\Table\CatalogsListTable;
+use HfH\Catalog\Admin\Table\SortableListTable;
 use HfH\Catalog\Plugin;
 use HfH\Catalog\Repository\Catalogs;
 
@@ -20,13 +21,11 @@ class CatalogsPage extends AdminPage
     const NOTICE_CREATED = 'hfh_catalog_created';
     const NOTICE_DELETED = 'hfh_catalog_deleted';
     const NOTICE_LISTED = 'hfh_catalog_listed';
-    const NOTICE_MOVED = 'hfh_catalog_moved';
 
     const NOTICES = [
         self::NOTICE_CREATED,
         self::NOTICE_DELETED,
         self::NOTICE_LISTED,
-        self::NOTICE_MOVED,
     ];
 
     public function page_title(): string
@@ -60,22 +59,18 @@ class CatalogsPage extends AdminPage
             self::NOTICE_CREATED => __('Catalog created.', Plugin::TEXT_DOMAIN),
             self::NOTICE_DELETED => __('Catalog deleted.', Plugin::TEXT_DOMAIN),
             self::NOTICE_LISTED => __('Catalog index updated.', Plugin::TEXT_DOMAIN),
-            self::NOTICE_MOVED => __('Catalog moved.', Plugin::TEXT_DOMAIN),
         ];
 ?>
         <div class="wrap">
             <h1 class="wp-heading-inline"><?php echo esc_html($this->page_title()); ?></h1>
             <a href="<?php echo esc_url(NewCatalogPage::url()); ?>" class="page-title-action"><?php esc_html_e('Add New', Plugin::TEXT_DOMAIN); ?></a>
             <hr class="wp-header-end">
-            <?php
-            $this->render_notices($errors, $successes);
-
-            if ($table->has_items()) {
+            <?php $this->render_notices($errors, $successes); ?>
+            <?php if ($table->has_items()) :
                 $table->display();
-            } else {
-                echo '<p>' . esc_html__('No catalogs yet.', Plugin::TEXT_DOMAIN) . '</p>';
-            }
-            ?>
+            else : ?>
+                <p><?php esc_html_e('No catalogs yet.', Plugin::TEXT_DOMAIN); ?></p>
+            <?php endif; ?>
         </div>
 <?php
     }
@@ -102,7 +97,7 @@ class CatalogsPage extends AdminPage
             return;
         }
 
-        $this->redirect(self::url(), self::NOTICE_MOVED);
+        $this->redirect(self::url() . '#' . SortableListTable::row_element_id(Catalogs::SORTABLE_TYPE, (int) $catalog->id));
     }
 
     protected function delete_catalog(): void

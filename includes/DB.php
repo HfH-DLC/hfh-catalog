@@ -156,6 +156,36 @@ class DB
     }
 
     /**
+     * Writes sort_order by position. Only for tables with an "id" column.
+     *
+     * @param array $ids Row ids in the wanted order.
+     */
+    public static function applyOrder(string $table, array $ids): bool
+    {
+        global $wpdb;
+
+        foreach (array_values($ids) as $position => $id) {
+            $updated = $wpdb->update($table, ['sort_order' => $position], ['id' => (int) $id], ['%d'], ['%d']);
+            if ($updated === false) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    /**
+     * True when both arrays hold the same ids, in any order.
+     */
+    public static function isSameSet(array $a, array $b): bool
+    {
+        $a = array_map('intval', $a);
+        $b = array_map('intval', $b);
+        sort($a);
+        sort($b);
+        return $a === $b;
+    }
+
+    /**
      * Runs prepared queries as one transaction, rolling back on the first failure.
      */
     public static function transaction(array $queries): bool

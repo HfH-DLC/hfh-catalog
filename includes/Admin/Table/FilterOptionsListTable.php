@@ -5,23 +5,45 @@ namespace HfH\Catalog\Admin\Table;
 use HfH\Catalog\Admin\Page\FilterOptionPage;
 use HfH\Catalog\Admin\Page\FilterPage;
 use HfH\Catalog\Plugin;
+use HfH\Catalog\Repository\FilterOptions;
+use Override;
 
 if (!class_exists('WP_List_Table')) {
     require_once ABSPATH . 'wp-admin/includes/class-wp-list-table.php';
 }
 
-class FilterOptionsListTable extends \WP_List_Table
+class FilterOptionsListTable extends SortableListTable
 {
+    private object $filter;
     private array $filter_options;
 
-    public function __construct(array $filter_options)
+    public function __construct(object $filter, array $filter_options)
     {
         parent::__construct([
             'singular' => 'filter_option',
             'plural'   => 'filter_options',
             'ajax'     => false,
         ]);
+        $this->filter = $filter;
         $this->filter_options = $filter_options;
+    }
+
+    #[Override]
+    protected function row_id(object $item): int
+    {
+        return (int) $item->id;
+    }
+
+    #[Override]
+    protected function sortable_type(): string
+    {
+        return FilterOptions::SORTABLE_TYPE;
+    }
+
+    #[Override]
+    protected function sortable_parent(): int
+    {
+        return (int) $this->filter->id;
     }
 
     public function get_columns(): array
@@ -38,61 +60,53 @@ class FilterOptionsListTable extends \WP_List_Table
     protected function column_name($filter_option): string
     {
         $edit_url = FilterOptionPage::url(['id' => $filter_option->id]);
-        $index = array_search($filter_option, $this->filter_options, true);
 
         $actions = [
-            'edit' => sprintf(
-                '<a href="%s" aria-label="%s">%s</a>',
-                esc_url($edit_url),
+            'edit' => $this->action_link(
+                $edit_url,
+                __('Edit', Plugin::TEXT_DOMAIN),
                 /* translators: %s: filter option name */
-                esc_attr(sprintf(__('Edit “%s”', Plugin::TEXT_DOMAIN), $filter_option->name)),
-                esc_html__('Edit', Plugin::TEXT_DOMAIN)
+                sprintf(__('Edit “%s”', Plugin::TEXT_DOMAIN), $filter_option->name)
             ),
         ];
 
-        if ($index > 0) {
-            $actions['move_up'] = sprintf(
-                '<a href="%s" aria-label="%s">%s</a>',
-                esc_url($this->action_url(FilterPage::ACTION_MOVE_OPTION, $filter_option, ['direction' => 'up'])),
-                /* translators: %s: filter option name */
-                esc_attr(sprintf(__('Move “%s” up', Plugin::TEXT_DOMAIN), $filter_option->name)),
-                esc_html__('Move up', Plugin::TEXT_DOMAIN)
-            );
-        }
-
-        if ($index < count($this->filter_options) - 1) {
-            $actions['move_down'] = sprintf(
-                '<a href="%s" aria-label="%s">%s</a>',
-                esc_url($this->action_url(FilterPage::ACTION_MOVE_OPTION, $filter_option, ['direction' => 'down'])),
-                /* translators: %s: filter option name */
-                esc_attr(sprintf(__('Move “%s” down', Plugin::TEXT_DOMAIN), $filter_option->name)),
-                esc_html__('Move down', Plugin::TEXT_DOMAIN)
-            );
-        }
-
-        $actions['delete'] = sprintf(
-            '<a href="%s" class="submitdelete" aria-label="%s" onclick="return confirm(\'%s\');">%s</a>',
-            esc_url($this->action_url(FilterPage::ACTION_DELETE_OPTION, $filter_option)),
+        $actions['move_up'] = $this->action_link(
+            $this->action_url(FilterPage::ACTION_MOVE_OPTION, $filter_option, ['direction' => 'up']),
+            __('Move up', Plugin::TEXT_DOMAIN),
             /* translators: %s: filter option name */
-            esc_attr(sprintf(__('Delete “%s”', Plugin::TEXT_DOMAIN), $filter_option->name)),
-            /* translators: %s: filter option name */
-            esc_js(sprintf(__('Delete “%s”? This cannot be undone.', Plugin::TEXT_DOMAIN), $filter_option->name)),
-            esc_html__('Delete', Plugin::TEXT_DOMAIN)
+            sprintf(__('Move “%s” up', Plugin::TEXT_DOMAIN), $filter_option->name)
         );
 
-        return sprintf(
-            '<strong><a class="row-title" href="%s">%s</a></strong>%s',
-            esc_url($edit_url),
-            esc_html($filter_option->name),
-            $this->row_actions($actions)
+        $actions['move_down'] = $this->action_link(
+            $this->action_url(FilterPage::ACTION_MOVE_OPTION, $filter_option, ['direction' => 'down']),
+            __('Move down', Plugin::TEXT_DOMAIN),
+            /* translators: %s: filter option name */
+            sprintf(__('Move “%s” down', Plugin::TEXT_DOMAIN), $filter_option->name)
         );
+
+        $actions['delete'] = $this->action_link(
+            $this->action_url(FilterPage::ACTION_DELETE_OPTION, $filter_option),
+            __('Delete', Plugin::TEXT_DOMAIN),
+            /* translators: %s: filter option name */
+            sprintf(__('Delete “%s”', Plugin::TEXT_DOMAIN), $filter_option->name),
+            'submitdelete',
+            /* translators: %s: filter option name */
+            sprintf(__('Delete “%s”? This cannot be undone.', Plugin::TEXT_DOMAIN), $filter_option->name)
+        );
+
+        ob_start();
+?>
+        <strong><a class="row-title" href="<?= esc_url($edit_url) ?>"><?= esc_html($filter_option->name) ?></a></strong>
+        <?= $this->row_actions($actions) ?>
+<?php
+        return ob_get_clean();
     }
 
     private function action_url(string $action, object $filter_option, array $args = []): string
     {
         return FilterPage::action_url(
             $action,
-            ['id' => $filter_option->filter_id, 'filter_option_id' => $filter_option->id] + $args
+            ['id' => $this->filter->id, 'filter_option_id' => $filter_option->id] + $args
         );
     }
 

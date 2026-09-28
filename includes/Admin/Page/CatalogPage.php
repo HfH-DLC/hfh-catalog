@@ -5,6 +5,7 @@ namespace HfH\Catalog\Admin\Page;
 use HfH\Catalog\Frontend;
 use HfH\Catalog\Admin\Table\FiltersListTable;
 use HfH\Catalog\Admin\Table\SitesListTable;
+use HfH\Catalog\Admin\Table\SortableListTable;
 use HfH\Catalog\Plugin;
 use HfH\Catalog\Repository\Catalogs;
 use HfH\Catalog\Repository\FilterOptions;
@@ -30,21 +31,17 @@ class CatalogPage extends AdminPage
     const NOTICE_UPDATED = 'hfh_catalog_updated';
     const NOTICE_SITE_ADDED = 'hfh_site_added';
     const NOTICE_SITE_REMOVED = 'hfh_site_removed';
-    const NOTICE_SITE_MOVED = 'hfh_site_moved';
     const NOTICE_SITE_UPDATED = 'hfh_site_updated';
     const NOTICE_FILTER_ADDED = 'hfh_filter_added';
     const NOTICE_FILTER_DELETED = 'hfh_filter_deleted';
-    const NOTICE_FILTER_MOVED = 'hfh_filter_moved';
 
     const NOTICES = [
         self::NOTICE_UPDATED,
         self::NOTICE_SITE_ADDED,
         self::NOTICE_SITE_REMOVED,
-        self::NOTICE_SITE_MOVED,
         self::NOTICE_SITE_UPDATED,
         self::NOTICE_FILTER_ADDED,
         self::NOTICE_FILTER_DELETED,
-        self::NOTICE_FILTER_MOVED,
     ];
 
     const ERROR_INVALID = 'invalid';
@@ -88,7 +85,7 @@ class CatalogPage extends AdminPage
         $sites_table = new SitesListTable($catalog, $filters, SiteFilterOptions::findForCatalog((int) $catalog->id));
         $sites_table->prepare_items();
 
-        $filters_table = new FiltersListTable($filters, $options_by_filter);
+        $filters_table = new FiltersListTable($catalog, $filters, $options_by_filter);
         $filters_table->prepare_items();
 
         $available_sites = Sites::findAvailable((int) $catalog->id);
@@ -105,11 +102,9 @@ class CatalogPage extends AdminPage
             self::NOTICE_UPDATED        => __('Catalog updated.', Plugin::TEXT_DOMAIN),
             self::NOTICE_SITE_ADDED     => __('Site added.', Plugin::TEXT_DOMAIN),
             self::NOTICE_SITE_REMOVED   => __('Site removed.', Plugin::TEXT_DOMAIN),
-            self::NOTICE_SITE_MOVED     => __('Site moved.', Plugin::TEXT_DOMAIN),
             self::NOTICE_SITE_UPDATED   => __('Site updated.', Plugin::TEXT_DOMAIN),
             self::NOTICE_FILTER_ADDED   => __('Filter added.', Plugin::TEXT_DOMAIN),
             self::NOTICE_FILTER_DELETED => __('Filter deleted.', Plugin::TEXT_DOMAIN),
-            self::NOTICE_FILTER_MOVED   => __('Filter moved.', Plugin::TEXT_DOMAIN),
         ];
 ?>
         <div class="wrap">
@@ -175,13 +170,11 @@ class CatalogPage extends AdminPage
                 <br class="clear">
             </div>
 
-            <?php
-            if ($sites_table->has_items()) {
-                $sites_table->display();
-            } else {
-                echo '<p>' . esc_html__('No sites in this catalog yet.', Plugin::TEXT_DOMAIN) . '</p>';
-            }
-            ?>
+            <?php if ($sites_table->has_items()) : ?>
+                <?php $sites_table->display(); ?>
+            <?php else : ?>
+                <p><?php esc_html_e('No sites in this catalog yet.', Plugin::TEXT_DOMAIN); ?></p>
+            <?php endif; ?>
 
             <h2><?php esc_html_e('Filters', Plugin::TEXT_DOMAIN); ?></h2>
             <div class="tablenav top">
@@ -197,13 +190,11 @@ class CatalogPage extends AdminPage
                 <br class="clear">
             </div>
 
-            <?php
-            if ($filters_table->has_items()) {
-                $filters_table->display();
-            } else {
-                echo '<p>' . esc_html__('No filters yet.', Plugin::TEXT_DOMAIN) . '</p>';
-            }
-            ?>
+            <?php if ($filters_table->has_items()) : ?>
+                <?php $filters_table->display(); ?>
+            <?php else : ?>
+                <p><?php esc_html_e('No filters yet.', Plugin::TEXT_DOMAIN); ?></p>
+            <?php endif; ?>
         </div>
 <?php
     }
@@ -286,14 +277,15 @@ class CatalogPage extends AdminPage
     protected function move_site(): void
     {
         $catalog = $this->current_catalog();
+        $blog_id = absint($_GET['blog_id'] ?? 0);
         $offset = ($_GET['direction'] ?? '') === 'up' ? -1 : 1;
 
-        if (!Sites::move((int) $catalog->id, absint($_GET['blog_id'] ?? 0), $offset)) {
+        if (!Sites::move((int) $catalog->id, $blog_id, $offset)) {
             $this->error = self::ERROR_DB;
             return;
         }
 
-        $this->redirect(self::url(['id' => $catalog->id]), self::NOTICE_SITE_MOVED);
+        $this->redirect(self::url(['id' => $catalog->id]) . '#' . SortableListTable::row_element_id(Sites::SORTABLE_TYPE, $blog_id));
     }
 
     protected function add_filter(): void
@@ -332,14 +324,15 @@ class CatalogPage extends AdminPage
     protected function move_filter(): void
     {
         $catalog = $this->current_catalog();
+        $filter_id = absint($_GET['filter_id'] ?? 0);
         $offset = ($_GET['direction'] ?? '') === 'up' ? -1 : 1;
 
-        if (!Filters::move((int) $catalog->id, absint($_GET['filter_id'] ?? 0), $offset)) {
+        if (!Filters::move((int) $catalog->id, $filter_id, $offset)) {
             $this->error = self::ERROR_DB;
             return;
         }
 
-        $this->redirect(self::url(['id' => $catalog->id]), self::NOTICE_FILTER_MOVED);
+        $this->redirect(self::url(['id' => $catalog->id]) . '#' . SortableListTable::row_element_id(Filters::SORTABLE_TYPE, $filter_id));
     }
 
     /**

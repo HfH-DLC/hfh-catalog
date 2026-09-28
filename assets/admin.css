@@ -5,3 +5,30 @@
 #adminmenu #toplevel_page_hfh-catalogs .dashicons-before::before {
   content: var(--heroicon-outline-rectangle-stack, "\f318") !important;
 }
+
+.hfh-sortable__item {
+  cursor: move;
+  scroll-margin-top: 48px;
+}
+
+@media screen and (max-width: 782px) {
+  .hfh-sortable__item {
+    scroll-margin-top: 62px;
+  }
+}
+
+.hfh-sortable__item.ui-sortable-helper {
+  background: #fff;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+}
+
+.hfh-sortable__placeholder {
+  background: #f0f0f1;
+  outline: 1px dashed #c3c4c7;
+  outline-offset: -1px;
+}
+
+.hfh-sortable__item--first .row-actions .move_up,
+.hfh-sortable__item--last .row-actions .move_down {
+  display: none;
+}

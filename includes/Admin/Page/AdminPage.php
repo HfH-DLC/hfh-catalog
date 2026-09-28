@@ -77,9 +77,9 @@ abstract class AdminPage
         return wp_nonce_url(static::url(['hfh_action' => $action] + $args), $action);
     }
 
-    protected function redirect(string $url, string $notice): void
+    protected function redirect(string $url, string $notice = ''): void
     {
-        wp_safe_redirect(add_query_arg($notice, 1, $url));
+        wp_safe_redirect($notice ? add_query_arg($notice, 1, $url) : $url);
         exit;
     }
 

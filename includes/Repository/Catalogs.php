@@ -6,6 +6,8 @@ use HfH\Catalog\DB;
 
 class Catalogs
 {
+    const SORTABLE_TYPE = 'catalogs';
+
     /**
      * Every catalog: the ones on the index first, in their order, then the rest by name.
      */
@@ -56,6 +58,21 @@ class Catalogs
             $catalog_id,
             $offset
         );
+    }
+
+    /**
+     * Applies a new order to the listed catalogs.
+     *
+     * @param array $ids All listed catalog ids, in the wanted order.
+     */
+    public static function reorder(array $ids): bool
+    {
+        $current = wp_list_pluck(self::findListed(), 'id');
+        if (!DB::isSameSet($current, $ids)) {
+            return false;
+        }
+
+        return DB::applyOrder(DB::catalogsTable(), $ids);
     }
 
     public static function findById(int $id): ?object

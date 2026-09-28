@@ -6,12 +6,13 @@ use HfH\Catalog\Admin\Page\CatalogPage;
 use HfH\Catalog\Admin\Page\CatalogsPage;
 use HfH\Catalog\Plugin;
 use HfH\Catalog\Repository\Catalogs;
+use Override;
 
 if (!class_exists('WP_List_Table')) {
     require_once ABSPATH . 'wp-admin/includes/class-wp-list-table.php';
 }
 
-class CatalogsListTable extends \WP_List_Table
+class CatalogsListTable extends SortableListTable
 {
     public function __construct()
     {
@@ -20,6 +21,27 @@ class CatalogsListTable extends \WP_List_Table
             'plural'   => 'catalogs',
             'ajax'     => false,
         ]);
+    }
+
+    #[Override]
+    protected function row_id(object $item): int
+    {
+        return (int) $item->id;
+    }
+
+    #[Override]
+    protected function sortable_type(): string
+    {
+        return Catalogs::SORTABLE_TYPE;
+    }
+
+    /**
+     * Only the listed catalogs have an order.
+     */
+    #[Override]
+    protected function is_sortable_row(object $item): bool
+    {
+        return (int) $item->listed === 1;
     }
 
     public function get_columns(): array
@@ -40,69 +62,60 @@ class CatalogsListTable extends \WP_List_Table
     protected function column_name($catalog): string
     {
         $edit_url = CatalogPage::url(['id' => $catalog->id]);
-        $listed = (int) $catalog->listed === 1;
-        // Only the listed catalogs have an order, so positions are counted among them.
-        $listed_items = array_values(array_filter($this->items, fn($item) => (int) $item->listed === 1));
-        $index = $listed ? array_search($catalog, $listed_items, true) : false;
+        $listed = $this->is_sortable_row($catalog);
 
         $actions = [
-            'edit' => sprintf(
-                '<a href="%s" aria-label="%s">%s</a>',
-                esc_url($edit_url),
+            'edit' => $this->action_link(
+                $edit_url,
+                __('Edit', Plugin::TEXT_DOMAIN),
                 /* translators: %s: catalog name */
-                esc_attr(sprintf(__('Edit “%s”', Plugin::TEXT_DOMAIN), $catalog->name)),
-                esc_html__('Edit', Plugin::TEXT_DOMAIN)
+                sprintf(__('Edit “%s”', Plugin::TEXT_DOMAIN), $catalog->name)
             ),
-            'listed' => sprintf(
-                '<a href="%s" aria-label="%s">%s</a>',
-                esc_url($this->action_url(CatalogsPage::ACTION_TOGGLE_LISTED, $catalog, ['listed' => $listed ? '0' : '1'])),
-                esc_attr($listed
+            'listed' => $this->action_link(
+                $this->action_url(CatalogsPage::ACTION_TOGGLE_LISTED, $catalog, ['listed' => $listed ? '0' : '1']),
+                $listed
+                    ? __('Hide from index', Plugin::TEXT_DOMAIN)
+                    : __('Show on index', Plugin::TEXT_DOMAIN),
+                $listed
                     /* translators: %s: catalog name */
                     ? sprintf(__('Hide “%s” from the catalog index', Plugin::TEXT_DOMAIN), $catalog->name)
                     /* translators: %s: catalog name */
-                    : sprintf(__('Show “%s” on the catalog index', Plugin::TEXT_DOMAIN), $catalog->name)),
-                $listed
-                    ? esc_html__('Hide from index', Plugin::TEXT_DOMAIN)
-                    : esc_html__('Show on index', Plugin::TEXT_DOMAIN)
+                    : sprintf(__('Show “%s” on the catalog index', Plugin::TEXT_DOMAIN), $catalog->name)
             ),
         ];
 
-        if ($listed && $index > 0) {
-            $actions['move_up'] = sprintf(
-                '<a href="%s" aria-label="%s">%s</a>',
-                esc_url($this->action_url(CatalogsPage::ACTION_MOVE, $catalog, ['direction' => 'up'])),
+        if ($listed) {
+            $actions['move_up'] = $this->action_link(
+                $this->action_url(CatalogsPage::ACTION_MOVE, $catalog, ['direction' => 'up']),
+                __('Move up', Plugin::TEXT_DOMAIN),
                 /* translators: %s: catalog name */
-                esc_attr(sprintf(__('Move “%s” up', Plugin::TEXT_DOMAIN), $catalog->name)),
-                esc_html__('Move up', Plugin::TEXT_DOMAIN)
+                sprintf(__('Move “%s” up', Plugin::TEXT_DOMAIN), $catalog->name)
+            );
+
+            $actions['move_down'] = $this->action_link(
+                $this->action_url(CatalogsPage::ACTION_MOVE, $catalog, ['direction' => 'down']),
+                __('Move down', Plugin::TEXT_DOMAIN),
+                /* translators: %s: catalog name */
+                sprintf(__('Move “%s” down', Plugin::TEXT_DOMAIN), $catalog->name)
             );
         }
 
-        if ($listed && $index < count($listed_items) - 1) {
-            $actions['move_down'] = sprintf(
-                '<a href="%s" aria-label="%s">%s</a>',
-                esc_url($this->action_url(CatalogsPage::ACTION_MOVE, $catalog, ['direction' => 'down'])),
-                /* translators: %s: catalog name */
-                esc_attr(sprintf(__('Move “%s” down', Plugin::TEXT_DOMAIN), $catalog->name)),
-                esc_html__('Move down', Plugin::TEXT_DOMAIN)
-            );
-        }
-
-        $actions['delete'] = sprintf(
-            '<a href="%s" class="submitdelete" aria-label="%s" onclick="return confirm(\'%s\');">%s</a>',
-            esc_url($this->action_url(CatalogsPage::ACTION_DELETE, $catalog)),
+        $actions['delete'] = $this->action_link(
+            $this->action_url(CatalogsPage::ACTION_DELETE, $catalog),
+            __('Delete', Plugin::TEXT_DOMAIN),
             /* translators: %s: catalog name */
-            esc_attr(sprintf(__('Delete “%s”', Plugin::TEXT_DOMAIN), $catalog->name)),
+            sprintf(__('Delete “%s”', Plugin::TEXT_DOMAIN), $catalog->name),
+            'submitdelete',
             /* translators: %s: catalog name */
-            esc_js(sprintf(__('Delete “%s” with all its filters and site assignments? This cannot be undone.', Plugin::TEXT_DOMAIN), $catalog->name)),
-            esc_html__('Delete', Plugin::TEXT_DOMAIN)
+            sprintf(__('Delete “%s” with all its filters and site assignments? This cannot be undone.', Plugin::TEXT_DOMAIN), $catalog->name)
         );
 
-        return sprintf(
-            '<strong><a class="row-title" href="%s">%s</a></strong>%s',
-            esc_url($edit_url),
-            esc_html($catalog->name),
-            $this->row_actions($actions)
-        );
+        ob_start();
+?>
+        <strong><a class="row-title" href="<?= esc_url($edit_url) ?>"><?= esc_html($catalog->name) ?></a></strong>
+        <?= $this->row_actions($actions) ?>
+<?php
+        return ob_get_clean();
     }
 
     protected function column_slug($catalog): string
@@ -112,9 +125,9 @@ class CatalogsListTable extends \WP_List_Table
 
     protected function column_listed($catalog): string
     {
-        return (int) $catalog->listed === 1
+        return $this->is_sortable_row($catalog)
             ? esc_html__('Yes', Plugin::TEXT_DOMAIN)
-            :  esc_html__('No', Plugin::TEXT_DOMAIN);
+            : esc_html__('No', Plugin::TEXT_DOMAIN);
     }
 
     private function action_url(string $action, object $catalog, array $args = []): string

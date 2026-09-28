@@ -123,9 +123,9 @@ class Frontend
     public function template_include(string $template): string
     {
         if ($this->is_index) {
-            return HFH__CATALOG_PLUGIN_DIR . 'templates/catalogs.php';
+            return HFH_CATALOG_PLUGIN_DIR . 'templates/catalogs.php';
         }
-        return $this->catalog ? HFH__CATALOG_PLUGIN_DIR . 'templates/catalog.php' : $template;
+        return $this->catalog ? HFH_CATALOG_PLUGIN_DIR . 'templates/catalog.php' : $template;
     }
 
     public function document_title_parts(array $parts): array
@@ -161,7 +161,7 @@ class Frontend
 
         wp_enqueue_style(
             'hfh-catalog',
-            HFH__CATALOG_PLUGIN_URL . 'assets/catalog.css',
+            HFH_CATALOG_PLUGIN_URL . 'assets/catalog.css',
             [],
             HFH_CATALOG_PLUGIN_VERSION
         );
@@ -172,7 +172,7 @@ class Frontend
 
         wp_enqueue_script(
             'hfh-catalog',
-            HFH__CATALOG_PLUGIN_URL . 'assets/catalog.js',
+            HFH_CATALOG_PLUGIN_URL . 'assets/catalog.js',
             [],
             HFH_CATALOG_PLUGIN_VERSION,
             ['in_footer' => true, 'strategy' => 'defer']
@@ -241,7 +241,7 @@ class Frontend
     public function render_results(array $sites, array $selection): string
     {
         ob_start();
-        require HFH__CATALOG_PLUGIN_DIR . 'templates/results.php';
+        require HFH_CATALOG_PLUGIN_DIR . 'templates/results.php';
         return ob_get_clean();
     }
 }

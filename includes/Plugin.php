@@ -47,7 +47,7 @@ class Plugin
         load_plugin_textdomain(
             self::TEXT_DOMAIN,
             false,
-            dirname(plugin_basename(HFH__CATALOG_PLUGIN_FILE)) . '/languages'
+            dirname(plugin_basename(HFH_CATALOG_PLUGIN_FILE)) . '/languages'
         );
     }
 

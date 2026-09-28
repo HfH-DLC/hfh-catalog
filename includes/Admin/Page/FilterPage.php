@@ -3,6 +3,7 @@
 namespace HfH\Catalog\Admin\Page;
 
 use HfH\Catalog\Admin\Table\FilterOptionsListTable;
+use HfH\Catalog\Admin\Table\SortableListTable;
 use HfH\Catalog\Plugin;
 use HfH\Catalog\Repository\Catalogs;
 use HfH\Catalog\Repository\FilterOptions;
@@ -24,14 +25,12 @@ class FilterPage extends AdminPage
     const NOTICE_OPTION_ADDED = 'hfh_filter_option_added';
     const NOTICE_OPTION_UPDATED = 'hfh_filter_option_updated';
     const NOTICE_OPTION_DELETED = 'hfh_filter_option_deleted';
-    const NOTICE_OPTION_MOVED = 'hfh_filter_option_moved';
 
     const NOTICES = [
         self::NOTICE_UPDATED,
         self::NOTICE_OPTION_ADDED,
         self::NOTICE_OPTION_UPDATED,
         self::NOTICE_OPTION_DELETED,
-        self::NOTICE_OPTION_MOVED,
     ];
 
     const ERROR_INVALID = 'invalid';
@@ -69,7 +68,7 @@ class FilterPage extends AdminPage
 
         $filter_url = self::url(['id' => $filter->id]);
 
-        $options_table = new FilterOptionsListTable(FilterOptions::findForFilter((int) $filter->id));
+        $options_table = new FilterOptionsListTable($filter, FilterOptions::findForFilter((int) $filter->id));
         $options_table->prepare_items();
 
         $errors = [
@@ -84,7 +83,6 @@ class FilterPage extends AdminPage
             self::NOTICE_OPTION_ADDED   => __('Option added.', Plugin::TEXT_DOMAIN),
             self::NOTICE_OPTION_UPDATED => __('Option updated.', Plugin::TEXT_DOMAIN),
             self::NOTICE_OPTION_DELETED => __('Option deleted.', Plugin::TEXT_DOMAIN),
-            self::NOTICE_OPTION_MOVED   => __('Option moved.', Plugin::TEXT_DOMAIN),
         ];
 ?>
         <div class="wrap">
@@ -126,14 +124,11 @@ class FilterPage extends AdminPage
                 </form>
                 <br class="clear">
             </div>
-
-            <?php
-            if ($options_table->has_items()) {
+            <?php if ($options_table->has_items()) :
                 $options_table->display();
-            } else {
-                echo '<p>' . esc_html__('No options yet.', Plugin::TEXT_DOMAIN) . '</p>';
-            }
-            ?>
+            else : ?>
+                <p><?php esc_html_e('No options yet.', Plugin::TEXT_DOMAIN); ?></p>
+            <?php endif; ?>
         </div>
 <?php
     }
@@ -199,14 +194,15 @@ class FilterPage extends AdminPage
     protected function move_filter_option(): void
     {
         $filter = $this->current_filter();
+        $filter_option_id = absint($_GET['filter_option_id'] ?? 0);
         $offset = ($_GET['direction'] ?? '') === 'up' ? -1 : 1;
 
-        if (!FilterOptions::move((int) $filter->id, absint($_GET['filter_option_id'] ?? 0), $offset)) {
+        if (!FilterOptions::move((int) $filter->id, $filter_option_id, $offset)) {
             $this->error = self::ERROR_DB;
             return;
         }
 
-        $this->redirect(self::url(['id' => $filter->id]), self::NOTICE_OPTION_MOVED);
+        $this->redirect(self::url(['id' => $filter->id]) . '#' . SortableListTable::row_element_id(FilterOptions::SORTABLE_TYPE, $filter_option_id));
     }
 
     protected function current_filter(): object

@@ -20,6 +20,7 @@ class Sites
     const META_LONG_DESCRIPTION = 'pb_about_unlimited';
     const META_URL = 'pb_book_url';
     const META_BOOK_INFORMATION = 'pb_book_information_array';
+    const SORTABLE_TYPE = "sites";
 
     public static function findIdsForCatalog(int $catalog_id): array
     {
@@ -205,6 +206,32 @@ class Sites
                 $table,
                 ['sort_order' => $position],
                 ['catalog_id' => $catalog_id, 'blog_id' => $id],
+                ['%d'],
+                ['%d', '%d']
+            );
+            if ($updated === false) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    /**
+     * @param array $blog_ids All of the catalog's site ids, in the wanted order.
+     */
+    public static function reorder(int $catalog_id, array $blog_ids): bool
+    {
+        global $wpdb;
+
+        if (!DB::isSameSet(self::findIdsForCatalog($catalog_id), $blog_ids)) {
+            return false;
+        }
+
+        foreach (array_values($blog_ids) as $position => $blog_id) {
+            $updated = $wpdb->update(
+                DB::catalogSitesTable(),
+                ['sort_order' => $position],
+                ['catalog_id' => $catalog_id, 'blog_id' => (int) $blog_id],
                 ['%d'],
                 ['%d', '%d']
             );

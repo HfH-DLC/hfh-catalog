@@ -6,6 +6,7 @@ use HfH\Catalog\Admin\Page\CatalogPage;
 use HfH\Catalog\Admin\Page\SitePage;
 use HfH\Catalog\Plugin;
 use HfH\Catalog\Repository\Sites;
+use Override;
 
 if (!class_exists('WP_List_Table')) {
     require_once ABSPATH . 'wp-admin/includes/class-wp-list-table.php';
@@ -14,7 +15,7 @@ if (!class_exists('WP_List_Table')) {
 /**
  * The sites in a catalog, with one column per filter.
  */
-class SitesListTable extends \WP_List_Table
+class SitesListTable extends SortableListTable
 {
     private object $catalog;
     private array $filters;
@@ -30,6 +31,24 @@ class SitesListTable extends \WP_List_Table
         $this->catalog = $catalog;
         $this->filters = $filters;
         $this->site_filter_options = $site_filter_options;
+    }
+
+    #[Override]
+    protected function row_id(object $item): int
+    {
+        return (int) $item->blog_id;
+    }
+
+    #[Override]
+    protected function sortable_type(): string
+    {
+        return Sites::SORTABLE_TYPE;
+    }
+
+    #[Override]
+    protected function sortable_parent(): int
+    {
+        return (int) $this->catalog->id;
     }
 
     public function get_columns(): array
@@ -51,7 +70,6 @@ class SitesListTable extends \WP_List_Table
     {
         $blog_id = (int) $site->blog_id;
         $edit_url = SitePage::url(['id' => $this->catalog->id, 'blog_id' => $blog_id]);
-        $index = array_search($site, $this->items, true);
 
         $states = [];
         if ($site->archived) {
@@ -62,55 +80,53 @@ class SitesListTable extends \WP_List_Table
         }
 
         $actions = [
-            'edit' => sprintf(
-                '<a href="%s" aria-label="%s">%s</a>',
-                esc_url($edit_url),
+            'edit' => $this->action_link(
+                $edit_url,
+                __('Edit', Plugin::TEXT_DOMAIN),
                 /* translators: %s: site name */
-                esc_attr(sprintf(__('Edit filter options of “%s”', Plugin::TEXT_DOMAIN), $site->name)),
-                esc_html__('Edit', Plugin::TEXT_DOMAIN)
+                sprintf(__('Edit filter options of “%s”', Plugin::TEXT_DOMAIN), $site->name)
             ),
         ];
 
-        if ($index > 0) {
-            $actions['move_up'] = sprintf(
-                '<a href="%s" aria-label="%s">%s</a>',
-                esc_url($this->action_url(CatalogPage::ACTION_MOVE_SITE, $blog_id, ['direction' => 'up'])),
-                /* translators: %s: site name */
-                esc_attr(sprintf(__('Move “%s” up', Plugin::TEXT_DOMAIN), $site->name)),
-                esc_html__('Move up', Plugin::TEXT_DOMAIN)
-            );
-        }
-
-        if ($index < count($this->items) - 1) {
-            $actions['move_down'] = sprintf(
-                '<a href="%s" aria-label="%s">%s</a>',
-                esc_url($this->action_url(CatalogPage::ACTION_MOVE_SITE, $blog_id, ['direction' => 'down'])),
-                /* translators: %s: site name */
-                esc_attr(sprintf(__('Move “%s” down', Plugin::TEXT_DOMAIN), $site->name)),
-                esc_html__('Move down', Plugin::TEXT_DOMAIN)
-            );
-        }
-
-        $actions['remove'] = sprintf(
-            '<a href="%s" class="submitdelete" aria-label="%s">%s</a>',
-            esc_url($this->action_url(CatalogPage::ACTION_REMOVE_SITE, $blog_id)),
+        $actions['move_up'] = $this->action_link(
+            $this->action_url(CatalogPage::ACTION_MOVE_SITE, $blog_id, ['direction' => 'up']),
+            __('Move up', Plugin::TEXT_DOMAIN),
             /* translators: %s: site name */
-            esc_attr(sprintf(__('Remove “%s” from this catalog', Plugin::TEXT_DOMAIN), $site->name)),
-            esc_html__('Remove', Plugin::TEXT_DOMAIN)
+            sprintf(__('Move “%s” up', Plugin::TEXT_DOMAIN), $site->name)
         );
 
-        return sprintf(
-            '<strong><a class="row-title" href="%s">%s</a></strong>%s<br><span class="description">%s</span>%s',
-            esc_url($edit_url),
-            esc_html($site->name),
-            $states
-                ? ' &mdash; <span class="post-state">' . esc_html(implode(', ', $states)) . '</span>'
-                : '',
-            $states
-                ? esc_html__('Not shown on the public catalog page.', Plugin::TEXT_DOMAIN)
-                : esc_html($site->domain . $site->path),
-            $this->row_actions($actions)
+        $actions['move_down'] = $this->action_link(
+            $this->action_url(CatalogPage::ACTION_MOVE_SITE, $blog_id, ['direction' => 'down']),
+            __('Move down', Plugin::TEXT_DOMAIN),
+            /* translators: %s: site name */
+            sprintf(__('Move “%s” down', Plugin::TEXT_DOMAIN), $site->name)
         );
+
+        $actions['remove'] = $this->action_link(
+            $this->action_url(CatalogPage::ACTION_REMOVE_SITE, $blog_id),
+            __('Remove', Plugin::TEXT_DOMAIN),
+            /* translators: %s: site name */
+            sprintf(__('Remove “%s” from this catalog', Plugin::TEXT_DOMAIN), $site->name),
+            'submitdelete'
+        );
+
+        ob_start();
+?>
+        <strong><a class="row-title" href="<?= esc_url($edit_url) ?>"><?= esc_html($site->name) ?></a></strong>
+        <?php if ($states) : ?>
+            &mdash; <span class="post-state"><?= esc_html(implode(', ', $states)) ?></span>
+        <?php endif; ?>
+        <br>
+        <span class="description">
+            <?php if ($states) : ?>
+                <?php esc_html_e('Not shown on the public catalog page.', Plugin::TEXT_DOMAIN); ?>
+            <?php else : ?>
+                <?= esc_html($site->domain . $site->path) ?>
+            <?php endif; ?>
+        </span>
+        <?= $this->row_actions($actions) ?>
+<?php
+        return ob_get_clean();
     }
 
     /**
