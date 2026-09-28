@@ -7,11 +7,11 @@ use HfH\Catalog\Repository\SiteFilterOptions;
 use HfH\Catalog\Repository\Sites;
 
 /**
- * Turns a /kataloge/{slug}/ request into a rendered catalog page.
+ * Turns a /catalogs/{slug}/ request into a rendered catalog page.
  */
 class Frontend
 {
-    const URL_BASE = 'kataloge';
+    const URL_BASE = 'catalogs';
     const QUERY_VAR_SLUG = 'hfh_catalog_slug';
     const QUERY_VAR_INDEX = 'hfh_catalog_index';
     const FILTER_PREFIX = 'hfhcat_';
