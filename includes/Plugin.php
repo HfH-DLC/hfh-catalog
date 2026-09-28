@@ -36,7 +36,6 @@ class Plugin
 
         add_action('init', [$this, 'load_textdomain']);
         add_action('admin_init', [DB::class, 'maybe_install']);
-        add_action('init', [SitemapProvider::class, 'register']);
         add_action('wp_delete_site', [$this, 'delete_site']);
 
         Frontend::get_instance();
