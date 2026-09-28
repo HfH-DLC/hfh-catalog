@@ -112,6 +112,6 @@ abstract class AdminPage
      */
     protected function site_label(\WP_Site $site): string
     {
-        return $site->blogname . ' (' . $site->path . ')';
+        return $site->blogname . ' ( ' . rtrim($site->path, '/') . ' )';
     }
 }
