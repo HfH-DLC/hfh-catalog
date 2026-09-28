@@ -14,6 +14,7 @@
 .hfh-catalog__sidebar {
   padding: 1.5rem 1.25rem 2.5rem;
   background-color: var(--hfh-catalog-filters-bg, #f4f4f4);
+  height: fit-content;
 }
 
 .hfh-catalog__filters-title,
@@ -185,5 +186,25 @@
   .hfh-catalog__title {
     font-size: 2rem;
     line-height: 2.5rem;
+  }
+}
+
+.hfh-catalog__edit {
+  display: block;
+  width: fit-content;
+  font-size: 1rem;
+  font-weight: 700;
+  background-color: var(--hfh-catalog-button-bg, #333);
+  color: var(--hfh-catalog-button-color, #fff);
+  padding: 0.875rem 1.375rem 0.875rem 1.375rem;
+  margin-bottom: 2rem;
+  border-width: 2px;
+  border-style: solid;
+  border-color: var(--hfh-catalog-button-bg, #333);
+
+  &:hover {
+    background-color: var(--hfh-catalog-button-bg-hover, #fff);
+    color: var(--hfh-catalog-button-color-hover, #333);
+    border-color: var(--hfh-catalog-button-bg-hover, #333);
   }
 }

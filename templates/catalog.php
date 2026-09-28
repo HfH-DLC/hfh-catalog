@@ -1,5 +1,6 @@
 <?php
 
+use HfH\Catalog\Admin\Page\CatalogPage;
 use HfH\Catalog\Frontend;
 use HfH\Catalog\Plugin;
 use HfH\Catalog\Repository\Filters;
@@ -65,6 +66,12 @@ get_header();
                 <?php echo $frontend->render_results($sites, $selection); ?>
             </div>
         </div>
+
+        <?php if (is_super_admin()) : ?>
+            <a href="<?= CatalogPage::url(['id' => $catalog->id]); ?>" class="hfh-catalog__edit">
+                Edit
+            </a>
+        <?php endif;  ?>
     </div>
 </main>
 <?php
