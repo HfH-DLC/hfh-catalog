@@ -105,11 +105,6 @@ class Sites
         ];
     }
 
-    /**
-     * Contributor terms are named when they are created, so a term can still be
-     * called "hmuster" while the book shows "Hans Muster". The real name lives in
-     * the contributor's fields, which pb_book_information_array carries along.
-     */
     private static function authorNames(int $blog_id): string
     {
         $info = get_site_meta($blog_id, self::META_BOOK_INFORMATION, true);
@@ -129,7 +124,6 @@ class Sites
         }
         $names = array_filter(array_map('trim', $names));
 
-        // Older syncs only wrote the term names.
         return $names
             ? implode(', ', $names)
             : implode(', ', array_filter((array) get_site_meta($blog_id, self::META_AUTHORS, false)));
