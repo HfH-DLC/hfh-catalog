@@ -91,11 +91,11 @@ abstract class SortableListTable extends \WP_List_Table
      *
      * @param string $confirm Question to confirm before following the link; empty for none.
      */
-    protected function action_link(string $url, string $label, string $aria_label, string $class = '', string $confirm = ''): string
+    protected function action_link(string $url, string $label, string $aria_label, string $class = '', string $confirm = '', bool $new_tab = false): string
     {
         ob_start();
     ?>
-        <a href="<?= esc_url($url) ?>" <?php if ($class) : ?>class="<?= esc_attr($class) ?>" <?php endif; ?> aria-label="<?= esc_attr($aria_label) ?>" <?php if ($confirm) : ?>onclick="return confirm('<?= esc_js($confirm) ?>');" <?php endif; ?>><?= esc_html($label) ?></a>
+        <a href="<?= esc_url($url) ?>" <?php if ($class) : ?>class="<?= esc_attr($class) ?>" <?php endif; ?> aria-label="<?= esc_attr($aria_label) ?>" <?php if ($confirm) : ?>onclick="return confirm('<?= esc_js($confirm) ?>');" <?php endif; ?><?php if ($new_tab) : ?>target="_blank" <?php endif; ?>><?= esc_html($label) ?></a>
 <?php
         return trim(ob_get_clean());
     }

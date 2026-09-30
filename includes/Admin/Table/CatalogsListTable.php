@@ -4,6 +4,7 @@ namespace HfH\Catalog\Admin\Table;
 
 use HfH\Catalog\Admin\Page\CatalogPage;
 use HfH\Catalog\Admin\Page\CatalogsPage;
+use HfH\Catalog\Frontend;
 use HfH\Catalog\Plugin;
 use HfH\Catalog\Repository\Catalogs;
 use Override;
@@ -70,6 +71,15 @@ class CatalogsListTable extends SortableListTable
                 __('Edit', Plugin::TEXT_DOMAIN),
                 /* translators: %s: catalog name */
                 sprintf(__('Edit “%s”', Plugin::TEXT_DOMAIN), $catalog->name)
+            ),
+            'view' => $this->action_link(
+                Frontend::get_instance()->catalog_url($catalog->slug),
+                __('View', Plugin::TEXT_DOMAIN),
+                /* translators: %s: catalog name */
+                sprintf(__('View “%s”', Plugin::TEXT_DOMAIN), $catalog->name),
+                '',
+                '',
+                true
             ),
             'listed' => $this->action_link(
                 $this->action_url(CatalogsPage::ACTION_TOGGLE_LISTED, $catalog, ['listed' => $listed ? '0' : '1']),
