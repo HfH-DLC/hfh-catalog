@@ -2,6 +2,7 @@
   const config = window.hfhCatalog;
   const form = document.querySelector(".hfh-catalog__filters");
   const results = document.querySelector(".hfh-catalog__results");
+  const status = document.querySelector(".hfh-catalog__status");
 
   if (!config || !form || !results) {
     return;
@@ -13,6 +14,19 @@
   }
 
   let controller = null;
+  let announcement = null;
+
+  const announce = (message) => {
+    if (!status) {
+      return;
+    }
+
+    window.clearTimeout(announcement);
+    status.textContent = "";
+    announcement = window.setTimeout(() => {
+      status.textContent = message;
+    }, 100);
+  };
 
   const update = async () => {
     const query = new URLSearchParams(new FormData(form)).toString();
@@ -31,6 +45,7 @@
 
       const data = await response.json();
       results.innerHTML = data.html;
+      announce(data.status);
       history.replaceState(
         null,
         "",

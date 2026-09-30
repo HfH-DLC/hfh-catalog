@@ -20,10 +20,12 @@ get_header();
         <div class="hfh-catalog__layout">
             <?php if ($sites || $filters) : ?>
                 <div class="hfh-catalog__sidebar">
+                    <a class="hfh-catalog__skip-link" href="#hfh-catalog-books"><?php esc_html_e('Skip to books', Plugin::TEXT_DOMAIN); ?></a>
+
                     <?php do_action('hfh_catalog_before_filters', $catalog); ?>
 
                     <?php if ($filters) : ?>
-                        <form class="hfh-catalog__filters" method="get" action="<?php echo esc_url(Frontend::get_instance()->catalog_url($catalog->slug)); ?>">
+                        <form class="hfh-catalog__filters" method="get" action="<?php echo esc_url($frontend->catalog_url($catalog->slug)); ?>">
                             <div class="hfh-catalog__filters-title"><?php esc_html_e('Filter by', Plugin::TEXT_DOMAIN); ?></div>
 
                             <?php foreach ($filters as $filter) : ?>
@@ -54,7 +56,7 @@ get_header();
                             <p class="hfh-catalog__filters-actions">
                                 <button type="submit"><?php esc_html_e('Apply filters', Plugin::TEXT_DOMAIN); ?></button>
                                 <?php if ($selection) : ?>
-                                    <a href="<?php echo esc_url(Frontend::get_instance()->catalog_url($catalog->slug)); ?>"><?php esc_html_e('Reset', Plugin::TEXT_DOMAIN); ?></a>
+                                    <a href="<?php echo esc_url($frontend->catalog_url($catalog->slug)); ?>"><?php esc_html_e('Reset', Plugin::TEXT_DOMAIN); ?></a>
                                 <?php endif; ?>
                             </p>
                         </form>
@@ -62,16 +64,21 @@ get_header();
                 </div>
             <?php endif; ?>
 
-            <div class="hfh-catalog__results">
-                <?php echo $frontend->render_results($sites, $selection); ?>
+            <div class="hfh-catalog__main">
+                <h2 class="hfh-catalog__visually-hidden" id="hfh-catalog-books" tabindex="-1"><?php esc_html_e('Books', Plugin::TEXT_DOMAIN); ?></h2>
+                <p class="hfh-catalog__status hfh-catalog__visually-hidden" role="status"><?php echo esc_html($frontend->results_status($sites, $selection)); ?></p>
+
+                <div class="hfh-catalog__results">
+                    <?php echo $frontend->render_results($sites, $selection); ?>
+                </div>
             </div>
         </div>
 
         <?php if (is_super_admin()) : ?>
-            <a href="<?= CatalogPage::url(['id' => $catalog->id]); ?>" class="hfh-catalog__edit">
-                Edit
+            <a href="<?php echo esc_url(CatalogPage::url(['id' => $catalog->id])); ?>" class="hfh-catalog__edit">
+                <?php esc_html_e('Edit', Plugin::TEXT_DOMAIN); ?>
             </a>
-        <?php endif;  ?>
+        <?php endif; ?>
     </div>
 </main>
 <?php

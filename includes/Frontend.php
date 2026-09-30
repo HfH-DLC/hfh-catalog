@@ -272,4 +272,17 @@ class Frontend
         require HFH_CATALOG_PLUGIN_DIR . 'templates/results.php';
         return ob_get_clean();
     }
+
+    public function results_status(array $sites, array $selection): string
+    {
+        if ($sites) {
+            $count = count($sites);
+            /* translators: %s: number of books */
+            return sprintf(_n('%s book', '%s books', $count, Plugin::TEXT_DOMAIN), number_format_i18n($count));
+        }
+
+        return $selection
+            ? __('No books match your selection.', Plugin::TEXT_DOMAIN)
+            : __('This catalog has no books yet.', Plugin::TEXT_DOMAIN);
+    }
 }

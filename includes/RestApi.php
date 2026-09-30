@@ -94,8 +94,9 @@ class RestApi
         $sites = $frontend->sites_for_selection((int) $catalog->id, $selection);
 
         return [
-            'count' => count($sites),
-            'html'  => $frontend->render_results($sites, $selection),
+            'count'  => count($sites),
+            'status' => $frontend->results_status($sites, $selection),
+            'html'   => $frontend->render_results($sites, $selection),
         ];
     }
 

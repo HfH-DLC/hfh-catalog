@@ -30,7 +30,7 @@ use HfH\Catalog\Plugin;
         <?php endforeach; ?>
     </ul>
 <?php elseif ($selection) : ?>
-    <p><?php esc_html_e('No entries match your selection.', Plugin::TEXT_DOMAIN); ?></p>
+    <p><?php esc_html_e('No books match your selection.', Plugin::TEXT_DOMAIN); ?></p>
 <?php else : ?>
-    <p><?php esc_html_e('This catalog has no entries yet.', Plugin::TEXT_DOMAIN); ?></p>
+    <p><?php esc_html_e('This catalog has no books yet.', Plugin::TEXT_DOMAIN); ?></p>
 <?php endif; ?>
