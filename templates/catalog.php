@@ -3,6 +3,7 @@
 use HfH\Catalog\Admin\Page\CatalogPage;
 use HfH\Catalog\Frontend;
 use HfH\Catalog\Plugin;
+use HfH\Catalog\Repository\Catalogs;
 use HfH\Catalog\Repository\Filters;
 
 $frontend = Frontend::get_instance();
@@ -10,12 +11,35 @@ $catalog = $frontend->get_catalog();
 $filters = Filters::findWithOptionsForCatalog((int) $catalog->id);
 $selection = $frontend->selection_from_query($filters);
 $sites = $frontend->sites_for_selection((int) $catalog->id, $selection);
+$listed_catalogs = (int) $catalog->listed === 1 ? Catalogs::findListed() : [];
 
 get_header();
 ?>
 <main class="hfh-catalog-page">
     <div class="hfh-catalog">
-        <h1><?php echo esc_html($catalog->name); ?></h1>
+        <div class="hfh-catalog__header">
+            <h1><?php echo esc_html($catalog->name); ?></h1>
+
+            <?php if (count($listed_catalogs) > 1) : ?>
+                <details class="hfh-catalog__switcher">
+                    <summary class="hfh-catalog__switcher-toggle">
+                        <?php esc_html_e('Catalog:', Plugin::TEXT_DOMAIN); ?>
+                        <?php echo esc_html($catalog->name); ?>
+                    </summary>
+                    <nav class="hfh-catalog__switcher-nav" aria-label="<?php esc_attr_e('Catalogs', Plugin::TEXT_DOMAIN); ?>">
+                        <ul class="hfh-catalog__switcher-list">
+                            <?php foreach ($listed_catalogs as $listed_catalog) : ?>
+                                <li>
+                                    <a class="hfh-catalog__switcher-link" href="<?php echo esc_url($frontend->catalog_url($listed_catalog->slug)); ?>" <?php if ((int) $listed_catalog->id === (int) $catalog->id) : ?>aria-current="page" <?php endif; ?>>
+                                        <?php echo esc_html($listed_catalog->name); ?>
+                                    </a>
+                                </li>
+                            <?php endforeach; ?>
+                        </ul>
+                    </nav>
+                </details>
+            <?php endif; ?>
+        </div>
 
         <div class="hfh-catalog__layout">
             <?php if ($sites || $filters) : ?>
