@@ -91,12 +91,13 @@ class RestApi
         $frontend = Frontend::get_instance();
         $filters = Filters::findWithOptionsForCatalog((int) $catalog->id);
         $selection = $frontend->selection_from_query($filters);
+        $view = $frontend->view_from_query();
         $sites = $frontend->sites_for_selection((int) $catalog->id, $selection);
 
         return [
             'count'  => count($sites),
             'status' => $frontend->results_status($sites, $selection),
-            'html'   => $frontend->render_results($sites, $selection),
+            'html'   => $frontend->render_results($sites, $selection, $view),
         ];
     }
 

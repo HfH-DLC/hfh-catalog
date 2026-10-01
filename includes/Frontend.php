@@ -16,6 +16,9 @@ class Frontend
     const QUERY_VAR_SLUG = 'hfh_catalog_slug';
     const QUERY_VAR_INDEX = 'hfh_catalog_index';
     const FILTER_PREFIX = 'hfhcat_';
+    const VIEW_PARAM = 'hfhcat-view';
+    const VIEW_GRID = 'grid';
+    const VIEW_LIST = 'list';
 
     private static ?self $instance = null;
     private ?object $catalog = null;
@@ -252,6 +255,32 @@ class Frontend
         return $selection;
     }
 
+    public function view_from_query(): string
+    {
+        $view = $_GET[self::VIEW_PARAM] ?? null;
+
+        return is_string($view) && wp_unslash($view) === self::VIEW_LIST ? self::VIEW_LIST : self::VIEW_GRID;
+    }
+
+    public function view_url(string $slug, array $selection, string $view): string
+    {
+        $pairs = [];
+
+        foreach ($selection as $filter_slug => $option_slugs) {
+            foreach ($option_slugs as $option_slug) {
+                $pairs[] = rawurlencode($this->filter_param((string) $filter_slug)) . '[]=' . rawurlencode($option_slug);
+            }
+        }
+
+        if ($view === self::VIEW_LIST) {
+            $pairs[] = self::VIEW_PARAM . '=' . self::VIEW_LIST;
+        }
+
+        $url = $this->catalog_url($slug);
+
+        return $pairs ? $url . '?' . implode('&', $pairs) : $url;
+    }
+
     /**
      * The catalog's sites matching the selection, in catalog order.
      */
@@ -266,7 +295,7 @@ class Frontend
     /**
      * Renders the results partial and returns it.
      */
-    public function render_results(array $sites, array $selection): string
+    public function render_results(array $sites, array $selection, string $view = self::VIEW_GRID): string
     {
         ob_start();
         require HFH_CATALOG_PLUGIN_DIR . 'templates/results.php';

@@ -10,8 +10,13 @@ $frontend = Frontend::get_instance();
 $catalog = $frontend->get_catalog();
 $filters = Filters::findWithOptionsForCatalog((int) $catalog->id);
 $selection = $frontend->selection_from_query($filters);
+$view = $frontend->view_from_query();
 $sites = $frontend->sites_for_selection((int) $catalog->id, $selection);
 $listed_catalogs = (int) $catalog->listed === 1 ? Catalogs::findListed() : [];
+$views = [
+    Frontend::VIEW_GRID => __('Grid', Plugin::TEXT_DOMAIN),
+    Frontend::VIEW_LIST => __('List', Plugin::TEXT_DOMAIN),
+];
 
 get_header();
 ?>
@@ -43,48 +48,63 @@ get_header();
 
         <div class="hfh-catalog__layout">
             <?php if ($sites || $filters) : ?>
-                <div class="hfh-catalog__sidebar">
+                <div class="hfh-catalog__before-filters">
                     <a class="hfh-catalog__skip-link" href="#hfh-catalog-books"><?php esc_html_e('Skip to books', Plugin::TEXT_DOMAIN); ?></a>
 
                     <?php do_action('hfh_catalog_before_filters', $catalog); ?>
+                </div>
 
-                    <?php if ($filters) : ?>
-                        <form class="hfh-catalog__filters" method="get" action="<?php echo esc_url($frontend->catalog_url($catalog->slug)); ?>">
-                            <div class="hfh-catalog__filters-title"><?php esc_html_e('Filter by', Plugin::TEXT_DOMAIN); ?></div>
+                <div class="hfh-catalog__views" role="group" aria-label="<?php esc_attr_e('View', Plugin::TEXT_DOMAIN); ?>">
+                    <?php foreach ($views as $view_key => $view_label) : ?>
+                        <a class="hfh-catalog__view" data-view="<?php echo esc_attr($view_key); ?>" href="<?php echo esc_url($frontend->view_url($catalog->slug, $selection, $view_key)); ?>" <?php if ($view_key === $view) : ?>aria-current="true" <?php endif; ?>>
+                            <?php echo esc_html($view_label); ?>
+                        </a>
+                    <?php endforeach; ?>
+                </div>
+            <?php endif; ?>
 
-                            <?php foreach ($filters as $filter) : ?>
-                                <?php if ($filter->options) : ?>
-                                    <fieldset class="hfh-catalog__filter">
-                                        <legend class="hfh-catalog__filter-legend"><?php echo esc_html($filter->name); ?></legend>
-                                        <div class="hfh-catalog__filter-options">
-                                            <?php foreach ($filter->options as $option) :
-                                                $id = 'hfh-catalog-option-' . $option->id;
-                                                $checked = in_array($option->slug, $selection[$filter->slug] ?? [], true);
-                                            ?>
-                                                <div class="hfh-catalog__filter-option">
-                                                    <input type="checkbox" class="hfh-catalog__checkbox"
-                                                        id="<?php echo esc_attr($id); ?>"
-                                                        name="<?php echo esc_attr($frontend->filter_param($filter->slug)); ?>[]"
-                                                        value="<?php echo esc_attr($option->slug); ?>"
-                                                        <?php checked($checked); ?>>
-                                                    <label class="hfh-catalog__checkbox-label" for="<?php echo esc_attr($id); ?>">
-                                                        <?php echo esc_html($option->name); ?>
-                                                    </label>
-                                                </div>
-                                            <?php endforeach; ?>
-                                        </div>
-                                    </fieldset>
-                                <?php endif; ?>
-                            <?php endforeach; ?>
+            <?php if ($filters) : ?>
+                <div class="hfh-catalog__sidebar">
+                    <form class="hfh-catalog__filters" method="get" action="<?php echo esc_url($frontend->catalog_url($catalog->slug)); ?>">
+                        <div class="hfh-catalog__filters-title"><?php esc_html_e('Filter by', Plugin::TEXT_DOMAIN); ?></div>
 
-                            <p class="hfh-catalog__filters-actions">
-                                <button type="submit"><?php esc_html_e('Apply filters', Plugin::TEXT_DOMAIN); ?></button>
-                                <?php if ($selection) : ?>
-                                    <a href="<?php echo esc_url($frontend->catalog_url($catalog->slug)); ?>"><?php esc_html_e('Reset', Plugin::TEXT_DOMAIN); ?></a>
-                                <?php endif; ?>
-                            </p>
-                        </form>
-                    <?php endif; ?>
+                        <?php foreach ($filters as $filter) : ?>
+                            <?php if ($filter->options) : ?>
+                                <fieldset class="hfh-catalog__filter">
+                                    <legend class="hfh-catalog__filter-legend"><?php echo esc_html($filter->name); ?></legend>
+                                    <div class="hfh-catalog__filter-options">
+                                        <?php foreach ($filter->options as $option) :
+                                            $id = 'hfh-catalog-option-' . $option->id;
+                                            $checked = in_array($option->slug, $selection[$filter->slug] ?? [], true);
+                                        ?>
+                                            <div class="hfh-catalog__filter-option">
+                                                <input type="checkbox" class="hfh-catalog__checkbox"
+                                                    id="<?php echo esc_attr($id); ?>"
+                                                    name="<?php echo esc_attr($frontend->filter_param($filter->slug)); ?>[]"
+                                                    value="<?php echo esc_attr($option->slug); ?>"
+                                                    <?php checked($checked); ?>>
+                                                <label class="hfh-catalog__checkbox-label" for="<?php echo esc_attr($id); ?>">
+                                                    <?php echo esc_html($option->name); ?>
+                                                </label>
+                                            </div>
+                                        <?php endforeach; ?>
+                                    </div>
+                                </fieldset>
+                            <?php endif; ?>
+                        <?php endforeach; ?>
+
+                        <input type="hidden" class="hfh-catalog__view-input"
+                            name="<?php echo esc_attr(Frontend::VIEW_PARAM); ?>"
+                            value="<?php echo esc_attr(Frontend::VIEW_LIST); ?>"
+                            <?php disabled($view, Frontend::VIEW_GRID); ?>>
+
+                        <p class="hfh-catalog__filters-actions">
+                            <button type="submit"><?php esc_html_e('Apply filters', Plugin::TEXT_DOMAIN); ?></button>
+                            <?php if ($selection) : ?>
+                                <a href="<?php echo esc_url($frontend->view_url($catalog->slug, [], $view)); ?>"><?php esc_html_e('Reset', Plugin::TEXT_DOMAIN); ?></a>
+                            <?php endif; ?>
+                        </p>
+                    </form>
                 </div>
             <?php endif; ?>
 
@@ -93,7 +113,7 @@ get_header();
                 <p class="hfh-catalog__status hfh-catalog__visually-hidden" role="status"><?php echo esc_html($frontend->results_status($sites, $selection)); ?></p>
 
                 <div class="hfh-catalog__results">
-                    <?php echo $frontend->render_results($sites, $selection); ?>
+                    <?php echo $frontend->render_results($sites, $selection, $view); ?>
                 </div>
             </div>
         </div>

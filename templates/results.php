@@ -1,16 +1,18 @@
 <?php
 
+use HfH\Catalog\Frontend;
 use HfH\Catalog\Plugin;
 
 /**
  * Rendered by Frontend::render_results(), which passes:
  *
- * @var array $sites     Sites with their book data, in catalog order.
- * @var array $selection The active filter selection.
+ * @var array  $sites     Sites with their book data, in catalog order.
+ * @var array  $selection The active filter selection.
+ * @var string $view      Frontend::VIEW_GRID or Frontend::VIEW_LIST.
  */
 ?>
 <?php if ($sites) : ?>
-    <ul class="hfh-catalog__list">
+    <ul class="hfh-catalog__list<?php if ($view === Frontend::VIEW_LIST) : ?> hfh-catalog__list--list<?php endif; ?>">
         <?php foreach ($sites as $book) : ?>
             <li>
                 <a class="hfh-catalog__card" href="<?php echo esc_url($book->url); ?>">
