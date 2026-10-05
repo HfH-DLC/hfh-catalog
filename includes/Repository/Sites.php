@@ -90,6 +90,7 @@ class Sites
         $blog_id = (int) $site->blog_id;
         $meta = fn(string $key): string => (string) get_site_meta($blog_id, $key, true);
         $excerpt = $meta(self::META_SHORT_DESCRIPTION) ?: $meta(self::META_LONG_DESCRIPTION);
+        $site_url = self::siteUrl($site);
 
         return (object) [
             'blog_id' => $blog_id,
@@ -98,12 +99,30 @@ class Sites
             'path' => $site->path,
             'archived' => $site->archived === '1',
             'deleted' => $site->deleted === '1',
-            'url' => $meta(self::META_URL) ?: get_home_url($blog_id),
+            'url' => $site_url,
             'title' => $meta(self::META_TITLE) ?: $site->blogname,
             'authors' => self::authorNames($blog_id),
-            'cover' => $meta(self::META_COVER),
+            'cover' => self::currentCoverUrl($meta(self::META_COVER), $meta(self::META_URL), $site_url),
             'excerpt' => wp_trim_words(wp_strip_all_tags($excerpt), 50),
         ];
+    }
+
+    private static function siteUrl(\WP_Site $site): string
+    {
+        return set_url_scheme('http://' . $site->domain . $site->path);
+    }
+
+    private static function currentCoverUrl(string $cover, string $stored_url, string $site_url): string
+    {
+        if ($cover === '' || $stored_url === '') {
+            return $cover;
+        }
+
+        $stored_base = trailingslashit($stored_url);
+
+        return str_starts_with($cover, $stored_base)
+            ? $site_url . substr($cover, strlen($stored_base))
+            : $cover;
     }
 
     private static function authorNames(int $blog_id): string
