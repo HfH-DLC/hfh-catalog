@@ -9,7 +9,7 @@ $catalogs = Catalogs::findListed();
 get_header();
 ?>
 <main id="main" class="hfh-catalog">
-    <h1><?php esc_html_e('Catalogs', Plugin::TEXT_DOMAIN); ?></h1>
+    <h1><?php esc_html_e('Catalogs', 'hfh-catalog'); ?></h1>
     <?php if ($catalogs) : ?>
         <ul class="hfh-catalog__index">
             <?php foreach ($catalogs as $catalog) : ?>
@@ -21,7 +21,7 @@ get_header();
             <?php endforeach; ?>
         </ul>
     <?php else : ?>
-        <p><?php esc_html_e('No catalogs yet.', Plugin::TEXT_DOMAIN); ?></p>
+        <p><?php esc_html_e('No catalogs yet.', 'hfh-catalog'); ?></p>
     <?php endif; ?>
 </main>
 <?php

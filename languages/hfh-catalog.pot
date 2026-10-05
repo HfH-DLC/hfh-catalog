@@ -1,0 +1,590 @@
+# Copyright (C) 2026 Matthias Nötzli
+# This file is distributed under the GPLv2.
+msgid ""
+msgstr ""
+"Project-Id-Version: HfH Catalog 1.0.0\n"
+"Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/hfh-catalog\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"POT-Creation-Date: 2026-10-05T09:12:26+00:00\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"X-Generator: WP-CLI 2.12.0\n"
+"X-Domain: hfh-catalog\n"
+
+#. Plugin Name of the plugin
+#: hfh-catalog.php
+msgid "HfH Catalog"
+msgstr ""
+
+#. Description of the plugin
+#: hfh-catalog.php
+msgid "Network-wide catalogs of subsites with filters."
+msgstr ""
+
+#. Author of the plugin
+#: hfh-catalog.php
+msgid "Matthias Nötzli"
+msgstr ""
+
+#: includes/Admin/Menu.php:70
+#: includes/Admin/Menu.php:71
+msgid "All Catalogs"
+msgstr ""
+
+#: includes/Admin/Menu.php:162
+#: includes/RestApi.php:123
+msgid "The order could not be saved. Reload the page and try again."
+msgstr ""
+
+#: includes/Admin/Page/AdminPage.php:58
+msgid "Sorry, you are not allowed to execute this action."
+msgstr ""
+
+#: includes/Admin/Page/AdminPage.php:92
+msgid "Something went wrong."
+msgstr ""
+
+#: includes/Admin/Page/CatalogPage.php:55
+#: includes/Admin/Page/CatalogPage.php:60
+msgid "Edit Catalog"
+msgstr ""
+
+#: includes/Admin/Page/CatalogPage.php:94
+msgid "Please enter a valid catalog name or slug."
+msgstr ""
+
+#: includes/Admin/Page/CatalogPage.php:95
+#: includes/Admin/Page/NewCatalogPage.php:36
+msgid "This slug is already in use."
+msgstr ""
+
+#: includes/Admin/Page/CatalogPage.php:96
+msgid "Please select a valid site."
+msgstr ""
+
+#: includes/Admin/Page/CatalogPage.php:97
+#: includes/Admin/Page/FilterPage.php:75
+msgid "Please enter a valid filter name."
+msgstr ""
+
+#: includes/Admin/Page/CatalogPage.php:98
+#: includes/Admin/Page/FilterPage.php:76
+msgid "A filter with this name already exists."
+msgstr ""
+
+#: includes/Admin/Page/CatalogPage.php:99
+#: includes/Admin/Page/CatalogsPage.php:56
+#: includes/Admin/Page/FilterOptionPage.php:47
+#: includes/Admin/Page/FilterPage.php:79
+#: includes/Admin/Page/SettingsPage.php:45
+#: includes/Admin/Page/SitePage.php:45
+msgid "Your changes could not be saved."
+msgstr ""
+
+#: includes/Admin/Page/CatalogPage.php:102
+msgid "Catalog updated."
+msgstr ""
+
+#: includes/Admin/Page/CatalogPage.php:103
+msgid "Site added."
+msgstr ""
+
+#: includes/Admin/Page/CatalogPage.php:104
+msgid "Site removed."
+msgstr ""
+
+#: includes/Admin/Page/CatalogPage.php:105
+msgid "Site updated."
+msgstr ""
+
+#: includes/Admin/Page/CatalogPage.php:106
+msgid "Filter added."
+msgstr ""
+
+#: includes/Admin/Page/CatalogPage.php:107
+msgid "Filter deleted."
+msgstr ""
+
+#: includes/Admin/Page/CatalogPage.php:114
+#: includes/Admin/Page/FilterPage.php:101
+#: includes/Admin/Page/SettingsPage.php:29
+msgid "Settings"
+msgstr ""
+
+#: includes/Admin/Page/CatalogPage.php:120
+#: includes/Admin/Page/FilterOptionPage.php:68
+#: includes/Admin/Page/FilterPage.php:107
+#: includes/Admin/Page/NewCatalogPage.php:49
+#: includes/Admin/Table/CatalogsListTable.php:51
+#: includes/Admin/Table/SiteCatalogsListTable.php:31
+msgid "Name"
+msgstr ""
+
+#: includes/Admin/Page/CatalogPage.php:124
+#: includes/Admin/Page/NewCatalogPage.php:53
+#: includes/Admin/Table/CatalogsListTable.php:52
+#: includes/Admin/Table/SiteCatalogsListTable.php:32
+msgid "Slug"
+msgstr ""
+
+#: includes/Admin/Page/CatalogPage.php:128
+msgid "Public address:"
+msgstr ""
+
+#: includes/Admin/Page/CatalogPage.php:130
+msgid "Changing the slug changes this address, and existing links to it will stop working."
+msgstr ""
+
+#: includes/Admin/Page/CatalogPage.php:135
+msgid "Description"
+msgstr ""
+
+#: includes/Admin/Page/CatalogPage.php:148
+msgid "Shown under the title on the catalog page."
+msgstr ""
+
+#: includes/Admin/Page/CatalogPage.php:152
+#: includes/Admin/Page/FilterOptionPage.php:72
+#: includes/Admin/Page/FilterPage.php:111
+#: includes/Admin/Page/SitePage.php:92
+msgid "Update"
+msgstr ""
+
+#: includes/Admin/Page/CatalogPage.php:155
+msgid "Sites"
+msgstr ""
+
+#: includes/Admin/Page/CatalogPage.php:160
+msgid "Site to add"
+msgstr ""
+
+#: includes/Admin/Page/CatalogPage.php:162
+msgid "Start typing a site name or URL…"
+msgstr ""
+
+#: includes/Admin/Page/CatalogPage.php:168
+msgid "Add site"
+msgstr ""
+
+#: includes/Admin/Page/CatalogPage.php:176
+msgid "No sites in this catalog yet."
+msgstr ""
+
+#: includes/Admin/Page/CatalogPage.php:179
+msgid "Filters"
+msgstr ""
+
+#: includes/Admin/Page/CatalogPage.php:184
+#: includes/Admin/Page/CatalogPage.php:186
+msgid "New filter name"
+msgstr ""
+
+#: includes/Admin/Page/CatalogPage.php:188
+msgid "Add filter"
+msgstr ""
+
+#: includes/Admin/Page/CatalogPage.php:196
+msgid "No filters yet."
+msgstr ""
+
+#: includes/Admin/Page/CatalogPage.php:345
+#: includes/Admin/Page/CatalogsPage.php:122
+#: includes/Admin/Page/FilterPage.php:66
+#: includes/RestApi.php:86
+msgid "Catalog not found."
+msgstr ""
+
+#: includes/Admin/Page/CatalogsPage.php:33
+#: includes/Admin/Page/CatalogsPage.php:38
+#: includes/Admin/SiteCatalogs.php:41
+#: includes/Admin/SiteCatalogs.php:42
+#: includes/Admin/SiteCatalogs.php:55
+#: includes/Frontend.php:169
+#: templates/catalog.php:34
+#: templates/catalogs.php:12
+msgid "Catalogs"
+msgstr ""
+
+#: includes/Admin/Page/CatalogsPage.php:59
+msgid "Catalog created."
+msgstr ""
+
+#: includes/Admin/Page/CatalogsPage.php:60
+msgid "Catalog deleted."
+msgstr ""
+
+#: includes/Admin/Page/CatalogsPage.php:61
+msgid "Catalog index updated."
+msgstr ""
+
+#: includes/Admin/Page/CatalogsPage.php:66
+#: includes/Admin/Page/NewCatalogPage.php:24
+msgid "Add New"
+msgstr ""
+
+#: includes/Admin/Page/CatalogsPage.php:72
+#: templates/catalogs.php:24
+msgid "No catalogs yet."
+msgstr ""
+
+#: includes/Admin/Page/FilterOptionPage.php:23
+#: includes/Admin/Page/FilterOptionPage.php:28
+msgid "Edit Option"
+msgstr ""
+
+#: includes/Admin/Page/FilterOptionPage.php:41
+#: includes/Admin/Page/FilterPage.php:212
+msgid "Filter not found."
+msgstr ""
+
+#: includes/Admin/Page/FilterOptionPage.php:45
+#: includes/Admin/Page/FilterPage.php:77
+msgid "Please enter a valid option."
+msgstr ""
+
+#: includes/Admin/Page/FilterOptionPage.php:46
+#: includes/Admin/Page/FilterPage.php:78
+msgid "This option already exists for this filter."
+msgstr ""
+
+#. translators: %s: filter name
+#. translators: %s: catalog name
+#: includes/Admin/Page/FilterOptionPage.php:56
+#: includes/Admin/Page/FilterPage.php:94
+#: includes/Admin/Page/SitePage.php:54
+#, php-format
+msgid "← Back to %s"
+msgstr ""
+
+#: includes/Admin/Page/FilterOptionPage.php:106
+msgid "Option not found."
+msgstr ""
+
+#: includes/Admin/Page/FilterPage.php:43
+#: includes/Admin/Page/FilterPage.php:48
+msgid "Edit Filter"
+msgstr ""
+
+#: includes/Admin/Page/FilterPage.php:82
+msgid "Filter updated."
+msgstr ""
+
+#: includes/Admin/Page/FilterPage.php:83
+msgid "Option added."
+msgstr ""
+
+#: includes/Admin/Page/FilterPage.php:84
+msgid "Option updated."
+msgstr ""
+
+#: includes/Admin/Page/FilterPage.php:85
+msgid "Option deleted."
+msgstr ""
+
+#: includes/Admin/Page/FilterPage.php:114
+#: includes/Admin/Table/FiltersListTable.php:55
+msgid "Options"
+msgstr ""
+
+#: includes/Admin/Page/FilterPage.php:119
+#: includes/Admin/Page/FilterPage.php:121
+msgid "New option name"
+msgstr ""
+
+#: includes/Admin/Page/FilterPage.php:123
+msgid "Add option"
+msgstr ""
+
+#: includes/Admin/Page/FilterPage.php:130
+#: includes/Admin/Page/SitePage.php:75
+msgid "No options yet."
+msgstr ""
+
+#: includes/Admin/Page/NewCatalogPage.php:19
+msgid "Add New Catalog"
+msgstr ""
+
+#: includes/Admin/Page/NewCatalogPage.php:35
+msgid "Please enter a valid name or slug."
+msgstr ""
+
+#: includes/Admin/Page/NewCatalogPage.php:37
+msgid "The catalog could not be saved."
+msgstr ""
+
+#: includes/Admin/Page/NewCatalogPage.php:43
+msgid "Required fields are marked"
+msgstr ""
+
+#: includes/Admin/Page/NewCatalogPage.php:56
+msgid "Leave empty to generate it from the name."
+msgstr ""
+
+#: includes/Admin/Page/NewCatalogPage.php:60
+msgid "Add catalog"
+msgstr ""
+
+#: includes/Admin/Page/SettingsPage.php:24
+msgid "Catalog Settings"
+msgstr ""
+
+#: includes/Admin/Page/SettingsPage.php:44
+msgid "Please enter a valid URL base."
+msgstr ""
+
+#: includes/Admin/Page/SettingsPage.php:48
+msgid "Settings saved."
+msgstr ""
+
+#: includes/Admin/Page/SettingsPage.php:60
+msgid "URL base"
+msgstr ""
+
+#: includes/Admin/Page/SettingsPage.php:64
+msgid "Catalog index:"
+msgstr ""
+
+#: includes/Admin/Page/SettingsPage.php:66
+msgid "Changing the URL base changes the address of every catalog, and existing links to them will stop working."
+msgstr ""
+
+#: includes/Admin/Page/SettingsPage.php:71
+msgid "Save Changes"
+msgstr ""
+
+#: includes/Admin/Page/SitePage.php:23
+#: includes/Admin/Page/SitePage.php:28
+msgid "Edit Site"
+msgstr ""
+
+#: includes/Admin/Page/SitePage.php:62
+msgid "This catalog has no filters yet."
+msgstr ""
+
+#: includes/Admin/Page/SitePage.php:125
+msgid "Site not found in this catalog."
+msgstr ""
+
+#: includes/Admin/SiteCatalogs.php:60
+msgid "This site is not in any catalog yet."
+msgstr ""
+
+#: includes/Admin/Table/CatalogsListTable.php:53
+msgid "On index"
+msgstr ""
+
+#: includes/Admin/Table/CatalogsListTable.php:71
+#: includes/Admin/Table/FilterOptionsListTable.php:67
+#: includes/Admin/Table/FiltersListTable.php:72
+#: includes/Admin/Table/SiteCatalogsListTable.php:58
+#: includes/Admin/Table/SitesListTable.php:85
+#: templates/catalog.php:127
+msgid "Edit"
+msgstr ""
+
+#. translators: %s: catalog name
+#. translators: %s: filter option name
+#. translators: %s: filter name
+#: includes/Admin/Table/CatalogsListTable.php:73
+#: includes/Admin/Table/FilterOptionsListTable.php:69
+#: includes/Admin/Table/FiltersListTable.php:74
+#, php-format
+msgid "Edit \"%s\""
+msgstr ""
+
+#: includes/Admin/Table/CatalogsListTable.php:77
+#: includes/Admin/Table/SiteCatalogsListTable.php:50
+#: templates/catalog.php:61
+msgid "View"
+msgstr ""
+
+#. translators: %s: catalog name
+#: includes/Admin/Table/CatalogsListTable.php:79
+#, php-format
+msgid "View \"%s\""
+msgstr ""
+
+#: includes/Admin/Table/CatalogsListTable.php:87
+msgid "Hide from index"
+msgstr ""
+
+#: includes/Admin/Table/CatalogsListTable.php:88
+msgid "Show on index"
+msgstr ""
+
+#. translators: %s: catalog name
+#: includes/Admin/Table/CatalogsListTable.php:91
+#, php-format
+msgid "Hide \"%s\" from the catalog index"
+msgstr ""
+
+#. translators: %s: catalog name
+#: includes/Admin/Table/CatalogsListTable.php:93
+#, php-format
+msgid "Show \"%s\" on the catalog index"
+msgstr ""
+
+#: includes/Admin/Table/CatalogsListTable.php:100
+#: includes/Admin/Table/FilterOptionsListTable.php:75
+#: includes/Admin/Table/FiltersListTable.php:80
+#: includes/Admin/Table/SitesListTable.php:93
+msgid "Move up"
+msgstr ""
+
+#. translators: %s: catalog name
+#. translators: %s: filter option name
+#. translators: %s: filter name
+#. translators: %s: site name
+#: includes/Admin/Table/CatalogsListTable.php:102
+#: includes/Admin/Table/FilterOptionsListTable.php:77
+#: includes/Admin/Table/FiltersListTable.php:82
+#: includes/Admin/Table/SitesListTable.php:95
+#, php-format
+msgid "Move \"%s\" up"
+msgstr ""
+
+#: includes/Admin/Table/CatalogsListTable.php:107
+#: includes/Admin/Table/FilterOptionsListTable.php:82
+#: includes/Admin/Table/FiltersListTable.php:87
+#: includes/Admin/Table/SitesListTable.php:100
+msgid "Move down"
+msgstr ""
+
+#. translators: %s: catalog name
+#. translators: %s: filter option name
+#. translators: %s: filter name
+#. translators: %s: site name
+#: includes/Admin/Table/CatalogsListTable.php:109
+#: includes/Admin/Table/FilterOptionsListTable.php:84
+#: includes/Admin/Table/FiltersListTable.php:89
+#: includes/Admin/Table/SitesListTable.php:102
+#, php-format
+msgid "Move \"%s\" down"
+msgstr ""
+
+#: includes/Admin/Table/CatalogsListTable.php:115
+#: includes/Admin/Table/FilterOptionsListTable.php:89
+#: includes/Admin/Table/FiltersListTable.php:94
+msgid "Delete"
+msgstr ""
+
+#. translators: %s: catalog name
+#. translators: %s: filter option name
+#. translators: %s: filter name
+#: includes/Admin/Table/CatalogsListTable.php:117
+#: includes/Admin/Table/FilterOptionsListTable.php:91
+#: includes/Admin/Table/FiltersListTable.php:96
+#, php-format
+msgid "Delete \"%s\""
+msgstr ""
+
+#. translators: %s: catalog name
+#. translators: %s: filter option name
+#. translators: %s: filter name
+#: includes/Admin/Table/CatalogsListTable.php:120
+#: includes/Admin/Table/FilterOptionsListTable.php:94
+#: includes/Admin/Table/FiltersListTable.php:99
+#, php-format
+msgid "Delete \"%s\"?"
+msgstr ""
+
+#: includes/Admin/Table/CatalogsListTable.php:139
+msgid "Yes"
+msgstr ""
+
+#: includes/Admin/Table/CatalogsListTable.php:140
+msgid "No"
+msgstr ""
+
+#: includes/Admin/Table/FilterOptionsListTable.php:51
+msgid "Option"
+msgstr ""
+
+#: includes/Admin/Table/FiltersListTable.php:54
+msgid "Filter"
+msgstr ""
+
+#: includes/Admin/Table/SitesListTable.php:56
+msgid "Site"
+msgstr ""
+
+#: includes/Admin/Table/SitesListTable.php:76
+msgid "Archived"
+msgstr ""
+
+#: includes/Admin/Table/SitesListTable.php:79
+msgid "Deactivated"
+msgstr ""
+
+#. translators: %s: site name
+#: includes/Admin/Table/SitesListTable.php:87
+#, php-format
+msgid "Edit filter options of \"%s\""
+msgstr ""
+
+#: includes/Admin/Table/SitesListTable.php:107
+msgid "Remove"
+msgstr ""
+
+#. translators: %s: site name
+#: includes/Admin/Table/SitesListTable.php:109
+#, php-format
+msgid "Remove \"%s\" from this catalog"
+msgstr ""
+
+#: includes/Admin/Table/SitesListTable.php:122
+msgid "Not shown on the public catalog page."
+msgstr ""
+
+#. translators: %s: number of books
+#: includes/Frontend.php:310
+#, php-format
+msgid "%s book"
+msgid_plural "%s books"
+msgstr[0] ""
+msgstr[1] ""
+
+#: includes/Frontend.php:314
+#: templates/results.php:35
+msgid "No books match your selection."
+msgstr ""
+
+#: includes/Frontend.php:315
+#: templates/results.php:37
+msgid "This catalog has no books yet."
+msgstr ""
+
+#: templates/catalog.php:17
+msgid "Grid"
+msgstr ""
+
+#: templates/catalog.php:18
+msgid "List"
+msgstr ""
+
+#: templates/catalog.php:31
+msgid "Catalog:"
+msgstr ""
+
+#: templates/catalog.php:56
+msgid "Skip to books"
+msgstr ""
+
+#: templates/catalog.php:73
+msgid "Filter by"
+msgstr ""
+
+#: templates/catalog.php:106
+msgid "Apply filters"
+msgstr ""
+
+#: templates/catalog.php:108
+msgid "Reset"
+msgstr ""
+
+#: templates/catalog.php:116
+msgid "Books"
+msgstr ""

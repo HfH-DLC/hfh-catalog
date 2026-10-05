@@ -166,7 +166,7 @@ class Frontend
         if ($this->catalog) {
             $parts['title'] = $this->catalog->name;
         } elseif ($this->is_index) {
-            $parts['title'] = __('Catalogs', Plugin::TEXT_DOMAIN);
+            $parts['title'] = __('Catalogs', 'hfh-catalog');
         }
         return $parts;
     }
@@ -307,11 +307,11 @@ class Frontend
         if ($sites) {
             $count = count($sites);
             /* translators: %s: number of books */
-            return sprintf(_n('%s book', '%s books', $count, Plugin::TEXT_DOMAIN), number_format_i18n($count));
+            return sprintf(_n('%s book', '%s books', $count, 'hfh-catalog'), number_format_i18n($count));
         }
 
         return $selection
-            ? __('No books match your selection.', Plugin::TEXT_DOMAIN)
-            : __('This catalog has no books yet.', Plugin::TEXT_DOMAIN);
+            ? __('No books match your selection.', 'hfh-catalog')
+            : __('This catalog has no books yet.', 'hfh-catalog');
     }
 }

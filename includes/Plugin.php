@@ -12,7 +12,6 @@ use HfH\Catalog\Repository\Sites;
  */
 class Plugin
 {
-    const TEXT_DOMAIN = 'hfh-catalog';
 
     private static ?self $instance = null;
 
@@ -58,7 +57,7 @@ class Plugin
     public function load_textdomain(): void
     {
         load_plugin_textdomain(
-            self::TEXT_DOMAIN,
+            'hfh-catalog',
             false,
             dirname(plugin_basename(HFH_CATALOG_PLUGIN_FILE)) . '/languages'
         );

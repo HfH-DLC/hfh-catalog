@@ -30,12 +30,12 @@ class CatalogsPage extends AdminPage
 
     public function page_title(): string
     {
-        return __('Catalogs', Plugin::TEXT_DOMAIN);
+        return __('Catalogs', 'hfh-catalog');
     }
 
     public function menu_title(): string
     {
-        return __('Catalogs', Plugin::TEXT_DOMAIN);
+        return __('Catalogs', 'hfh-catalog');
     }
 
     protected function handlers(): array
@@ -53,23 +53,23 @@ class CatalogsPage extends AdminPage
         $table->prepare_items();
 
         $errors = [
-            self::ERROR_DB => __('Your changes could not be saved.', Plugin::TEXT_DOMAIN),
+            self::ERROR_DB => __('Your changes could not be saved.', 'hfh-catalog'),
         ];
         $successes = [
-            self::NOTICE_CREATED => __('Catalog created.', Plugin::TEXT_DOMAIN),
-            self::NOTICE_DELETED => __('Catalog deleted.', Plugin::TEXT_DOMAIN),
-            self::NOTICE_LISTED => __('Catalog index updated.', Plugin::TEXT_DOMAIN),
+            self::NOTICE_CREATED => __('Catalog created.', 'hfh-catalog'),
+            self::NOTICE_DELETED => __('Catalog deleted.', 'hfh-catalog'),
+            self::NOTICE_LISTED => __('Catalog index updated.', 'hfh-catalog'),
         ];
 ?>
         <div class="wrap">
             <h1 class="wp-heading-inline"><?php echo esc_html($this->page_title()); ?></h1>
-            <a href="<?php echo esc_url(NewCatalogPage::url()); ?>" class="page-title-action"><?php esc_html_e('Add New', Plugin::TEXT_DOMAIN); ?></a>
+            <a href="<?php echo esc_url(NewCatalogPage::url()); ?>" class="page-title-action"><?php esc_html_e('Add New', 'hfh-catalog'); ?></a>
             <hr class="wp-header-end">
             <?php $this->render_notices($errors, $successes); ?>
             <?php if ($table->has_items()) :
                 $table->display();
             else : ?>
-                <p><?php esc_html_e('No catalogs yet.', Plugin::TEXT_DOMAIN); ?></p>
+                <p><?php esc_html_e('No catalogs yet.', 'hfh-catalog'); ?></p>
             <?php endif; ?>
         </div>
 <?php
@@ -119,7 +119,7 @@ class CatalogsPage extends AdminPage
     {
         $catalog = Catalogs::findById(absint($_GET['catalog_id'] ?? 0));
         if (!$catalog) {
-            $this->not_found(__('Catalog not found.', Plugin::TEXT_DOMAIN));
+            $this->not_found(__('Catalog not found.', 'hfh-catalog'));
         }
         return $catalog;
     }

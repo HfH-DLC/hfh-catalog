@@ -20,12 +20,12 @@ class FilterOptionPage extends AdminPage
 
     public function page_title(): string
     {
-        return __('Edit Option', Plugin::TEXT_DOMAIN);
+        return __('Edit Option', 'hfh-catalog');
     }
 
     public function menu_title(): string
     {
-        return __('Edit Option', Plugin::TEXT_DOMAIN);
+        return __('Edit Option', 'hfh-catalog');
     }
 
     protected function handlers(): array
@@ -38,13 +38,13 @@ class FilterOptionPage extends AdminPage
         $filter_option = $this->current_filter_option();
         $filter = Filters::findById((int) $filter_option->filter_id);
         if (!$filter) {
-            $this->not_found(__('Filter not found.', Plugin::TEXT_DOMAIN));
+            $this->not_found(__('Filter not found.', 'hfh-catalog'));
         }
 
         $errors = [
-            self::ERROR_INVALID => __('Please enter a valid option.', Plugin::TEXT_DOMAIN),
-            self::ERROR_EXISTS  => __('This option already exists for this filter.', Plugin::TEXT_DOMAIN),
-            self::ERROR_DB      => __('Your changes could not be saved.', Plugin::TEXT_DOMAIN),
+            self::ERROR_INVALID => __('Please enter a valid option.', 'hfh-catalog'),
+            self::ERROR_EXISTS  => __('This option already exists for this filter.', 'hfh-catalog'),
+            self::ERROR_DB      => __('Your changes could not be saved.', 'hfh-catalog'),
         ];
 ?>
         <div class="wrap">
@@ -53,7 +53,7 @@ class FilterOptionPage extends AdminPage
                 <a href="<?php echo esc_url(FilterPage::url(['id' => $filter->id])); ?>">
                     <?php
                     /* translators: %s: filter name */
-                    echo esc_html(sprintf(__('← Back to %s', Plugin::TEXT_DOMAIN), $filter->name));
+                    echo esc_html(sprintf(__('← Back to %s', 'hfh-catalog'), $filter->name));
                     ?>
                 </a>
             </p>
@@ -65,11 +65,11 @@ class FilterOptionPage extends AdminPage
                 <input type="hidden" name="hfh_action" value="<?php echo esc_attr(self::ACTION_UPDATE); ?>">
                 <table class="form-table" role="presentation">
                     <tr class="form-field form-required">
-                        <th scope="row"><label for="hfh-option-name"><?php esc_html_e('Name', Plugin::TEXT_DOMAIN); ?></label></th>
+                        <th scope="row"><label for="hfh-option-name"><?php esc_html_e('Name', 'hfh-catalog'); ?></label></th>
                         <td><input type="text" id="hfh-option-name" name="filter_option_name" required value="<?php echo esc_attr($this->values['filter_option_name'] ?? $filter_option->name); ?>"></td>
                     </tr>
                 </table>
-                <?php submit_button(__('Update', Plugin::TEXT_DOMAIN)); ?>
+                <?php submit_button(__('Update', 'hfh-catalog')); ?>
             </form>
         </div>
 <?php
@@ -103,7 +103,7 @@ class FilterOptionPage extends AdminPage
     {
         $filter_option = FilterOptions::findById(absint($_GET['id'] ?? 0));
         if (!$filter_option) {
-            $this->not_found(__('Option not found.', Plugin::TEXT_DOMAIN));
+            $this->not_found(__('Option not found.', 'hfh-catalog'));
         }
         return $filter_option;
     }

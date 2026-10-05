@@ -14,8 +14,8 @@ $view = $frontend->view_from_query();
 $sites = $frontend->sites_for_selection((int) $catalog->id, $selection);
 $listed_catalogs = (int) $catalog->listed === 1 ? Catalogs::findListed() : [];
 $views = [
-    Frontend::VIEW_GRID => __('Grid', Plugin::TEXT_DOMAIN),
-    Frontend::VIEW_LIST => __('List', Plugin::TEXT_DOMAIN),
+    Frontend::VIEW_GRID => __('Grid', 'hfh-catalog'),
+    Frontend::VIEW_LIST => __('List', 'hfh-catalog'),
 ];
 
 get_header();
@@ -28,10 +28,10 @@ get_header();
             <?php if (count($listed_catalogs) > 1) : ?>
                 <details class="hfh-catalog__switcher">
                     <summary class="hfh-catalog__switcher-toggle">
-                        <?php esc_html_e('Catalog:', Plugin::TEXT_DOMAIN); ?>
+                        <?php esc_html_e('Catalog:', 'hfh-catalog'); ?>
                         <?= esc_html($catalog->name); ?>
                     </summary>
-                    <nav class="hfh-catalog__switcher-nav" aria-label="<?php esc_attr_e('Catalogs', Plugin::TEXT_DOMAIN); ?>">
+                    <nav class="hfh-catalog__switcher-nav" aria-label="<?php esc_attr_e('Catalogs', 'hfh-catalog'); ?>">
                         <ul class="hfh-catalog__switcher-list">
                             <?php foreach ($listed_catalogs as $listed_catalog) : ?>
                                 <li>
@@ -53,12 +53,12 @@ get_header();
         <div class="hfh-catalog__layout">
             <?php if ($sites || $filters) : ?>
                 <div class="hfh-catalog__before-filters">
-                    <a class="hfh-catalog__skip-link" href="#hfh-catalog-books"><?php esc_html_e('Skip to books', Plugin::TEXT_DOMAIN); ?></a>
+                    <a class="hfh-catalog__skip-link" href="#hfh-catalog-books"><?php esc_html_e('Skip to books', 'hfh-catalog'); ?></a>
 
                     <?php do_action('hfh_catalog_before_filters', $catalog); ?>
                 </div>
 
-                <div class="hfh-catalog__views" role="group" aria-label="<?php esc_attr_e('View', Plugin::TEXT_DOMAIN); ?>">
+                <div class="hfh-catalog__views" role="group" aria-label="<?php esc_attr_e('View', 'hfh-catalog'); ?>">
                     <?php foreach ($views as $view_key => $view_label) : ?>
                         <a class="hfh-catalog__view" data-view="<?= esc_attr($view_key); ?>" href="<?= esc_url($frontend->view_url($catalog->slug, $selection, $view_key)); ?>" <?php if ($view_key === $view) : ?>aria-current="true" <?php endif; ?>>
                             <?= esc_html($view_label); ?>
@@ -70,7 +70,7 @@ get_header();
             <?php if ($filters) : ?>
                 <div class="hfh-catalog__sidebar">
                     <form class="hfh-catalog__filters" method="get" action="<?= esc_url($frontend->catalog_url($catalog->slug)); ?>">
-                        <div class="hfh-catalog__filters-title"><?php esc_html_e('Filter by', Plugin::TEXT_DOMAIN); ?></div>
+                        <div class="hfh-catalog__filters-title"><?php esc_html_e('Filter by', 'hfh-catalog'); ?></div>
 
                         <?php foreach ($filters as $filter) : ?>
                             <?php if ($filter->options) : ?>
@@ -103,9 +103,9 @@ get_header();
                             <?php disabled($view, Frontend::VIEW_GRID); ?>>
 
                         <p class="hfh-catalog__filters-actions">
-                            <button type="submit"><?php esc_html_e('Apply filters', Plugin::TEXT_DOMAIN); ?></button>
+                            <button type="submit"><?php esc_html_e('Apply filters', 'hfh-catalog'); ?></button>
                             <?php if ($selection) : ?>
-                                <a href="<?= esc_url($frontend->view_url($catalog->slug, [], $view)); ?>"><?php esc_html_e('Reset', Plugin::TEXT_DOMAIN); ?></a>
+                                <a href="<?= esc_url($frontend->view_url($catalog->slug, [], $view)); ?>"><?php esc_html_e('Reset', 'hfh-catalog'); ?></a>
                             <?php endif; ?>
                         </p>
                     </form>
@@ -113,7 +113,7 @@ get_header();
             <?php endif; ?>
 
             <div class="hfh-catalog__main">
-                <h2 class="hfh-catalog__visually-hidden" id="hfh-catalog-books" tabindex="-1"><?php esc_html_e('Books', Plugin::TEXT_DOMAIN); ?></h2>
+                <h2 class="hfh-catalog__visually-hidden" id="hfh-catalog-books" tabindex="-1"><?php esc_html_e('Books', 'hfh-catalog'); ?></h2>
                 <p class="hfh-catalog__status hfh-catalog__visually-hidden" role="status"><?= esc_html($frontend->results_status($sites, $selection)); ?></p>
 
                 <div class="hfh-catalog__results">
@@ -124,7 +124,7 @@ get_header();
 
         <?php if (is_super_admin()) : ?>
             <a href="<?= esc_url(CatalogPage::url(['id' => $catalog->id])); ?>" class="hfh-catalog__edit">
-                <?php esc_html_e('Edit', Plugin::TEXT_DOMAIN); ?>
+                <?php esc_html_e('Edit', 'hfh-catalog'); ?>
             </a>
         <?php endif; ?>
     </div>

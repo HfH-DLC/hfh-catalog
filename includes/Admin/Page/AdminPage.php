@@ -55,7 +55,7 @@ abstract class AdminPage
 
         check_admin_referer($action);
         if (!current_user_can(self::CAPABILITY)) {
-            wp_die(esc_html__('Sorry, you are not allowed to execute this action.', Plugin::TEXT_DOMAIN), 403);
+            wp_die(esc_html__('Sorry, you are not allowed to execute this action.', 'hfh-catalog'), 403);
         }
 
         $this->{$handlers[$action]}();
@@ -89,7 +89,7 @@ abstract class AdminPage
     protected function render_notices(array $errors, array $successes = []): void
     {
         if ($this->error !== '') {
-            $message = $errors[$this->error] ?? __('Something went wrong.', Plugin::TEXT_DOMAIN);
+            $message = $errors[$this->error] ?? __('Something went wrong.', 'hfh-catalog');
             printf('<div class="notice notice-error"><p>%s</p></div>', esc_html($message));
             return;
         }

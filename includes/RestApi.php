@@ -83,7 +83,7 @@ class RestApi
         if (!$catalog) {
             return new \WP_Error(
                 'hfh_catalog_not_found',
-                __('Catalog not found.', Plugin::TEXT_DOMAIN),
+                __('Catalog not found.', 'hfh-catalog'),
                 ['status' => 404]
             );
         }
@@ -120,7 +120,7 @@ class RestApi
         if (!$saved) {
             return new \WP_Error(
                 'hfh_catalog_reorder_failed',
-                __('The order could not be saved. Reload the page and try again.', Plugin::TEXT_DOMAIN),
+                __('The order could not be saved. Reload the page and try again.', 'hfh-catalog'),
                 ['status' => 409]
             );
         }

@@ -28,8 +28,8 @@ class SiteCatalogsListTable extends \WP_List_Table
     public function get_columns(): array
     {
         return [
-            'name' => __('Name', Plugin::TEXT_DOMAIN),
-            'slug' => __('Slug', Plugin::TEXT_DOMAIN),
+            'name' => __('Name', 'hfh-catalog'),
+            'slug' => __('Slug', 'hfh-catalog'),
         ];
     }
 
@@ -47,7 +47,7 @@ class SiteCatalogsListTable extends \WP_List_Table
             'view' => sprintf(
                 '<a href="%s">%s</a>',
                 esc_url($url),
-                esc_html__('View', Plugin::TEXT_DOMAIN)
+                esc_html__('View', 'hfh-catalog')
             ),
         ];
 
@@ -55,7 +55,7 @@ class SiteCatalogsListTable extends \WP_List_Table
             $actions['edit'] = sprintf(
                 '<a href="%s">%s</a>',
                 esc_url(CatalogPage::url(['id' => $catalog->id])),
-                esc_html__('Edit', Plugin::TEXT_DOMAIN)
+                esc_html__('Edit', 'hfh-catalog')
             );
         }
 

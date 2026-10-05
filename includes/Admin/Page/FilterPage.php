@@ -40,12 +40,12 @@ class FilterPage extends AdminPage
 
     public function page_title(): string
     {
-        return __('Edit Filter', Plugin::TEXT_DOMAIN);
+        return __('Edit Filter', 'hfh-catalog');
     }
 
     public function menu_title(): string
     {
-        return __('Edit Filter', Plugin::TEXT_DOMAIN);
+        return __('Edit Filter', 'hfh-catalog');
     }
 
     protected function handlers(): array
@@ -63,7 +63,7 @@ class FilterPage extends AdminPage
         $filter = $this->current_filter();
         $catalog = Catalogs::findById((int) $filter->catalog_id);
         if (!$catalog) {
-            $this->not_found(__('Catalog not found.', Plugin::TEXT_DOMAIN));
+            $this->not_found(__('Catalog not found.', 'hfh-catalog'));
         }
 
         $filter_url = self::url(['id' => $filter->id]);
@@ -72,17 +72,17 @@ class FilterPage extends AdminPage
         $options_table->prepare_items();
 
         $errors = [
-            self::ERROR_INVALID        => __('Please enter a valid filter name.', Plugin::TEXT_DOMAIN),
-            self::ERROR_FILTER_EXISTS  => __('A filter with this name already exists.', Plugin::TEXT_DOMAIN),
-            self::ERROR_INVALID_OPTION => __('Please enter a valid option.', Plugin::TEXT_DOMAIN),
-            self::ERROR_OPTION_EXISTS  => __('This option already exists for this filter.', Plugin::TEXT_DOMAIN),
-            self::ERROR_DB             => __('Your changes could not be saved.', Plugin::TEXT_DOMAIN),
+            self::ERROR_INVALID        => __('Please enter a valid filter name.', 'hfh-catalog'),
+            self::ERROR_FILTER_EXISTS  => __('A filter with this name already exists.', 'hfh-catalog'),
+            self::ERROR_INVALID_OPTION => __('Please enter a valid option.', 'hfh-catalog'),
+            self::ERROR_OPTION_EXISTS  => __('This option already exists for this filter.', 'hfh-catalog'),
+            self::ERROR_DB             => __('Your changes could not be saved.', 'hfh-catalog'),
         ];
         $successes = [
-            self::NOTICE_UPDATED        => __('Filter updated.', Plugin::TEXT_DOMAIN),
-            self::NOTICE_OPTION_ADDED   => __('Option added.', Plugin::TEXT_DOMAIN),
-            self::NOTICE_OPTION_UPDATED => __('Option updated.', Plugin::TEXT_DOMAIN),
-            self::NOTICE_OPTION_DELETED => __('Option deleted.', Plugin::TEXT_DOMAIN),
+            self::NOTICE_UPDATED        => __('Filter updated.', 'hfh-catalog'),
+            self::NOTICE_OPTION_ADDED   => __('Option added.', 'hfh-catalog'),
+            self::NOTICE_OPTION_UPDATED => __('Option updated.', 'hfh-catalog'),
+            self::NOTICE_OPTION_DELETED => __('Option deleted.', 'hfh-catalog'),
         ];
 ?>
         <div class="wrap">
@@ -91,43 +91,43 @@ class FilterPage extends AdminPage
                 <a href="<?php echo esc_url(CatalogPage::url(['id' => $catalog->id])); ?>">
                     <?php
                     /* translators: %s: catalog name */
-                    echo esc_html(sprintf(__('← Back to %s', Plugin::TEXT_DOMAIN), $catalog->name));
+                    echo esc_html(sprintf(__('← Back to %s', 'hfh-catalog'), $catalog->name));
                     ?>
                 </a>
             </p>
 
             <?php $this->render_notices($errors, $successes); ?>
 
-            <h2><?php esc_html_e('Settings', Plugin::TEXT_DOMAIN); ?></h2>
+            <h2><?php esc_html_e('Settings', 'hfh-catalog'); ?></h2>
             <form method="post" action="<?php echo esc_url($filter_url); ?>">
                 <?php wp_nonce_field(self::ACTION_UPDATE); ?>
                 <input type="hidden" name="hfh_action" value="<?php echo esc_attr(self::ACTION_UPDATE); ?>">
                 <table class="form-table" role="presentation">
                     <tr class="form-field form-required">
-                        <th scope="row"><label for="hfh-filter-name"><?php esc_html_e('Name', Plugin::TEXT_DOMAIN); ?></label></th>
+                        <th scope="row"><label for="hfh-filter-name"><?php esc_html_e('Name', 'hfh-catalog'); ?></label></th>
                         <td><input type="text" id="hfh-filter-name" name="filter_name" required value="<?php echo esc_attr($this->values['filter_name'] ?? $filter->name); ?>"></td>
                     </tr>
                 </table>
-                <?php submit_button(__('Update', Plugin::TEXT_DOMAIN)); ?>
+                <?php submit_button(__('Update', 'hfh-catalog')); ?>
             </form>
 
-            <h2><?php esc_html_e('Options', Plugin::TEXT_DOMAIN); ?></h2>
+            <h2><?php esc_html_e('Options', 'hfh-catalog'); ?></h2>
             <div class="tablenav top">
                 <form method="post" action="<?php echo esc_url($filter_url); ?>" class="alignleft actions">
                     <?php wp_nonce_field(self::ACTION_ADD_OPTION); ?>
                     <input type="hidden" name="hfh_action" value="<?php echo esc_attr(self::ACTION_ADD_OPTION); ?>">
-                    <label for="hfh-option-name" class="screen-reader-text"><?php esc_html_e('New option name', Plugin::TEXT_DOMAIN); ?></label>
+                    <label for="hfh-option-name" class="screen-reader-text"><?php esc_html_e('New option name', 'hfh-catalog'); ?></label>
                     <input type="text" id="hfh-option-name" name="filter_option_name" required
-                        placeholder="<?php esc_attr_e('New option name', Plugin::TEXT_DOMAIN); ?>"
+                        placeholder="<?php esc_attr_e('New option name', 'hfh-catalog'); ?>"
                         value="<?php echo esc_attr($this->values['filter_option_name'] ?? ''); ?>">
-                    <?php submit_button(__('Add option', Plugin::TEXT_DOMAIN), '', 'submit', false); ?>
+                    <?php submit_button(__('Add option', 'hfh-catalog'), '', 'submit', false); ?>
                 </form>
                 <br class="clear">
             </div>
             <?php if ($options_table->has_items()) :
                 $options_table->display();
             else : ?>
-                <p><?php esc_html_e('No options yet.', Plugin::TEXT_DOMAIN); ?></p>
+                <p><?php esc_html_e('No options yet.', 'hfh-catalog'); ?></p>
             <?php endif; ?>
         </div>
 <?php
@@ -209,7 +209,7 @@ class FilterPage extends AdminPage
     {
         $filter = Filters::findById(absint($_GET['id'] ?? 0));
         if (!$filter) {
-            $this->not_found(__('Filter not found.', Plugin::TEXT_DOMAIN));
+            $this->not_found(__('Filter not found.', 'hfh-catalog'));
         }
         return $filter;
     }

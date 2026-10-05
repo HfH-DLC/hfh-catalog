@@ -51,8 +51,8 @@ class FiltersListTable extends SortableListTable
     public function get_columns(): array
     {
         return [
-            'name'    => __('Filter', Plugin::TEXT_DOMAIN),
-            'options' => __('Options', Plugin::TEXT_DOMAIN),
+            'name'    => __('Filter', 'hfh-catalog'),
+            'options' => __('Options', 'hfh-catalog'),
         ];
     }
 
@@ -69,34 +69,34 @@ class FiltersListTable extends SortableListTable
         $actions = [
             'edit' => $this->action_link(
                 $filter_url,
-                __('Edit', Plugin::TEXT_DOMAIN),
+                __('Edit', 'hfh-catalog'),
                 /* translators: %s: filter name */
-                sprintf(__('Edit “%s”', Plugin::TEXT_DOMAIN), $filter->name)
+                sprintf(__('Edit "%s"', 'hfh-catalog'), $filter->name)
             ),
         ];
 
         $actions['move_up'] = $this->action_link(
             $this->action_url(CatalogPage::ACTION_MOVE_FILTER, $filter, ['direction' => 'up']),
-            __('Move up', Plugin::TEXT_DOMAIN),
+            __('Move up', 'hfh-catalog'),
             /* translators: %s: filter name */
-            sprintf(__('Move “%s” up', Plugin::TEXT_DOMAIN), $filter->name)
+            sprintf(__('Move "%s" up', 'hfh-catalog'), $filter->name)
         );
 
         $actions['move_down'] = $this->action_link(
             $this->action_url(CatalogPage::ACTION_MOVE_FILTER, $filter, ['direction' => 'down']),
-            __('Move down', Plugin::TEXT_DOMAIN),
+            __('Move down', 'hfh-catalog'),
             /* translators: %s: filter name */
-            sprintf(__('Move “%s” down', Plugin::TEXT_DOMAIN), $filter->name)
+            sprintf(__('Move "%s" down', 'hfh-catalog'), $filter->name)
         );
 
         $actions['delete'] = $this->action_link(
             $this->action_url(CatalogPage::ACTION_DELETE_FILTER, $filter),
-            __('Delete', Plugin::TEXT_DOMAIN),
+            __('Delete', 'hfh-catalog'),
             /* translators: %s: filter name */
-            sprintf(__('Delete “%s”', Plugin::TEXT_DOMAIN), $filter->name),
+            sprintf(__('Delete "%s"', 'hfh-catalog'), $filter->name),
             'submitdelete',
             /* translators: %s: filter name */
-            sprintf(__('Delete “%s” and all its options? This cannot be undone.', Plugin::TEXT_DOMAIN), $filter->name)
+            sprintf(__('Delete "%s"?', 'hfh-catalog'), $filter->name)
         );
 
         ob_start();

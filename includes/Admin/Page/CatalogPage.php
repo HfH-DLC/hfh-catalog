@@ -52,12 +52,12 @@ class CatalogPage extends AdminPage
 
     public function page_title(): string
     {
-        return __('Edit Catalog', Plugin::TEXT_DOMAIN);
+        return __('Edit Catalog', 'hfh-catalog');
     }
 
     public function menu_title(): string
     {
-        return __('Edit Catalog', Plugin::TEXT_DOMAIN);
+        return __('Edit Catalog', 'hfh-catalog');
     }
 
     protected function handlers(): array
@@ -91,48 +91,48 @@ class CatalogPage extends AdminPage
         $available_sites = Sites::findAvailable((int) $catalog->id);
 
         $errors = [
-            self::ERROR_INVALID        => __('Please enter a valid catalog name or slug.', Plugin::TEXT_DOMAIN),
-            self::ERROR_SLUG_EXISTS    => __('This slug is already in use.', Plugin::TEXT_DOMAIN),
-            self::ERROR_INVALID_SITE   => __('Please select a valid site.', Plugin::TEXT_DOMAIN),
-            self::ERROR_INVALID_FILTER => __('Please enter a valid filter name.', Plugin::TEXT_DOMAIN),
-            self::ERROR_FILTER_EXISTS  => __('A filter with this name already exists.', Plugin::TEXT_DOMAIN),
-            self::ERROR_DB             => __('Your changes could not be saved.', Plugin::TEXT_DOMAIN),
+            self::ERROR_INVALID        => __('Please enter a valid catalog name or slug.', 'hfh-catalog'),
+            self::ERROR_SLUG_EXISTS    => __('This slug is already in use.', 'hfh-catalog'),
+            self::ERROR_INVALID_SITE   => __('Please select a valid site.', 'hfh-catalog'),
+            self::ERROR_INVALID_FILTER => __('Please enter a valid filter name.', 'hfh-catalog'),
+            self::ERROR_FILTER_EXISTS  => __('A filter with this name already exists.', 'hfh-catalog'),
+            self::ERROR_DB             => __('Your changes could not be saved.', 'hfh-catalog'),
         ];
         $successes = [
-            self::NOTICE_UPDATED        => __('Catalog updated.', Plugin::TEXT_DOMAIN),
-            self::NOTICE_SITE_ADDED     => __('Site added.', Plugin::TEXT_DOMAIN),
-            self::NOTICE_SITE_REMOVED   => __('Site removed.', Plugin::TEXT_DOMAIN),
-            self::NOTICE_SITE_UPDATED   => __('Site updated.', Plugin::TEXT_DOMAIN),
-            self::NOTICE_FILTER_ADDED   => __('Filter added.', Plugin::TEXT_DOMAIN),
-            self::NOTICE_FILTER_DELETED => __('Filter deleted.', Plugin::TEXT_DOMAIN),
+            self::NOTICE_UPDATED        => __('Catalog updated.', 'hfh-catalog'),
+            self::NOTICE_SITE_ADDED     => __('Site added.', 'hfh-catalog'),
+            self::NOTICE_SITE_REMOVED   => __('Site removed.', 'hfh-catalog'),
+            self::NOTICE_SITE_UPDATED   => __('Site updated.', 'hfh-catalog'),
+            self::NOTICE_FILTER_ADDED   => __('Filter added.', 'hfh-catalog'),
+            self::NOTICE_FILTER_DELETED => __('Filter deleted.', 'hfh-catalog'),
         ];
 ?>
         <div class="wrap">
             <h1><?php echo esc_html($catalog->name); ?></h1>
             <?php $this->render_notices($errors, $successes); ?>
 
-            <h2><?php esc_html_e('Settings', Plugin::TEXT_DOMAIN); ?></h2>
+            <h2><?php esc_html_e('Settings', 'hfh-catalog'); ?></h2>
             <form method="post" action="<?php echo esc_url($catalog_url); ?>">
                 <?php wp_nonce_field(self::ACTION_UPDATE); ?>
                 <input type="hidden" name="hfh_action" value="<?php echo esc_attr(self::ACTION_UPDATE); ?>">
                 <table class="form-table" role="presentation">
                     <tr class="form-field form-required">
-                        <th scope="row"><label for="hfh-catalog-name"><?php esc_html_e('Name', Plugin::TEXT_DOMAIN); ?></label></th>
+                        <th scope="row"><label for="hfh-catalog-name"><?php esc_html_e('Name', 'hfh-catalog'); ?></label></th>
                         <td><input type="text" id="hfh-catalog-name" name="catalog_name" required value="<?php echo esc_attr($this->values['catalog_name'] ?? $catalog->name); ?>"></td>
                     </tr>
                     <tr class="form-field">
-                        <th scope="row"><label for="hfh-catalog-slug"><?php esc_html_e('Slug', Plugin::TEXT_DOMAIN); ?></label></th>
+                        <th scope="row"><label for="hfh-catalog-slug"><?php esc_html_e('Slug', 'hfh-catalog'); ?></label></th>
                         <td>
                             <input type="text" id="hfh-catalog-slug" name="catalog_slug" aria-describedby="hfh-catalog-slug-desc" value="<?php echo esc_attr($this->values['catalog_slug'] ?? $catalog->slug); ?>">
                             <p class="description" id="hfh-catalog-slug-desc">
-                                <?php esc_html_e('Public address:', Plugin::TEXT_DOMAIN); ?>
+                                <?php esc_html_e('Public address:', 'hfh-catalog'); ?>
                                 <a href="<?php echo esc_url($public_url); ?>"><?php echo esc_html($public_url); ?></a><br>
-                                <?php esc_html_e('Changing the slug changes this address, and existing links to it will stop working.', Plugin::TEXT_DOMAIN); ?>
+                                <?php esc_html_e('Changing the slug changes this address, and existing links to it will stop working.', 'hfh-catalog'); ?>
                             </p>
                         </td>
                     </tr>
                     <tr class="form-field">
-                        <th scope="row"><label for="hfh_catalog_description"><?php esc_html_e('Description', Plugin::TEXT_DOMAIN); ?></label></th>
+                        <th scope="row"><label for="hfh_catalog_description"><?php esc_html_e('Description', 'hfh-catalog'); ?></label></th>
                         <td>
                             <?php
                             wp_editor(
@@ -145,27 +145,27 @@ class CatalogPage extends AdminPage
                                 ]
                             );
                             ?>
-                            <p class="description"><?php esc_html_e('Shown under the title on the catalog page.', Plugin::TEXT_DOMAIN); ?></p>
+                            <p class="description"><?php esc_html_e('Shown under the title on the catalog page.', 'hfh-catalog'); ?></p>
                         </td>
                     </tr>
                 </table>
-                <?php submit_button(__('Update', Plugin::TEXT_DOMAIN)); ?>
+                <?php submit_button(__('Update', 'hfh-catalog')); ?>
             </form>
 
-            <h2><?php esc_html_e('Sites', Plugin::TEXT_DOMAIN); ?></h2>
+            <h2><?php esc_html_e('Sites', 'hfh-catalog'); ?></h2>
             <div class="tablenav top">
                 <form method="post" action="<?php echo esc_url($catalog_url); ?>" class="alignleft actions">
                     <?php wp_nonce_field(self::ACTION_ADD_SITE); ?>
                     <input type="hidden" name="hfh_action" value="<?php echo esc_attr(self::ACTION_ADD_SITE); ?>">
-                    <label for="hfh-catalog-site" class="screen-reader-text"><?php esc_html_e('Site to add', Plugin::TEXT_DOMAIN); ?></label>
+                    <label for="hfh-catalog-site" class="screen-reader-text"><?php esc_html_e('Site to add', 'hfh-catalog'); ?></label>
                     <input type="text" id="hfh-catalog-site" name="site" list="hfh-catalog-sites" class="regular-text" required
-                        autocomplete="off" placeholder="<?php esc_attr_e('Start typing a site name or URL…', Plugin::TEXT_DOMAIN); ?>">
+                        autocomplete="off" placeholder="<?php esc_attr_e('Start typing a site name or URL…', 'hfh-catalog'); ?>">
                     <datalist id="hfh-catalog-sites">
                         <?php foreach ($available_sites as $site) : ?>
                             <option value="<?php echo esc_attr($this->site_label($site)); ?>"></option>
                         <?php endforeach; ?>
                     </datalist>
-                    <?php submit_button(__('Add site', Plugin::TEXT_DOMAIN), '', 'submit', false); ?>
+                    <?php submit_button(__('Add site', 'hfh-catalog'), '', 'submit', false); ?>
                 </form>
                 <br class="clear">
             </div>
@@ -173,19 +173,19 @@ class CatalogPage extends AdminPage
             <?php if ($sites_table->has_items()) : ?>
                 <?php $sites_table->display(); ?>
             <?php else : ?>
-                <p><?php esc_html_e('No sites in this catalog yet.', Plugin::TEXT_DOMAIN); ?></p>
+                <p><?php esc_html_e('No sites in this catalog yet.', 'hfh-catalog'); ?></p>
             <?php endif; ?>
 
-            <h2><?php esc_html_e('Filters', Plugin::TEXT_DOMAIN); ?></h2>
+            <h2><?php esc_html_e('Filters', 'hfh-catalog'); ?></h2>
             <div class="tablenav top">
                 <form method="post" action="<?php echo esc_url($catalog_url); ?>" class="alignleft actions">
                     <?php wp_nonce_field(self::ACTION_ADD_FILTER); ?>
                     <input type="hidden" name="hfh_action" value="<?php echo esc_attr(self::ACTION_ADD_FILTER); ?>">
-                    <label for="hfh-filter-name" class="screen-reader-text"><?php esc_html_e('New filter name', Plugin::TEXT_DOMAIN); ?></label>
+                    <label for="hfh-filter-name" class="screen-reader-text"><?php esc_html_e('New filter name', 'hfh-catalog'); ?></label>
                     <input type="text" id="hfh-filter-name" name="filter_name" required
-                        placeholder="<?php esc_attr_e('New filter name', Plugin::TEXT_DOMAIN); ?>"
+                        placeholder="<?php esc_attr_e('New filter name', 'hfh-catalog'); ?>"
                         value="<?php echo esc_attr($this->values['filter_name'] ?? ''); ?>">
-                    <?php submit_button(__('Add filter', Plugin::TEXT_DOMAIN), '', 'submit', false); ?>
+                    <?php submit_button(__('Add filter', 'hfh-catalog'), '', 'submit', false); ?>
                 </form>
                 <br class="clear">
             </div>
@@ -193,7 +193,7 @@ class CatalogPage extends AdminPage
             <?php if ($filters_table->has_items()) : ?>
                 <?php $filters_table->display(); ?>
             <?php else : ?>
-                <p><?php esc_html_e('No filters yet.', Plugin::TEXT_DOMAIN); ?></p>
+                <p><?php esc_html_e('No filters yet.', 'hfh-catalog'); ?></p>
             <?php endif; ?>
         </div>
 <?php
@@ -342,7 +342,7 @@ class CatalogPage extends AdminPage
     {
         $catalog = Catalogs::findById(absint($_GET['id'] ?? 0));
         if (!$catalog) {
-            $this->not_found(__('Catalog not found.', Plugin::TEXT_DOMAIN));
+            $this->not_found(__('Catalog not found.', 'hfh-catalog'));
         }
         return $catalog;
     }

@@ -53,7 +53,7 @@ class SitesListTable extends SortableListTable
 
     public function get_columns(): array
     {
-        $columns = ['name' => __('Site', Plugin::TEXT_DOMAIN)];
+        $columns = ['name' => __('Site', 'hfh-catalog')];
         foreach ($this->filters as $filter) {
             $columns['filter_' . $filter->id] = $filter->name;
         }
@@ -73,40 +73,40 @@ class SitesListTable extends SortableListTable
 
         $states = [];
         if ($site->archived) {
-            $states[] = __('Archived', Plugin::TEXT_DOMAIN);
+            $states[] = __('Archived', 'hfh-catalog');
         }
         if ($site->deleted) {
-            $states[] = __('Deactivated', Plugin::TEXT_DOMAIN);
+            $states[] = __('Deactivated', 'hfh-catalog');
         }
 
         $actions = [
             'edit' => $this->action_link(
                 $edit_url,
-                __('Edit', Plugin::TEXT_DOMAIN),
+                __('Edit', 'hfh-catalog'),
                 /* translators: %s: site name */
-                sprintf(__('Edit filter options of “%s”', Plugin::TEXT_DOMAIN), $site->name)
+                sprintf(__('Edit filter options of "%s"', 'hfh-catalog'), $site->name)
             ),
         ];
 
         $actions['move_up'] = $this->action_link(
             $this->action_url(CatalogPage::ACTION_MOVE_SITE, $blog_id, ['direction' => 'up']),
-            __('Move up', Plugin::TEXT_DOMAIN),
+            __('Move up', 'hfh-catalog'),
             /* translators: %s: site name */
-            sprintf(__('Move “%s” up', Plugin::TEXT_DOMAIN), $site->name)
+            sprintf(__('Move "%s" up', 'hfh-catalog'), $site->name)
         );
 
         $actions['move_down'] = $this->action_link(
             $this->action_url(CatalogPage::ACTION_MOVE_SITE, $blog_id, ['direction' => 'down']),
-            __('Move down', Plugin::TEXT_DOMAIN),
+            __('Move down', 'hfh-catalog'),
             /* translators: %s: site name */
-            sprintf(__('Move “%s” down', Plugin::TEXT_DOMAIN), $site->name)
+            sprintf(__('Move "%s" down', 'hfh-catalog'), $site->name)
         );
 
         $actions['remove'] = $this->action_link(
             $this->action_url(CatalogPage::ACTION_REMOVE_SITE, $blog_id),
-            __('Remove', Plugin::TEXT_DOMAIN),
+            __('Remove', 'hfh-catalog'),
             /* translators: %s: site name */
-            sprintf(__('Remove “%s” from this catalog', Plugin::TEXT_DOMAIN), $site->name),
+            sprintf(__('Remove "%s" from this catalog', 'hfh-catalog'), $site->name),
             'submitdelete'
         );
 
@@ -119,7 +119,7 @@ class SitesListTable extends SortableListTable
         <br>
         <span class="description">
             <?php if ($states) : ?>
-                <?php esc_html_e('Not shown on the public catalog page.', Plugin::TEXT_DOMAIN); ?>
+                <?php esc_html_e('Not shown on the public catalog page.', 'hfh-catalog'); ?>
             <?php else : ?>
                 <?= esc_html($site->domain . $site->path) ?>
             <?php endif; ?>

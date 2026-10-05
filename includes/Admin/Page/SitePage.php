@@ -20,12 +20,12 @@ class SitePage extends AdminPage
 
     public function page_title(): string
     {
-        return __('Edit Site', Plugin::TEXT_DOMAIN);
+        return __('Edit Site', 'hfh-catalog');
     }
 
     public function menu_title(): string
     {
-        return __('Edit Site', Plugin::TEXT_DOMAIN);
+        return __('Edit Site', 'hfh-catalog');
     }
 
     protected function handlers(): array
@@ -42,7 +42,7 @@ class SitePage extends AdminPage
         $selected_ids = SiteFilterOptions::findIdsForSite((int) $catalog->id, (int) $site->blog_id);
 
         $errors = [
-            self::ERROR_DB => __('Your changes could not be saved.', Plugin::TEXT_DOMAIN),
+            self::ERROR_DB => __('Your changes could not be saved.', 'hfh-catalog'),
         ];
 ?>
         <div class="wrap">
@@ -51,7 +51,7 @@ class SitePage extends AdminPage
                 <a href="<?php echo esc_url(CatalogPage::url(['id' => $catalog->id])); ?>">
                     <?php
                     /* translators: %s: catalog name */
-                    echo esc_html(sprintf(__('← Back to %s', Plugin::TEXT_DOMAIN), $catalog->name));
+                    echo esc_html(sprintf(__('← Back to %s', 'hfh-catalog'), $catalog->name));
                     ?>
                 </a>
             </p>
@@ -59,7 +59,7 @@ class SitePage extends AdminPage
             <?php $this->render_notices($errors); ?>
 
             <?php if (!$filters) : ?>
-                <p><?php esc_html_e('This catalog has no filters yet.', Plugin::TEXT_DOMAIN); ?></p>
+                <p><?php esc_html_e('This catalog has no filters yet.', 'hfh-catalog'); ?></p>
             <?php else : ?>
                 <form method="post" action="<?php echo esc_url(self::url(['id' => $catalog->id, 'blog_id' => $site->blog_id])); ?>">
                     <?php wp_nonce_field(self::ACTION_UPDATE); ?>
@@ -72,7 +72,7 @@ class SitePage extends AdminPage
                                 <th scope="row"><?php echo esc_html($filter->name); ?></th>
                                 <td>
                                     <?php if (!$filter_options) : ?>
-                                        <p class="description"><?php esc_html_e('No options yet.', Plugin::TEXT_DOMAIN); ?></p>
+                                        <p class="description"><?php esc_html_e('No options yet.', 'hfh-catalog'); ?></p>
                                     <?php else : ?>
                                         <fieldset>
                                             <legend class="screen-reader-text"><span><?php echo esc_html($filter->name); ?></span></legend>
@@ -89,7 +89,7 @@ class SitePage extends AdminPage
                             </tr>
                         <?php endforeach; ?>
                     </table>
-                    <?php submit_button(__('Update', Plugin::TEXT_DOMAIN)); ?>
+                    <?php submit_button(__('Update', 'hfh-catalog')); ?>
                 </form>
             <?php endif; ?>
         </div>
@@ -122,7 +122,7 @@ class SitePage extends AdminPage
         $site = Sites::find($blog_id);
 
         if (!$catalog || !$site || !Sites::isInCatalog((int) $catalog->id, $blog_id)) {
-            $this->not_found(__('Site not found in this catalog.', Plugin::TEXT_DOMAIN));
+            $this->not_found(__('Site not found in this catalog.', 'hfh-catalog'));
         }
 
         return [$catalog, $site];

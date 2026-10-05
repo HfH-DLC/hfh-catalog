@@ -38,8 +38,8 @@ class SiteCatalogs
 
         add_submenu_page(
             'index.php',
-            __('Catalogs', Plugin::TEXT_DOMAIN),
-            __('Catalogs', Plugin::TEXT_DOMAIN),
+            __('Catalogs', 'hfh-catalog'),
+            __('Catalogs', 'hfh-catalog'),
             'read',
             self::SLUG,
             [$this, 'render']
@@ -52,12 +52,12 @@ class SiteCatalogs
         $table->prepare_items();
 ?>
         <div class="wrap">
-            <h1><?php esc_html_e('Catalogs', Plugin::TEXT_DOMAIN); ?></h1>
+            <h1><?php esc_html_e('Catalogs', 'hfh-catalog'); ?></h1>
             <?php
             if ($table->has_items()) {
                 $table->display();
             } else {
-                echo '<p>' . esc_html__('This site is not in any catalog yet.', Plugin::TEXT_DOMAIN) . '</p>';
+                echo '<p>' . esc_html__('This site is not in any catalog yet.', 'hfh-catalog') . '</p>';
             }
             ?>
         </div>

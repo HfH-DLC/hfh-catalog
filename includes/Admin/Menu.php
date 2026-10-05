@@ -67,8 +67,8 @@ class Menu
 
         add_submenu_page(
             CatalogsPage::SLUG,
-            __('All Catalogs', Plugin::TEXT_DOMAIN),
-            __('All Catalogs', Plugin::TEXT_DOMAIN),
+            __('All Catalogs', 'hfh-catalog'),
+            __('All Catalogs', 'hfh-catalog'),
             AdminPage::CAPABILITY,
             CatalogsPage::SLUG,
             [$this->catalogs, 'render']
@@ -159,7 +159,7 @@ class Menu
             'window.hfhCatalogSortable = ' . wp_json_encode([
                 'restUrl'      => get_rest_url(get_main_site_id(), RestApi::NAMESPACE . RestApi::ROUTE_REORDER),
                 'nonce'        => wp_create_nonce('wp_rest'),
-                'errorMessage' => __('The order could not be saved. Reload the page and try again.', Plugin::TEXT_DOMAIN),
+                'errorMessage' => __('The order could not be saved. Reload the page and try again.', 'hfh-catalog'),
             ]) . ';',
             'before'
         );

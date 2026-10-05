@@ -21,12 +21,12 @@ class SettingsPage extends AdminPage
 
     public function page_title(): string
     {
-        return __('Catalog Settings', Plugin::TEXT_DOMAIN);
+        return __('Catalog Settings', 'hfh-catalog');
     }
 
     public function menu_title(): string
     {
-        return __('Settings', Plugin::TEXT_DOMAIN);
+        return __('Settings', 'hfh-catalog');
     }
 
     protected function handlers(): array
@@ -41,11 +41,11 @@ class SettingsPage extends AdminPage
         $frontend = Frontend::get_instance();
 
         $errors = [
-            self::ERROR_INVALID => __('Please enter a valid URL base.', Plugin::TEXT_DOMAIN),
-            self::ERROR_DB      => __('Your changes could not be saved.', Plugin::TEXT_DOMAIN),
+            self::ERROR_INVALID => __('Please enter a valid URL base.', 'hfh-catalog'),
+            self::ERROR_DB      => __('Your changes could not be saved.', 'hfh-catalog'),
         ];
         $successes = [
-            self::NOTICE_UPDATED => __('Settings saved.', Plugin::TEXT_DOMAIN),
+            self::NOTICE_UPDATED => __('Settings saved.', 'hfh-catalog'),
         ];
 ?>
         <div class="wrap">
@@ -57,18 +57,18 @@ class SettingsPage extends AdminPage
                 <input type="hidden" name="hfh_action" value="<?php echo esc_attr(self::ACTION_UPDATE); ?>">
                 <table class="form-table" role="presentation">
                     <tr class="form-field form-required">
-                        <th scope="row"><label for="hfh-catalog-url-base"><?php esc_html_e('URL base', Plugin::TEXT_DOMAIN); ?></label></th>
+                        <th scope="row"><label for="hfh-catalog-url-base"><?php esc_html_e('URL base', 'hfh-catalog'); ?></label></th>
                         <td>
                             <input type="text" id="hfh-catalog-url-base" name="url_base" required aria-describedby="hfh-catalog-url-base-desc" value="<?php echo esc_attr($this->values['url_base'] ?? $frontend->url_base()); ?>">
                             <p class="description" id="hfh-catalog-url-base-desc">
-                                <?php esc_html_e('Catalog index:', Plugin::TEXT_DOMAIN); ?>
+                                <?php esc_html_e('Catalog index:', 'hfh-catalog'); ?>
                                 <a href="<?php echo esc_url($frontend->index_url()); ?>"><?php echo esc_html($frontend->index_url()); ?></a><br>
-                                <?php esc_html_e('Changing the URL base changes the address of every catalog, and existing links to them will stop working.', Plugin::TEXT_DOMAIN); ?>
+                                <?php esc_html_e('Changing the URL base changes the address of every catalog, and existing links to them will stop working.', 'hfh-catalog'); ?>
                             </p>
                         </td>
                     </tr>
                 </table>
-                <?php submit_button(__('Save Changes', Plugin::TEXT_DOMAIN)); ?>
+                <?php submit_button(__('Save Changes', 'hfh-catalog')); ?>
             </form>
         </div>
 <?php
