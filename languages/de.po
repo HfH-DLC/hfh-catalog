@@ -5,7 +5,7 @@ msgstr ""
 "Project-Id-Version: HfH Catalog 1.0.0\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/hfh-catalog\n"
 "POT-Creation-Date: 2026-10-05T09:12:26+00:00\n"
-"PO-Revision-Date: 2026-10-05 11:20+0200\n"
+"PO-Revision-Date: 2026-10-05 11:45+0200\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: de\n"
@@ -403,7 +403,7 @@ msgstr "\"%s\" anschauen"
 
 #: includes/Admin/Table/CatalogsListTable.php:87
 msgid "Hide from index"
-msgstr "Im Index verbergen"
+msgstr "Aus dem Index entfernen"
 
 #: includes/Admin/Table/CatalogsListTable.php:88
 msgid "Show on index"
@@ -413,7 +413,7 @@ msgstr "Im Index anzeigen"
 #: includes/Admin/Table/CatalogsListTable.php:91
 #, php-format
 msgid "Hide \"%s\" from the catalog index"
-msgstr "\"%s\" im Katalogindex verbergen"
+msgstr "\"%s\" aus dem Katalogindex entfernen"
 
 #. translators: %s: catalog name
 #: includes/Admin/Table/CatalogsListTable.php:93
