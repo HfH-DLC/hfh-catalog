@@ -90,6 +90,8 @@ class Sites
         $blog_id = (int) $site->blog_id;
         $meta = fn(string $key): string => (string) get_site_meta($blog_id, $key, true);
         $excerpt = $meta(self::META_SHORT_DESCRIPTION) ?: $meta(self::META_LONG_DESCRIPTION);
+        $info = get_site_meta($blog_id, self::META_BOOK_INFORMATION, true);
+        $cover = is_array($info) ? (string) ($info['pb_cover_image'] ?? '') : '';
         $site_url = self::siteUrl($site);
 
         return (object) [
@@ -102,7 +104,7 @@ class Sites
             'url' => $site_url,
             'title' => $meta(self::META_TITLE) ?: $site->blogname,
             'authors' => self::authorNames($blog_id),
-            'cover' => self::currentCoverUrl($meta(self::META_COVER), $meta(self::META_URL), $site_url),
+            'cover' => self::currentCoverUrl($cover, $meta(self::META_URL), $site_url),
             'excerpt' => wp_trim_words(wp_strip_all_tags($excerpt), 50),
         ];
     }
