@@ -122,8 +122,10 @@ get_header();
             </div>
         </div>
 
-        <?php if (is_super_admin()) : ?>
-            <a href="<?= esc_url(CatalogPage::url(['id' => $catalog->id])); ?>" class="hfh-catalog__edit">
+        <?php if (is_super_admin()) :
+            $edit_link_classes = (array) apply_filters('hfh_catalog_edit_link_classes', ['hfh-catalog__edit']);
+        ?>
+            <a href="<?= esc_url(CatalogPage::url(['id' => $catalog->id])); ?>" class="<?= esc_attr(implode(' ', $edit_link_classes)); ?>">
                 <?php esc_html_e('Edit', 'hfh-catalog'); ?>
             </a>
         <?php endif; ?>
