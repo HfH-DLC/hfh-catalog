@@ -46,9 +46,9 @@ class SitePage extends AdminPage
         ];
 ?>
         <div class="wrap">
-            <h1><?php echo esc_html($site->blogname); ?></h1>
+            <h1><?= esc_html($site->blogname); ?></h1>
             <p>
-                <a href="<?php echo esc_url(CatalogPage::url(['id' => $catalog->id])); ?>">
+                <a href="<?= esc_url(CatalogPage::url(['id' => $catalog->id])); ?>">
                     <?php
                     /* translators: %s: catalog name */
                     echo esc_html(sprintf(__('← Back to %s', 'hfh-catalog'), $catalog->name));
@@ -61,26 +61,26 @@ class SitePage extends AdminPage
             <?php if (!$filters) : ?>
                 <p><?php esc_html_e('This catalog has no filters yet.', 'hfh-catalog'); ?></p>
             <?php else : ?>
-                <form method="post" action="<?php echo esc_url(self::url(['id' => $catalog->id, 'blog_id' => $site->blog_id])); ?>">
+                <form method="post" action="<?= esc_url(self::url(['id' => $catalog->id, 'blog_id' => $site->blog_id])); ?>">
                     <?php wp_nonce_field(self::ACTION_UPDATE); ?>
-                    <input type="hidden" name="hfh_action" value="<?php echo esc_attr(self::ACTION_UPDATE); ?>">
+                    <input type="hidden" name="hfh_action" value="<?= esc_attr(self::ACTION_UPDATE); ?>">
                     <table class="form-table" role="presentation">
                         <?php foreach ($filters as $filter) :
                             $filter_options = $options_by_filter[$filter->id] ?? [];
                         ?>
                             <tr>
-                                <th scope="row"><?php echo esc_html($filter->name); ?></th>
+                                <th scope="row"><?= esc_html($filter->name); ?></th>
                                 <td>
                                     <?php if (!$filter_options) : ?>
                                         <p class="description"><?php esc_html_e('No options yet.', 'hfh-catalog'); ?></p>
                                     <?php else : ?>
                                         <fieldset>
-                                            <legend class="screen-reader-text"><span><?php echo esc_html($filter->name); ?></span></legend>
+                                            <legend class="screen-reader-text"><span><?= esc_html($filter->name); ?></span></legend>
                                             <?php foreach ($filter_options as $filter_option) : ?>
                                                 <label>
-                                                    <input type="checkbox" name="filter_option_ids[]" value="<?php echo esc_attr($filter_option->id); ?>"
+                                                    <input type="checkbox" name="filter_option_ids[]" value="<?= esc_attr($filter_option->id); ?>"
                                                         <?php checked(in_array((int) $filter_option->id, $selected_ids, true)); ?>>
-                                                    <?php echo esc_html($filter_option->name); ?>
+                                                    <?= esc_html($filter_option->name); ?>
                                                 </label><br>
                                             <?php endforeach; ?>
                                         </fieldset>

@@ -108,25 +108,25 @@ class CatalogPage extends AdminPage
         ];
 ?>
         <div class="wrap">
-            <h1><?php echo esc_html($catalog->name); ?></h1>
+            <h1><?= esc_html($catalog->name); ?></h1>
             <?php $this->render_notices($errors, $successes); ?>
 
             <h2><?php esc_html_e('Settings', 'hfh-catalog'); ?></h2>
-            <form method="post" action="<?php echo esc_url($catalog_url); ?>">
+            <form method="post" action="<?= esc_url($catalog_url); ?>">
                 <?php wp_nonce_field(self::ACTION_UPDATE); ?>
-                <input type="hidden" name="hfh_action" value="<?php echo esc_attr(self::ACTION_UPDATE); ?>">
+                <input type="hidden" name="hfh_action" value="<?= esc_attr(self::ACTION_UPDATE); ?>">
                 <table class="form-table" role="presentation">
                     <tr class="form-field form-required">
                         <th scope="row"><label for="hfh-catalog-name"><?php esc_html_e('Name', 'hfh-catalog'); ?></label></th>
-                        <td><input type="text" id="hfh-catalog-name" name="catalog_name" required value="<?php echo esc_attr($this->values['catalog_name'] ?? $catalog->name); ?>"></td>
+                        <td><input type="text" id="hfh-catalog-name" name="catalog_name" required value="<?= esc_attr($this->values['catalog_name'] ?? $catalog->name); ?>"></td>
                     </tr>
                     <tr class="form-field">
                         <th scope="row"><label for="hfh-catalog-slug"><?php esc_html_e('Slug', 'hfh-catalog'); ?></label></th>
                         <td>
-                            <input type="text" id="hfh-catalog-slug" name="catalog_slug" aria-describedby="hfh-catalog-slug-desc" value="<?php echo esc_attr($this->values['catalog_slug'] ?? $catalog->slug); ?>">
+                            <input type="text" id="hfh-catalog-slug" name="catalog_slug" aria-describedby="hfh-catalog-slug-desc" value="<?= esc_attr($this->values['catalog_slug'] ?? $catalog->slug); ?>">
                             <p class="description" id="hfh-catalog-slug-desc">
                                 <?php esc_html_e('Public address:', 'hfh-catalog'); ?>
-                                <a href="<?php echo esc_url($public_url); ?>"><?php echo esc_html($public_url); ?></a><br>
+                                <a href="<?= esc_url($public_url); ?>"><?= esc_html($public_url); ?></a><br>
                                 <?php esc_html_e('Changing the slug changes this address, and existing links to it will stop working.', 'hfh-catalog'); ?>
                             </p>
                         </td>
@@ -154,15 +154,15 @@ class CatalogPage extends AdminPage
 
             <h2><?php esc_html_e('Sites', 'hfh-catalog'); ?></h2>
             <div class="tablenav top">
-                <form method="post" action="<?php echo esc_url($catalog_url); ?>" class="alignleft actions">
+                <form method="post" action="<?= esc_url($catalog_url); ?>" class="alignleft actions">
                     <?php wp_nonce_field(self::ACTION_ADD_SITE); ?>
-                    <input type="hidden" name="hfh_action" value="<?php echo esc_attr(self::ACTION_ADD_SITE); ?>">
+                    <input type="hidden" name="hfh_action" value="<?= esc_attr(self::ACTION_ADD_SITE); ?>">
                     <label for="hfh-catalog-site" class="screen-reader-text"><?php esc_html_e('Site to add', 'hfh-catalog'); ?></label>
                     <input type="text" id="hfh-catalog-site" name="site" list="hfh-catalog-sites" class="regular-text" required
                         autocomplete="off" placeholder="<?php esc_attr_e('Start typing a site name or URL…', 'hfh-catalog'); ?>">
                     <datalist id="hfh-catalog-sites">
                         <?php foreach ($available_sites as $site) : ?>
-                            <option value="<?php echo esc_attr($this->site_label($site)); ?>"></option>
+                            <option value="<?= esc_attr($this->site_label($site)); ?>"></option>
                         <?php endforeach; ?>
                     </datalist>
                     <?php submit_button(__('Add site', 'hfh-catalog'), '', 'submit', false); ?>
@@ -178,13 +178,13 @@ class CatalogPage extends AdminPage
 
             <h2><?php esc_html_e('Filters', 'hfh-catalog'); ?></h2>
             <div class="tablenav top">
-                <form method="post" action="<?php echo esc_url($catalog_url); ?>" class="alignleft actions">
+                <form method="post" action="<?= esc_url($catalog_url); ?>" class="alignleft actions">
                     <?php wp_nonce_field(self::ACTION_ADD_FILTER); ?>
-                    <input type="hidden" name="hfh_action" value="<?php echo esc_attr(self::ACTION_ADD_FILTER); ?>">
+                    <input type="hidden" name="hfh_action" value="<?= esc_attr(self::ACTION_ADD_FILTER); ?>">
                     <label for="hfh-filter-name" class="screen-reader-text"><?php esc_html_e('New filter name', 'hfh-catalog'); ?></label>
                     <input type="text" id="hfh-filter-name" name="filter_name" required
                         placeholder="<?php esc_attr_e('New filter name', 'hfh-catalog'); ?>"
-                        value="<?php echo esc_attr($this->values['filter_name'] ?? ''); ?>">
+                        value="<?= esc_attr($this->values['filter_name'] ?? ''); ?>">
                     <?php submit_button(__('Add filter', 'hfh-catalog'), '', 'submit', false); ?>
                 </form>
                 <br class="clear">

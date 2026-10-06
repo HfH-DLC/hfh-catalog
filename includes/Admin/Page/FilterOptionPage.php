@@ -48,9 +48,9 @@ class FilterOptionPage extends AdminPage
         ];
 ?>
         <div class="wrap">
-            <h1><?php echo esc_html($this->page_title()); ?></h1>
+            <h1><?= esc_html($this->page_title()); ?></h1>
             <p>
-                <a href="<?php echo esc_url(FilterPage::url(['id' => $filter->id])); ?>">
+                <a href="<?= esc_url(FilterPage::url(['id' => $filter->id])); ?>">
                     <?php
                     /* translators: %s: filter name */
                     echo esc_html(sprintf(__('← Back to %s', 'hfh-catalog'), $filter->name));
@@ -60,13 +60,13 @@ class FilterOptionPage extends AdminPage
 
             <?php $this->render_notices($errors); ?>
 
-            <form method="post" action="<?php echo esc_url(self::url(['id' => $filter_option->id])); ?>">
+            <form method="post" action="<?= esc_url(self::url(['id' => $filter_option->id])); ?>">
                 <?php wp_nonce_field(self::ACTION_UPDATE); ?>
-                <input type="hidden" name="hfh_action" value="<?php echo esc_attr(self::ACTION_UPDATE); ?>">
+                <input type="hidden" name="hfh_action" value="<?= esc_attr(self::ACTION_UPDATE); ?>">
                 <table class="form-table" role="presentation">
                     <tr class="form-field form-required">
                         <th scope="row"><label for="hfh-option-name"><?php esc_html_e('Name', 'hfh-catalog'); ?></label></th>
-                        <td><input type="text" id="hfh-option-name" name="filter_option_name" required value="<?php echo esc_attr($this->values['filter_option_name'] ?? $filter_option->name); ?>"></td>
+                        <td><input type="text" id="hfh-option-name" name="filter_option_name" required value="<?= esc_attr($this->values['filter_option_name'] ?? $filter_option->name); ?>"></td>
                     </tr>
                 </table>
                 <?php submit_button(__('Update', 'hfh-catalog')); ?>

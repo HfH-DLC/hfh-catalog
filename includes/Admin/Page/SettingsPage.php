@@ -49,20 +49,20 @@ class SettingsPage extends AdminPage
         ];
 ?>
         <div class="wrap">
-            <h1><?php echo esc_html($this->page_title()); ?></h1>
+            <h1><?= esc_html($this->page_title()); ?></h1>
             <?php $this->render_notices($errors, $successes); ?>
 
-            <form method="post" action="<?php echo esc_url(self::url()); ?>">
+            <form method="post" action="<?= esc_url(self::url()); ?>">
                 <?php wp_nonce_field(self::ACTION_UPDATE); ?>
-                <input type="hidden" name="hfh_action" value="<?php echo esc_attr(self::ACTION_UPDATE); ?>">
+                <input type="hidden" name="hfh_action" value="<?= esc_attr(self::ACTION_UPDATE); ?>">
                 <table class="form-table" role="presentation">
                     <tr class="form-field form-required">
                         <th scope="row"><label for="hfh-catalog-url-base"><?php esc_html_e('URL base', 'hfh-catalog'); ?></label></th>
                         <td>
-                            <input type="text" id="hfh-catalog-url-base" name="url_base" required aria-describedby="hfh-catalog-url-base-desc" value="<?php echo esc_attr($this->values['url_base'] ?? $frontend->url_base()); ?>">
+                            <input type="text" id="hfh-catalog-url-base" name="url_base" required aria-describedby="hfh-catalog-url-base-desc" value="<?= esc_attr($this->values['url_base'] ?? $frontend->url_base()); ?>">
                             <p class="description" id="hfh-catalog-url-base-desc">
                                 <?php esc_html_e('Catalog index:', 'hfh-catalog'); ?>
-                                <a href="<?php echo esc_url($frontend->index_url()); ?>"><?php echo esc_html($frontend->index_url()); ?></a><br>
+                                <a href="<?= esc_url($frontend->index_url()); ?>"><?= esc_html($frontend->index_url()); ?></a><br>
                                 <?php esc_html_e('Changing the URL base changes the address of every catalog, and existing links to them will stop working.', 'hfh-catalog'); ?>
                             </p>
                         </td>

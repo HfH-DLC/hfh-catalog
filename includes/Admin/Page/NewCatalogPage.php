@@ -38,21 +38,21 @@ class NewCatalogPage extends AdminPage
         ];
 ?>
         <div class="wrap">
-            <h1><?php echo esc_html($this->page_title()); ?></h1>
+            <h1><?= esc_html($this->page_title()); ?></h1>
             <?php $this->render_notices($errors); ?>
             <p><span class="required-field-message"><?php esc_html_e('Required fields are marked', 'hfh-catalog'); ?> <span class="required">*</span></span></p>
-            <form method="post" action="<?php echo esc_url(self::url()); ?>">
+            <form method="post" action="<?= esc_url(self::url()); ?>">
                 <?php wp_nonce_field(self::ACTION_CREATE); ?>
-                <input type="hidden" name="hfh_action" value="<?php echo esc_attr(self::ACTION_CREATE); ?>">
+                <input type="hidden" name="hfh_action" value="<?= esc_attr(self::ACTION_CREATE); ?>">
                 <table class="form-table" role="presentation">
                     <tr class="form-field form-required">
                         <th scope="row"><label for="hfh-catalog-name"><?php esc_html_e('Name', 'hfh-catalog'); ?><span class="required">*</span></label></th>
-                        <td><input type="text" id="hfh-catalog-name" name="name" class="regular-text" required value="<?php echo esc_attr($this->values['name'] ?? ''); ?>"></td>
+                        <td><input type="text" id="hfh-catalog-name" name="name" class="regular-text" required value="<?= esc_attr($this->values['name'] ?? ''); ?>"></td>
                     </tr>
                     <tr>
                         <th scope="row"><label for="hfh-catalog-slug"><?php esc_html_e('Slug', 'hfh-catalog'); ?></label></th>
                         <td>
-                            <input type="text" id="hfh-catalog-slug" name="slug" class="regular-text" aria-describedby="hfh-catalog-slug-desc" value="<?php echo esc_attr($this->values['slug'] ?? ''); ?>">
+                            <input type="text" id="hfh-catalog-slug" name="slug" class="regular-text" aria-describedby="hfh-catalog-slug-desc" value="<?= esc_attr($this->values['slug'] ?? ''); ?>">
                             <p class="description" id="hfh-catalog-slug-desc"><?php esc_html_e('Leave empty to generate it from the name.', 'hfh-catalog'); ?></p>
                         </td>
                     </tr>

@@ -62,8 +62,8 @@ class CatalogsPage extends AdminPage
         ];
 ?>
         <div class="wrap">
-            <h1 class="wp-heading-inline"><?php echo esc_html($this->page_title()); ?></h1>
-            <a href="<?php echo esc_url(NewCatalogPage::url()); ?>" class="page-title-action"><?php esc_html_e('Add New', 'hfh-catalog'); ?></a>
+            <h1 class="wp-heading-inline"><?= esc_html($this->page_title()); ?></h1>
+            <a href="<?= esc_url(NewCatalogPage::url()); ?>" class="page-title-action"><?php esc_html_e('Add New', 'hfh-catalog'); ?></a>
             <hr class="wp-header-end">
             <?php $this->render_notices($errors, $successes); ?>
             <?php if ($table->has_items()) :

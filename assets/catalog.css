@@ -358,16 +358,18 @@
 .hfh-catalog__card-text {
   padding: 1rem 0.875rem;
 
-  border-top: 2px solid var(--hfh-catalog-card-border, #ddd);
+  border-top: 1px solid var(--hfh-catalog-text-border, #ddd);
   transition: border-color 0.25s ease 0s;
 }
 
 .hfh-catalog__pretitle {
+  margin-bottom: 0.75rem;
   font-size: 0.875rem;
   line-height: 1.5rem;
 }
 
 .hfh-catalog__title {
+  margin-bottom: 0.75rem;
   font-size: 1.5rem;
   line-height: 2rem;
 }
@@ -445,12 +447,14 @@
 }
 
 .hfh-catalog__list--list .hfh-catalog__pretitle {
+  margin-bottom: 0;
   font-size: 1rem;
   color: var(--hfh-catalog-text-muted, #595959);
   transition: color 0.25s ease 0s;
 }
 
 .hfh-catalog__list--list .hfh-catalog__title {
+  margin-bottom: 0;
   font-size: 1.5rem;
   line-height: 2rem;
   transition: color 0.25s ease 0s;

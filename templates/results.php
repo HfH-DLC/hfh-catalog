@@ -15,17 +15,17 @@ use HfH\Catalog\Plugin;
     <ul class="hfh-catalog__list<?php if ($view === Frontend::VIEW_LIST) : ?> hfh-catalog__list--list<?php endif; ?>">
         <?php foreach ($sites as $book) : ?>
             <li>
-                <a class="hfh-catalog__card" href="<?php echo esc_url($book->url); ?>">
+                <a class="hfh-catalog__card" href="<?= esc_url($book->url); ?>">
                     <?php if ($book->cover) : ?>
                         <div class="hfh-catalog__image">
-                            <img src="<?php echo esc_url($book->cover); ?>" alt="" loading="lazy">
+                            <img src="<?= esc_url($book->cover); ?>" alt="" loading="lazy">
                         </div>
                     <?php endif; ?>
                     <div class="hfh-catalog__card-text">
                         <?php if ($book->authors) : ?>
-                            <div class="hfh-catalog__pretitle"><?php echo esc_html($book->authors); ?></div>
+                            <div class="hfh-catalog__pretitle"><?= esc_html($book->authors); ?></div>
                         <?php endif; ?>
-                        <div class="hfh-catalog__title"><?php echo esc_html($book->title); ?></div>
+                        <div class="hfh-catalog__title"><?= esc_html($book->title); ?></div>
                     </div>
                     <?php do_action('hfh_catalog_after_card_text'); ?>
                 </a>

@@ -86,9 +86,9 @@ class FilterPage extends AdminPage
         ];
 ?>
         <div class="wrap">
-            <h1><?php echo esc_html($filter->name); ?></h1>
+            <h1><?= esc_html($filter->name); ?></h1>
             <p>
-                <a href="<?php echo esc_url(CatalogPage::url(['id' => $catalog->id])); ?>">
+                <a href="<?= esc_url(CatalogPage::url(['id' => $catalog->id])); ?>">
                     <?php
                     /* translators: %s: catalog name */
                     echo esc_html(sprintf(__('← Back to %s', 'hfh-catalog'), $catalog->name));
@@ -99,13 +99,13 @@ class FilterPage extends AdminPage
             <?php $this->render_notices($errors, $successes); ?>
 
             <h2><?php esc_html_e('Settings', 'hfh-catalog'); ?></h2>
-            <form method="post" action="<?php echo esc_url($filter_url); ?>">
+            <form method="post" action="<?= esc_url($filter_url); ?>">
                 <?php wp_nonce_field(self::ACTION_UPDATE); ?>
-                <input type="hidden" name="hfh_action" value="<?php echo esc_attr(self::ACTION_UPDATE); ?>">
+                <input type="hidden" name="hfh_action" value="<?= esc_attr(self::ACTION_UPDATE); ?>">
                 <table class="form-table" role="presentation">
                     <tr class="form-field form-required">
                         <th scope="row"><label for="hfh-filter-name"><?php esc_html_e('Name', 'hfh-catalog'); ?></label></th>
-                        <td><input type="text" id="hfh-filter-name" name="filter_name" required value="<?php echo esc_attr($this->values['filter_name'] ?? $filter->name); ?>"></td>
+                        <td><input type="text" id="hfh-filter-name" name="filter_name" required value="<?= esc_attr($this->values['filter_name'] ?? $filter->name); ?>"></td>
                     </tr>
                 </table>
                 <?php submit_button(__('Update', 'hfh-catalog')); ?>
@@ -113,13 +113,13 @@ class FilterPage extends AdminPage
 
             <h2><?php esc_html_e('Options', 'hfh-catalog'); ?></h2>
             <div class="tablenav top">
-                <form method="post" action="<?php echo esc_url($filter_url); ?>" class="alignleft actions">
+                <form method="post" action="<?= esc_url($filter_url); ?>" class="alignleft actions">
                     <?php wp_nonce_field(self::ACTION_ADD_OPTION); ?>
-                    <input type="hidden" name="hfh_action" value="<?php echo esc_attr(self::ACTION_ADD_OPTION); ?>">
+                    <input type="hidden" name="hfh_action" value="<?= esc_attr(self::ACTION_ADD_OPTION); ?>">
                     <label for="hfh-option-name" class="screen-reader-text"><?php esc_html_e('New option name', 'hfh-catalog'); ?></label>
                     <input type="text" id="hfh-option-name" name="filter_option_name" required
                         placeholder="<?php esc_attr_e('New option name', 'hfh-catalog'); ?>"
-                        value="<?php echo esc_attr($this->values['filter_option_name'] ?? ''); ?>">
+                        value="<?= esc_attr($this->values['filter_option_name'] ?? ''); ?>">
                     <?php submit_button(__('Add option', 'hfh-catalog'), '', 'submit', false); ?>
                 </form>
                 <br class="clear">
