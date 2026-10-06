@@ -2,14 +2,14 @@
 # This file is distributed under the GPLv2.
 msgid ""
 msgstr ""
-"Project-Id-Version: HfH Catalog 1.0.0\n"
+"Project-Id-Version: HfH Catalog 1.0.1\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/hfh-catalog\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2026-10-05T09:12:26+00:00\n"
+"POT-Creation-Date: 2026-10-06T08:56:27+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.12.0\n"
 "X-Domain: hfh-catalog\n"
@@ -203,7 +203,7 @@ msgstr ""
 #: includes/Admin/SiteCatalogs.php:42
 #: includes/Admin/SiteCatalogs.php:55
 #: includes/Frontend.php:169
-#: templates/catalog.php:34
+#: templates/catalog.php:35
 #: templates/catalogs.php:12
 msgid "Catalogs"
 msgstr ""
@@ -381,7 +381,7 @@ msgstr ""
 #: includes/Admin/Table/FiltersListTable.php:72
 #: includes/Admin/Table/SiteCatalogsListTable.php:58
 #: includes/Admin/Table/SitesListTable.php:85
-#: templates/catalog.php:127
+#: templates/catalog.php:130
 msgid "Edit"
 msgstr ""
 
@@ -397,7 +397,7 @@ msgstr ""
 
 #: includes/Admin/Table/CatalogsListTable.php:77
 #: includes/Admin/Table/SiteCatalogsListTable.php:50
-#: templates/catalog.php:61
+#: templates/catalog.php:62
 msgid "View"
 msgstr ""
 
@@ -548,43 +548,43 @@ msgstr[0] ""
 msgstr[1] ""
 
 #: includes/Frontend.php:314
-#: templates/results.php:35
+#: templates/results.php:36
 msgid "No books match your selection."
 msgstr ""
 
 #: includes/Frontend.php:315
-#: templates/results.php:37
+#: templates/results.php:38
 msgid "This catalog has no books yet."
 msgstr ""
 
-#: templates/catalog.php:17
+#: templates/catalog.php:19
 msgid "Grid"
 msgstr ""
 
-#: templates/catalog.php:18
+#: templates/catalog.php:20
 msgid "List"
 msgstr ""
 
-#: templates/catalog.php:31
-msgid "Catalog:"
+#: templates/catalog.php:33
+msgid "Catalog selection"
 msgstr ""
 
-#: templates/catalog.php:56
+#: templates/catalog.php:57
 msgid "Skip to books"
 msgstr ""
 
-#: templates/catalog.php:73
+#: templates/catalog.php:74
 msgid "Filter by"
 msgstr ""
 
-#: templates/catalog.php:106
+#: templates/catalog.php:107
 msgid "Apply filters"
 msgstr ""
 
-#: templates/catalog.php:108
+#: templates/catalog.php:109
 msgid "Reset"
 msgstr ""
 
-#: templates/catalog.php:116
+#: templates/catalog.php:117
 msgid "Books"
 msgstr ""

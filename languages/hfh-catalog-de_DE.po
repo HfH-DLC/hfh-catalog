@@ -2,10 +2,10 @@
 # This file is distributed under the GPLv2.
 msgid ""
 msgstr ""
-"Project-Id-Version: HfH Catalog 1.0.0\n"
+"Project-Id-Version: HfH Catalog 1.0.1\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/hfh-catalog\n"
-"POT-Creation-Date: 2026-10-05T09:12:26+00:00\n"
-"PO-Revision-Date: 2026-10-05 11:20+0200\n"
+"POT-Creation-Date: 2026-10-06T08:56:27+00:00\n"
+"PO-Revision-Date: 2026-10-06 10:58+0200\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: de\n"
@@ -19,7 +19,7 @@ msgstr ""
 #. Plugin Name of the plugin
 #: hfh-catalog.php
 msgid "HfH Catalog"
-msgstr ""
+msgstr "HfH Katalog"
 
 #. Description of the plugin
 #: hfh-catalog.php
@@ -29,7 +29,7 @@ msgstr "Netzwerkweite Kataloge von Unterseiten mit Filtern."
 #. Author of the plugin
 #: hfh-catalog.php
 msgid "Matthias Nötzli"
-msgstr ""
+msgstr "Matthias Nötzli"
 
 #: includes/Admin/Menu.php:70 includes/Admin/Menu.php:71
 msgid "All Catalogs"
@@ -43,7 +43,7 @@ msgstr ""
 
 #: includes/Admin/Page/AdminPage.php:58
 msgid "Sorry, you are not allowed to execute this action."
-msgstr ""
+msgstr "Sie sind leider nicht berechtigt, diese Aktion auszuführen."
 
 #: includes/Admin/Page/AdminPage.php:92
 msgid "Something went wrong."
@@ -120,14 +120,14 @@ msgstr "Einstellungen"
 #: includes/Admin/Table/CatalogsListTable.php:51
 #: includes/Admin/Table/SiteCatalogsListTable.php:31
 msgid "Name"
-msgstr ""
+msgstr "Name"
 
 #: includes/Admin/Page/CatalogPage.php:124
 #: includes/Admin/Page/NewCatalogPage.php:53
 #: includes/Admin/Table/CatalogsListTable.php:52
 #: includes/Admin/Table/SiteCatalogsListTable.php:32
 msgid "Slug"
-msgstr ""
+msgstr "Slug"
 
 #: includes/Admin/Page/CatalogPage.php:128
 msgid "Public address:"
@@ -201,7 +201,7 @@ msgstr "Katalog nicht gefunden."
 #: includes/Admin/Page/CatalogsPage.php:33
 #: includes/Admin/Page/CatalogsPage.php:38 includes/Admin/SiteCatalogs.php:41
 #: includes/Admin/SiteCatalogs.php:42 includes/Admin/SiteCatalogs.php:55
-#: includes/Frontend.php:169 templates/catalog.php:34 templates/catalogs.php:12
+#: includes/Frontend.php:169 templates/catalog.php:35 templates/catalogs.php:12
 msgid "Catalogs"
 msgstr "Kataloge"
 
@@ -376,7 +376,7 @@ msgstr "Im Katalogindex"
 #: includes/Admin/Table/FilterOptionsListTable.php:67
 #: includes/Admin/Table/FiltersListTable.php:72
 #: includes/Admin/Table/SiteCatalogsListTable.php:58
-#: includes/Admin/Table/SitesListTable.php:85 templates/catalog.php:127
+#: includes/Admin/Table/SitesListTable.php:85 templates/catalog.php:130
 msgid "Edit"
 msgstr "Bearbeiten"
 
@@ -391,7 +391,7 @@ msgid "Edit \"%s\""
 msgstr "\"%s\" bearbeiten"
 
 #: includes/Admin/Table/CatalogsListTable.php:77
-#: includes/Admin/Table/SiteCatalogsListTable.php:50 templates/catalog.php:61
+#: includes/Admin/Table/SiteCatalogsListTable.php:50 templates/catalog.php:62
 msgid "View"
 msgstr "Anschauen"
 
@@ -499,7 +499,7 @@ msgstr "Option"
 
 #: includes/Admin/Table/FiltersListTable.php:54
 msgid "Filter"
-msgstr ""
+msgstr "Filter"
 
 #: includes/Admin/Table/SitesListTable.php:56
 msgid "Site"
@@ -541,45 +541,48 @@ msgid_plural "%s books"
 msgstr[0] "%s Buch"
 msgstr[1] "%s Bücher"
 
-#: includes/Frontend.php:314 templates/results.php:35
+#: includes/Frontend.php:314 templates/results.php:36
 msgid "No books match your selection."
 msgstr "Für Ihre Auswahl wurden keine Bücher gefunden."
 
-#: includes/Frontend.php:315 templates/results.php:37
+#: includes/Frontend.php:315 templates/results.php:38
 msgid "This catalog has no books yet."
 msgstr "Dieser Katalog beinhaltet noch keine Bücher."
 
-#: templates/catalog.php:17
+#: templates/catalog.php:19
 msgid "Grid"
 msgstr "Kacheln"
 
-#: templates/catalog.php:18
+#: templates/catalog.php:20
 msgid "List"
 msgstr "Liste"
 
-#: templates/catalog.php:31
-msgid "Catalog:"
-msgstr "Katalog:"
+#: templates/catalog.php:33
+msgid "Catalog selection"
+msgstr "Katalogauswahl"
 
-#: templates/catalog.php:56
+#: templates/catalog.php:57
 msgid "Skip to books"
 msgstr "Zu den Büchern springen"
 
-#: templates/catalog.php:73
+#: templates/catalog.php:74
 msgid "Filter by"
 msgstr "Filtern nach"
 
-#: templates/catalog.php:106
+#: templates/catalog.php:107
 msgid "Apply filters"
 msgstr "Filter anwenden"
 
-#: templates/catalog.php:108
+#: templates/catalog.php:109
 msgid "Reset"
 msgstr "Zurücksetzen"
 
-#: templates/catalog.php:116
+#: templates/catalog.php:117
 msgid "Books"
 msgstr "Bücher"
+
+#~ msgid "Catalog:"
+#~ msgstr "Katalog:"
 
 #, php-format
 #~ msgid "Delete the catalog \"%s\"? This cannot be undone."
