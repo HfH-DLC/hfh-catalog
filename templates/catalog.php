@@ -2,7 +2,6 @@
 
 use HfH\Catalog\Admin\Page\CatalogPage;
 use HfH\Catalog\Frontend;
-use HfH\Catalog\Plugin;
 use HfH\Catalog\Repository\Catalogs;
 use HfH\Catalog\Repository\Filters;
 use HfH\Catalog\Repository\Sites;
@@ -31,8 +30,7 @@ get_header();
             <?php if (count($listed_catalogs) > 1) : ?>
                 <details class="hfh-catalog__switcher">
                     <summary class="hfh-catalog__switcher-toggle">
-                        <?php esc_html_e('Catalog:', 'hfh-catalog'); ?>
-                        <?= esc_html($catalog->name); ?>
+                        <?php esc_html_e('Catalog selection', 'hfh-catalog'); ?>
                     </summary>
                     <nav class="hfh-catalog__switcher-nav" aria-label="<?php esc_attr_e('Catalogs', 'hfh-catalog'); ?>">
                         <ul class="hfh-catalog__switcher-list">
@@ -58,7 +56,6 @@ get_header();
                 <div class="hfh-catalog__before-filters">
                     <a class="hfh-catalog__skip-link" href="#hfh-catalog-books"><?php esc_html_e('Skip to books', 'hfh-catalog'); ?></a>
 
-                    <?php do_action('hfh_catalog_before_filters', $catalog); ?>
                     <?php do_action('hfh_catalog_before_filters', $catalog, $blog_ids, $catalog_url); ?>
                 </div>
 
@@ -73,7 +70,6 @@ get_header();
 
             <?php if ($filters) : ?>
                 <div class="hfh-catalog__sidebar">
-                    <form class="hfh-catalog__filters" method="get" action="<?= esc_url($frontend->catalog_url($catalog->slug)); ?>">
                     <form class="hfh-catalog__filters" method="get" action="<?= esc_url($catalog_url); ?>">
                         <div class="hfh-catalog__filters-title"><?php esc_html_e('Filter by', 'hfh-catalog'); ?></div>
 
