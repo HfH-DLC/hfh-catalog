@@ -5,13 +5,16 @@ use HfH\Catalog\Frontend;
 use HfH\Catalog\Plugin;
 use HfH\Catalog\Repository\Catalogs;
 use HfH\Catalog\Repository\Filters;
+use HfH\Catalog\Repository\Sites;
 
 $frontend = Frontend::get_instance();
 $catalog = $frontend->get_catalog();
+$catalog_url = $frontend->catalog_url($catalog->slug);
 $filters = Filters::findWithOptionsForCatalog((int) $catalog->id);
 $selection = $frontend->selection_from_query($filters);
 $view = $frontend->view_from_query();
 $sites = $frontend->sites_for_selection((int) $catalog->id, $selection);
+$blog_ids = wp_list_pluck($selection ? Sites::findForCatalog((int) $catalog->id) : $sites, 'blog_id');
 $listed_catalogs = (int) $catalog->listed === 1 ? Catalogs::findListed() : [];
 $views = [
     Frontend::VIEW_GRID => __('Grid', 'hfh-catalog'),
@@ -56,6 +59,7 @@ get_header();
                     <a class="hfh-catalog__skip-link" href="#hfh-catalog-books"><?php esc_html_e('Skip to books', 'hfh-catalog'); ?></a>
 
                     <?php do_action('hfh_catalog_before_filters', $catalog); ?>
+                    <?php do_action('hfh_catalog_before_filters', $catalog, $blog_ids, $catalog_url); ?>
                 </div>
 
                 <div class="hfh-catalog__views" role="group" aria-label="<?php esc_attr_e('View', 'hfh-catalog'); ?>">
@@ -70,6 +74,7 @@ get_header();
             <?php if ($filters) : ?>
                 <div class="hfh-catalog__sidebar">
                     <form class="hfh-catalog__filters" method="get" action="<?= esc_url($frontend->catalog_url($catalog->slug)); ?>">
+                    <form class="hfh-catalog__filters" method="get" action="<?= esc_url($catalog_url); ?>">
                         <div class="hfh-catalog__filters-title"><?php esc_html_e('Filter by', 'hfh-catalog'); ?></div>
 
                         <?php foreach ($filters as $filter) : ?>
