@@ -27,6 +27,7 @@ use HfH\Catalog\Plugin;
                         <?php endif; ?>
                         <div class="hfh-catalog__title"><?php echo esc_html($book->title); ?></div>
                     </div>
+                    <?php do_action('hfh_catalog_after_card_text'); ?>
                 </a>
             </li>
         <?php endforeach; ?>
