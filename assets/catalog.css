@@ -271,12 +271,21 @@
 }
 
 .hfh-catalog__view {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   position: relative;
-  padding: 0.375rem 1rem;
+  padding: 0.625rem;
   border: 0.125rem solid var(--hfh-catalog-checkbox-border, #767676);
   background-color: var(--hfh-catalog-checkbox-bg, #fff);
   color: var(--hfh-catalog-text, inherit);
   text-decoration: none;
+}
+
+.hfh-catalog__view-icon {
+  display: block;
+  width: 1.5rem;
+  height: 1.5rem;
 }
 
 .hfh-catalog__view + .hfh-catalog__view {
@@ -302,10 +311,12 @@
 
 @media (forced-colors: active) {
   .hfh-catalog__view[aria-current="true"] {
-    text-decoration: underline;
+    forced-color-adjust: none;
+    background-color: Highlight;
+    border-color: Highlight;
+    color: HighlightText;
   }
 }
-
 .hfh-catalog__list {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(225px, 1fr));

@@ -62,7 +62,17 @@ get_header();
                 <div class="hfh-catalog__views" role="group" aria-label="<?php esc_attr_e('View', 'hfh-catalog'); ?>">
                     <?php foreach ($views as $view_key => $view_label) : ?>
                         <a class="hfh-catalog__view" data-view="<?= esc_attr($view_key); ?>" href="<?= esc_url($frontend->view_url($catalog->slug, $selection, $view_key)); ?>" <?php if ($view_key === $view) : ?>aria-current="true" <?php endif; ?>>
-                            <?= esc_html($view_label); ?>
+                            <?php if ($view_key === Frontend::VIEW_LIST) : ?>
+                                <svg class="hfh-catalog__view-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true" focusable="false">
+                                    <path stroke-width="2.5" d="M2.75 6h2.5 M2.75 12h2.5 M2.75 18h2.5" />
+                                    <path d="M8.25 6H21.25 M8.25 12H21.25 M8.25 18H21.25" />
+                                </svg>
+                            <?php else : ?>
+                                <svg class="hfh-catalog__view-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true" focusable="false">
+                                    <path d="M3.5 3.5h6.5v6.5H3.5Z M14 3.5h6.5v6.5H14Z M3.5 14h6.5v6.5H3.5Z M14 14h6.5v6.5H14Z" />
+                                </svg>
+                            <?php endif; ?>
+                            <span class="hfh-catalog__visually-hidden"><?= esc_html($view_label); ?></span>
                         </a>
                     <?php endforeach; ?>
                 </div>
