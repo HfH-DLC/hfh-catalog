@@ -61,9 +61,11 @@ class SettingsPage extends AdminPage
                         <td>
                             <input type="text" id="hfh-catalog-url-base" name="url_base" required aria-describedby="hfh-catalog-url-base-desc" value="<?= esc_attr($this->values['url_base'] ?? $frontend->url_base()); ?>">
                             <p class="description" id="hfh-catalog-url-base-desc">
-                                <?php esc_html_e('Catalog index:', 'hfh-catalog'); ?>
-                                <a href="<?= esc_url($frontend->index_url()); ?>"><?= esc_html($frontend->index_url()); ?></a><br>
-                                <?php esc_html_e('Changing the URL base changes the address of every catalog, and existing links to them will stop working.', 'hfh-catalog'); ?>
+                                <?php if (Frontend::INDEX_ENABLED) :
+                                    esc_html_e('Catalog index:', 'hfh-catalog'); ?>
+                                    <a href="<?= esc_url($frontend->index_url()); ?>"><?= esc_html($frontend->index_url()); ?></a><br>
+                                <?php endif;
+                                esc_html_e('Changing the URL base changes the address of every catalog, and existing links to them will stop working.', 'hfh-catalog'); ?>
                             </p>
                         </td>
                     </tr>

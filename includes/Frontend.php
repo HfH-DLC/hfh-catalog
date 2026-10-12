@@ -15,6 +15,7 @@ class Frontend
     const OPTION_URL_BASE = 'hfh_catalog_url_base';
     const QUERY_VAR_SLUG = 'hfh_catalog_slug';
     const QUERY_VAR_INDEX = 'hfh_catalog_index';
+    const INDEX_ENABLED = false;
     const FILTER_PREFIX = 'hfhcat_';
     const VIEW_PARAM = 'hfhcat-view';
     const VIEW_GRID = 'grid';
@@ -109,16 +110,25 @@ class Frontend
             'index.php?' . self::QUERY_VAR_SLUG . '=$matches[1]',
             'top'
         );
-        add_rewrite_rule(
-            '^' . $base . '/?$',
-            'index.php?' . self::QUERY_VAR_INDEX . '=1',
-            'top'
-        );
+
+        if (self::INDEX_ENABLED) {
+            add_rewrite_rule(
+                '^' . $base . '/?$',
+                'index.php?' . self::QUERY_VAR_INDEX . '=1',
+                'top'
+            );
+        }
     }
 
     public function add_query_vars(array $public_query_vars): array
     {
-        return [...$public_query_vars, self::QUERY_VAR_SLUG, self::QUERY_VAR_INDEX];
+        $vars = [...$public_query_vars, self::QUERY_VAR_SLUG];
+
+        if (self::INDEX_ENABLED) {
+            $vars[] = self::QUERY_VAR_INDEX;
+        }
+
+        return $vars;
     }
 
     public function parse_query(\WP_Query $query): void
