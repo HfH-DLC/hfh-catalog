@@ -56,10 +56,17 @@ class Filters
     public static function create(int $catalog_id, string $name, string $slug): bool
     {
         global $wpdb;
+        $table = DB::filtersTable();
+
+        $sort_order = (int) $wpdb->get_var($wpdb->prepare(
+            "SELECT COALESCE(MAX(sort_order) + 1, 0) FROM {$table} WHERE catalog_id = %d",
+            $catalog_id
+        ));
+
         return (bool) $wpdb->insert(
-            DB::filtersTable(),
-            ['catalog_id' => $catalog_id, 'name' => $name, 'slug' => $slug],
-            ['%d', '%s', '%s']
+            $table,
+            ['catalog_id' => $catalog_id, 'name' => $name, 'slug' => $slug, 'sort_order' => $sort_order],
+            ['%d', '%s', '%s', '%d']
         );
     }
 

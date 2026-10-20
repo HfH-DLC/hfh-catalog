@@ -6,7 +6,7 @@ use HfH\Catalog\DB;
 
 class FilterOptions
 {
-    const SORTABLE_TYPE = "filter_otions";
+    const SORTABLE_TYPE = "filter_options";
 
     public static function findForFilter(int $filter_id): array
     {
@@ -78,10 +78,17 @@ class FilterOptions
     public static function create(int $filter_id, string $name, string $slug): bool
     {
         global $wpdb;
+        $table = DB::filterOptionsTable();
+
+        $sort_order = (int) $wpdb->get_var($wpdb->prepare(
+            "SELECT COALESCE(MAX(sort_order) + 1, 0) FROM {$table} WHERE filter_id = %d",
+            $filter_id
+        ));
+
         return (bool) $wpdb->insert(
-            DB::filterOptionsTable(),
-            ['filter_id' => $filter_id, 'name' => $name, 'slug' => $slug],
-            ['%d', '%s', '%s']
+            $table,
+            ['filter_id' => $filter_id, 'name' => $name, 'slug' => $slug, 'sort_order' => $sort_order],
+            ['%d', '%s', '%s', '%d']
         );
     }
 

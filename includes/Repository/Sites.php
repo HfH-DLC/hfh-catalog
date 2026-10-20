@@ -27,7 +27,7 @@ class Sites
         global $wpdb;
         $table = DB::catalogSitesTable();
         return array_map('intval', $wpdb->get_col($wpdb->prepare(
-            "SELECT blog_id FROM {$table} WHERE catalog_id = %d ORDER BY sort_order",
+            "SELECT blog_id FROM {$table} WHERE catalog_id = %d ORDER BY sort_order, blog_id",
             $catalog_id
         )));
     }
@@ -179,10 +179,17 @@ class Sites
     public static function add(int $catalog_id, int $blog_id): bool
     {
         global $wpdb;
+        $table = DB::catalogSitesTable();
+
+        $sort_order = (int) $wpdb->get_var($wpdb->prepare(
+            "SELECT COALESCE(MAX(sort_order) + 1, 0) FROM {$table} WHERE catalog_id = %d",
+            $catalog_id
+        ));
+
         return (bool) $wpdb->insert(
-            DB::catalogSitesTable(),
-            ['catalog_id' => $catalog_id, 'blog_id' => $blog_id],
-            ['%d', '%d']
+            $table,
+            ['catalog_id' => $catalog_id, 'blog_id' => $blog_id, 'sort_order' => $sort_order],
+            ['%d', '%d', '%d']
         );
     }
 
