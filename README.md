@@ -20,9 +20,7 @@ On the catalog pages, visitors can switch between all catalogs marked **Show on 
 
 ## Filtering
 
-Options within a filter are combined with OR, filters with AND: selecting _Mathematics_ and _History_ under _Subject_ shows books with either; adding _Bachelor_ under _Level_ narrows these to bachelor-level books.
-
-Filtered views can be bookmarked and shared.
+Options within a filter are combined with OR, filters with AND.
 
 ## Notes
 
