@@ -16,9 +16,9 @@ class FilterPage extends AdminPage
     const SLUG = 'hfh-catalog-filter';
 
     const ACTION_UPDATE = 'hfh_filter_update';
-    const ACTION_ADD_OPTION = 'hfh_filter_option_add';
-    const ACTION_DELETE_OPTION = 'hfh_filter_option_delete';
-    const ACTION_MOVE_OPTION = 'hfh_filter_option_move';
+    const ACTION_ADD_FILTER_OPTION = 'hfh_filter_option_add';
+    const ACTION_DELETE_FILTER_OPTION = 'hfh_filter_option_delete';
+    const ACTION_MOVE_FILTER_OPTION = 'hfh_filter_option_move';
 
     const NOTICE_SPOT_FILTER_OPTIONS = 'hfh-filter-section-filter-options';
 
@@ -41,9 +41,9 @@ class FilterPage extends AdminPage
     {
         return [
             self::ACTION_UPDATE        => 'update_filter',
-            self::ACTION_ADD_OPTION    => 'add_filter_option',
-            self::ACTION_DELETE_OPTION => 'delete_filter_option',
-            self::ACTION_MOVE_OPTION   => 'move_filter_option',
+            self::ACTION_ADD_FILTER_OPTION    => 'add_filter_option',
+            self::ACTION_DELETE_FILTER_OPTION => 'delete_filter_option',
+            self::ACTION_MOVE_FILTER_OPTION   => 'move_filter_option',
         ];
     }
 
@@ -51,8 +51,8 @@ class FilterPage extends AdminPage
     {
         return [
             self::NOTICE_SPOT_FILTER_OPTIONS => [
-                self::ACTION_ADD_OPTION,
-                self::ACTION_DELETE_OPTION,
+                self::ACTION_ADD_FILTER_OPTION,
+                self::ACTION_DELETE_FILTER_OPTION,
                 FilterOptionPage::ACTION_UPDATE,
             ],
         ];
@@ -80,9 +80,9 @@ class FilterPage extends AdminPage
         ];
         $successes = [
             self::ACTION_UPDATE             => __('Filter updated.', 'hfh-catalog'),
-            self::ACTION_ADD_OPTION         => __('Option added.', 'hfh-catalog'),
+            self::ACTION_ADD_FILTER_OPTION         => __('Option added.', 'hfh-catalog'),
             FilterOptionPage::ACTION_UPDATE => __('Option updated.', 'hfh-catalog'),
-            self::ACTION_DELETE_OPTION      => __('Option deleted.', 'hfh-catalog'),
+            self::ACTION_DELETE_FILTER_OPTION      => __('Option deleted.', 'hfh-catalog'),
         ];
 ?>
         <div class="wrap">
@@ -115,13 +115,13 @@ class FilterPage extends AdminPage
             <?php $this->render_notices($errors, $successes, self::NOTICE_SPOT_FILTER_OPTIONS); ?>
             <div class="tablenav top">
                 <form method="post" action="<?= esc_url($filter_url . '#' . self::NOTICE_SPOT_FILTER_OPTIONS); ?>" class="alignleft actions">
-                    <?php wp_nonce_field(self::ACTION_ADD_OPTION); ?>
-                    <input type="hidden" name="hfh_action" value="<?= esc_attr(self::ACTION_ADD_OPTION); ?>">
+                    <?php wp_nonce_field(self::ACTION_ADD_FILTER_OPTION); ?>
+                    <input type="hidden" name="hfh_action" value="<?= esc_attr(self::ACTION_ADD_FILTER_OPTION); ?>">
                     <label for="hfh-option-name" class="screen-reader-text"><?php esc_html_e('New option name', 'hfh-catalog'); ?></label>
                     <input type="text" id="hfh-option-name" name="filter_option_name" required
                         placeholder="<?php esc_attr_e('New option name', 'hfh-catalog'); ?>"
                         value="<?= esc_attr($this->values['filter_option_name'] ?? ''); ?>"
-                        <?= $this->notice_action() === self::ACTION_ADD_OPTION ? 'autofocus' : ''; ?>>
+                        <?= $this->notice_action() === self::ACTION_ADD_FILTER_OPTION ? 'autofocus' : ''; ?>>
                     <?php submit_button(__('Add option', 'hfh-catalog'), '', 'submit', false); ?>
                 </form>
                 <br class="clear">

@@ -71,21 +71,21 @@ class FilterOptionsListTable extends SortableListTable
         ];
 
         $actions['move_up'] = $this->action_link(
-            $this->action_url(FilterPage::ACTION_MOVE_OPTION, $filter_option, ['direction' => 'up']),
+            $this->action_url(FilterPage::ACTION_MOVE_FILTER_OPTION, $filter_option, ['direction' => 'up']),
             __('Move up', 'hfh-catalog'),
             /* translators: %s: filter option name */
             sprintf(__('Move "%s" up', 'hfh-catalog'), $filter_option->name)
         );
 
         $actions['move_down'] = $this->action_link(
-            $this->action_url(FilterPage::ACTION_MOVE_OPTION, $filter_option, ['direction' => 'down']),
+            $this->action_url(FilterPage::ACTION_MOVE_FILTER_OPTION, $filter_option, ['direction' => 'down']),
             __('Move down', 'hfh-catalog'),
             /* translators: %s: filter option name */
             sprintf(__('Move "%s" down', 'hfh-catalog'), $filter_option->name)
         );
 
         $actions['delete'] = $this->action_link(
-            $this->action_url(FilterPage::ACTION_DELETE_OPTION, $filter_option),
+            $this->action_url(FilterPage::ACTION_DELETE_FILTER_OPTION, $filter_option),
             __('Delete', 'hfh-catalog'),
             /* translators: %s: filter option name */
             sprintf(__('Delete "%s"', 'hfh-catalog'), $filter_option->name),
