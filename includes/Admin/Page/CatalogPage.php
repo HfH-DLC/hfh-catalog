@@ -6,7 +6,6 @@ use HfH\Catalog\Frontend;
 use HfH\Catalog\Admin\Table\FiltersListTable;
 use HfH\Catalog\Admin\Table\SitesListTable;
 use HfH\Catalog\Admin\Table\SortableListTable;
-use HfH\Catalog\Plugin;
 use HfH\Catalog\Repository\Catalogs;
 use HfH\Catalog\Repository\FilterOptions;
 use HfH\Catalog\Repository\Filters;
@@ -28,21 +27,8 @@ class CatalogPage extends AdminPage
     const ACTION_DELETE_FILTER = 'hfh_catalog_delete_filter';
     const ACTION_MOVE_FILTER = 'hfh_catalog_move_filter';
 
-    const NOTICE_UPDATED = 'hfh_catalog_updated';
-    const NOTICE_SITE_ADDED = 'hfh_site_added';
-    const NOTICE_SITE_REMOVED = 'hfh_site_removed';
-    const NOTICE_SITE_UPDATED = 'hfh_site_updated';
-    const NOTICE_FILTER_ADDED = 'hfh_filter_added';
-    const NOTICE_FILTER_DELETED = 'hfh_filter_deleted';
-
-    const NOTICES = [
-        self::NOTICE_UPDATED,
-        self::NOTICE_SITE_ADDED,
-        self::NOTICE_SITE_REMOVED,
-        self::NOTICE_SITE_UPDATED,
-        self::NOTICE_FILTER_ADDED,
-        self::NOTICE_FILTER_DELETED,
-    ];
+    const NOTICE_SPOT_SITES = 'hfh-catalog-section-sites';
+    const NOTICE_SPOT_FILTERS = 'hfh-catalog-section-filters';
 
     const ERROR_INVALID = 'invalid';
     const ERROR_SLUG_EXISTS = 'slug_exists';
@@ -73,6 +59,21 @@ class CatalogPage extends AdminPage
         ];
     }
 
+    protected function notice_spots(): array
+    {
+        return [
+            self::NOTICE_SPOT_SITES => [
+                self::ACTION_ADD_SITE,
+                self::ACTION_REMOVE_SITE,
+                SitePage::ACTION_UPDATE,
+            ],
+            self::NOTICE_SPOT_FILTERS => [
+                self::ACTION_ADD_FILTER,
+                self::ACTION_DELETE_FILTER,
+            ],
+        ];
+    }
+
     public function render(): void
     {
         $catalog = $this->current_catalog();
@@ -99,12 +100,12 @@ class CatalogPage extends AdminPage
             self::ERROR_DB             => __('Your changes could not be saved.', 'hfh-catalog'),
         ];
         $successes = [
-            self::NOTICE_UPDATED        => __('Catalog updated.', 'hfh-catalog'),
-            self::NOTICE_SITE_ADDED     => __('Site added.', 'hfh-catalog'),
-            self::NOTICE_SITE_REMOVED   => __('Site removed.', 'hfh-catalog'),
-            self::NOTICE_SITE_UPDATED   => __('Site updated.', 'hfh-catalog'),
-            self::NOTICE_FILTER_ADDED   => __('Filter added.', 'hfh-catalog'),
-            self::NOTICE_FILTER_DELETED => __('Filter deleted.', 'hfh-catalog'),
+            self::ACTION_UPDATE        => __('Catalog updated.', 'hfh-catalog'),
+            self::ACTION_ADD_SITE      => __('Site added.', 'hfh-catalog'),
+            self::ACTION_REMOVE_SITE   => __('Site removed.', 'hfh-catalog'),
+            SitePage::ACTION_UPDATE    => __('Site updated.', 'hfh-catalog'),
+            self::ACTION_ADD_FILTER    => __('Filter added.', 'hfh-catalog'),
+            self::ACTION_DELETE_FILTER => __('Filter deleted.', 'hfh-catalog'),
         ];
 ?>
         <div class="wrap">
@@ -152,14 +153,17 @@ class CatalogPage extends AdminPage
                 <?php submit_button(__('Update', 'hfh-catalog')); ?>
             </form>
 
-            <h2><?php esc_html_e('Sites', 'hfh-catalog'); ?></h2>
+            <h2 id="<?= esc_attr(self::NOTICE_SPOT_SITES); ?>" class="hfh-scroll-target"><?php esc_html_e('Sites', 'hfh-catalog'); ?></h2>
+            <?php $this->render_notices($errors, $successes, self::NOTICE_SPOT_SITES); ?>
             <div class="tablenav top">
-                <form method="post" action="<?= esc_url($catalog_url); ?>" class="alignleft actions">
+                <form method="post" action="<?= esc_url($catalog_url . '#' . self::NOTICE_SPOT_SITES); ?>" class="alignleft actions">
                     <?php wp_nonce_field(self::ACTION_ADD_SITE); ?>
                     <input type="hidden" name="hfh_action" value="<?= esc_attr(self::ACTION_ADD_SITE); ?>">
                     <label for="hfh-catalog-site" class="screen-reader-text"><?php esc_html_e('Site to add', 'hfh-catalog'); ?></label>
                     <input type="text" id="hfh-catalog-site" name="site" list="hfh-catalog-sites" class="regular-text" required
-                        autocomplete="off" placeholder="<?php esc_attr_e('Start typing a site name or URL…', 'hfh-catalog'); ?>">
+                        autocomplete="off" placeholder="<?php esc_attr_e('Start typing a site name or URL…', 'hfh-catalog'); ?>"
+                        value="<?= esc_attr($this->values['site'] ?? ''); ?>"
+                        <?= $this->notice_action() === self::ACTION_ADD_SITE ? 'autofocus' : ''; ?>>
                     <datalist id="hfh-catalog-sites">
                         <?php foreach ($available_sites as $site) : ?>
                             <option value="<?= esc_attr($this->site_label($site)); ?>"></option>
@@ -176,15 +180,17 @@ class CatalogPage extends AdminPage
                 <p><?php esc_html_e('No sites in this catalog yet.', 'hfh-catalog'); ?></p>
             <?php endif; ?>
 
-            <h2><?php esc_html_e('Filters', 'hfh-catalog'); ?></h2>
+            <h2 id="<?= esc_attr(self::NOTICE_SPOT_FILTERS); ?>" class="hfh-scroll-target"><?php esc_html_e('Filters', 'hfh-catalog'); ?></h2>
+            <?php $this->render_notices($errors, $successes, self::NOTICE_SPOT_FILTERS); ?>
             <div class="tablenav top">
-                <form method="post" action="<?= esc_url($catalog_url); ?>" class="alignleft actions">
+                <form method="post" action="<?= esc_url($catalog_url . '#' . self::NOTICE_SPOT_FILTERS); ?>" class="alignleft actions">
                     <?php wp_nonce_field(self::ACTION_ADD_FILTER); ?>
                     <input type="hidden" name="hfh_action" value="<?= esc_attr(self::ACTION_ADD_FILTER); ?>">
                     <label for="hfh-filter-name" class="screen-reader-text"><?php esc_html_e('New filter name', 'hfh-catalog'); ?></label>
                     <input type="text" id="hfh-filter-name" name="filter_name" required
                         placeholder="<?php esc_attr_e('New filter name', 'hfh-catalog'); ?>"
-                        value="<?= esc_attr($this->values['filter_name'] ?? ''); ?>">
+                        value="<?= esc_attr($this->values['filter_name'] ?? ''); ?>"
+                        <?= $this->notice_action() === self::ACTION_ADD_FILTER ? 'autofocus' : ''; ?>>
                     <?php submit_button(__('Add filter', 'hfh-catalog'), '', 'submit', false); ?>
                 </form>
                 <br class="clear">
@@ -233,7 +239,7 @@ class CatalogPage extends AdminPage
         }
 
         if ($this->error === '') {
-            $this->redirect(self::url(['id' => $catalog->id]), self::NOTICE_UPDATED);
+            $this->redirect_with_notice(self::url(['id' => $catalog->id]));
         }
     }
 
@@ -242,6 +248,7 @@ class CatalogPage extends AdminPage
         $catalog = $this->current_catalog();
 
         $submitted = wp_unslash($_POST['site'] ?? '');
+        $this->values['site'] = $submitted;
 
         $blog_id = 0;
         foreach (Sites::findAvailable((int) $catalog->id) as $site) {
@@ -258,7 +265,7 @@ class CatalogPage extends AdminPage
         }
 
         if ($this->error === '') {
-            $this->redirect(self::url(['id' => $catalog->id]), self::NOTICE_SITE_ADDED);
+            $this->redirect_with_notice(self::url(['id' => $catalog->id]), self::NOTICE_SPOT_SITES);
         }
     }
 
@@ -271,7 +278,7 @@ class CatalogPage extends AdminPage
             return;
         }
 
-        $this->redirect(self::url(['id' => $catalog->id]), self::NOTICE_SITE_REMOVED);
+        $this->redirect_with_notice(self::url(['id' => $catalog->id]), self::NOTICE_SPOT_SITES);
     }
 
     protected function move_site(): void
@@ -285,7 +292,7 @@ class CatalogPage extends AdminPage
             return;
         }
 
-        $this->redirect(self::url(['id' => $catalog->id]) . '#' . SortableListTable::row_element_id(Sites::SORTABLE_TYPE, $blog_id));
+        $this->redirect(self::url(['id' => $catalog->id]), SortableListTable::row_element_id(Sites::SORTABLE_TYPE, $blog_id));
     }
 
     protected function add_filter(): void
@@ -305,7 +312,7 @@ class CatalogPage extends AdminPage
         }
 
         if ($this->error === '') {
-            $this->redirect(self::url(['id' => $catalog->id]), self::NOTICE_FILTER_ADDED);
+            $this->redirect_with_notice(self::url(['id' => $catalog->id]), self::NOTICE_SPOT_FILTERS);
         }
     }
 
@@ -318,7 +325,7 @@ class CatalogPage extends AdminPage
             return;
         }
 
-        $this->redirect(self::url(['id' => $catalog->id]), self::NOTICE_FILTER_DELETED);
+        $this->redirect_with_notice(self::url(['id' => $catalog->id]), self::NOTICE_SPOT_FILTERS);
     }
 
     protected function move_filter(): void
@@ -332,7 +339,7 @@ class CatalogPage extends AdminPage
             return;
         }
 
-        $this->redirect(self::url(['id' => $catalog->id]) . '#' . SortableListTable::row_element_id(Filters::SORTABLE_TYPE, $filter_id));
+        $this->redirect(self::url(['id' => $catalog->id]), SortableListTable::row_element_id(Filters::SORTABLE_TYPE, $filter_id));
     }
 
     /**

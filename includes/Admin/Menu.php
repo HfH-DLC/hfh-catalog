@@ -10,7 +10,6 @@ use HfH\Catalog\Admin\Page\FilterPage;
 use HfH\Catalog\Admin\Page\NewCatalogPage;
 use HfH\Catalog\Admin\Page\SettingsPage;
 use HfH\Catalog\Admin\Page\SitePage;
-use HfH\Catalog\Plugin;
 use HfH\Catalog\RestApi;
 
 /**
@@ -122,10 +121,7 @@ class Menu
     {
         return [
             ...$args,
-            ...CatalogsPage::NOTICES,
-            ...CatalogPage::NOTICES,
-            ...FilterPage::NOTICES,
-            ...SettingsPage::NOTICES,
+            AdminPage::NOTICE_QUERY_ARG,
         ];
     }
 

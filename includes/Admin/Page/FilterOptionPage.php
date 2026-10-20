@@ -2,7 +2,6 @@
 
 namespace HfH\Catalog\Admin\Page;
 
-use HfH\Catalog\Plugin;
 use HfH\Catalog\Repository\FilterOptions;
 use HfH\Catalog\Repository\Filters;
 
@@ -92,9 +91,9 @@ class FilterOptionPage extends AdminPage
         }
 
         if ($this->error === '') {
-            $this->redirect(
+            $this->redirect_with_notice(
                 FilterPage::url(['id' => $filter_option->filter_id]),
-                FilterPage::NOTICE_OPTION_UPDATED
+                FilterPage::NOTICE_SPOT_FILTER_OPTIONS
             );
         }
     }

@@ -6,15 +6,20 @@
   content: var(--heroicon-outline-rectangle-stack, "\f318") !important;
 }
 
-.hfh-sortable__item {
-  cursor: move;
+.hfh-sortable__item,
+.hfh-scroll-target {
   scroll-margin-top: 48px;
 }
 
 @media screen and (max-width: 782px) {
-  .hfh-sortable__item {
+  .hfh-sortable__item,
+  .hfh-scroll-target {
     scroll-margin-top: 62px;
   }
+}
+
+.hfh-sortable__item {
+  cursor: move;
 }
 
 .hfh-sortable__item.ui-sortable-helper {

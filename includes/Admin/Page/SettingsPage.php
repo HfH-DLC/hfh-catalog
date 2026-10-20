@@ -3,19 +3,12 @@
 namespace HfH\Catalog\Admin\Page;
 
 use HfH\Catalog\Frontend;
-use HfH\Catalog\Plugin;
 
 class SettingsPage extends AdminPage
 {
     const SLUG = 'hfh-catalog-settings';
 
     const ACTION_UPDATE = 'hfh_catalog_settings_update';
-
-    const NOTICE_UPDATED = 'hfh_catalog_settings_updated';
-
-    const NOTICES = [
-        self::NOTICE_UPDATED,
-    ];
 
     const ERROR_INVALID = 'invalid';
 
@@ -45,7 +38,7 @@ class SettingsPage extends AdminPage
             self::ERROR_DB      => __('Your changes could not be saved.', 'hfh-catalog'),
         ];
         $successes = [
-            self::NOTICE_UPDATED => __('Settings saved.', 'hfh-catalog'),
+            self::ACTION_UPDATE => __('Settings saved.', 'hfh-catalog'),
         ];
 ?>
         <div class="wrap">
@@ -88,7 +81,7 @@ class SettingsPage extends AdminPage
         }
 
         if ($this->error === '') {
-            $this->redirect(self::url(), self::NOTICE_UPDATED);
+            $this->redirect_with_notice(self::url());
         }
     }
 }

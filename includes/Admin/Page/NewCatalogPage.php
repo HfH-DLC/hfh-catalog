@@ -2,7 +2,6 @@
 
 namespace HfH\Catalog\Admin\Page;
 
-use HfH\Catalog\Plugin;
 use HfH\Catalog\Repository\Catalogs;
 
 class NewCatalogPage extends AdminPage
@@ -91,7 +90,7 @@ class NewCatalogPage extends AdminPage
         }
 
         if ($this->error === '') {
-            $this->redirect(CatalogsPage::url(), CatalogsPage::NOTICE_CREATED);
+            $this->redirect_with_notice(CatalogsPage::url());
         }
     }
 }

@@ -4,7 +4,6 @@ namespace HfH\Catalog\Admin\Page;
 
 use HfH\Catalog\Admin\Table\CatalogsListTable;
 use HfH\Catalog\Admin\Table\SortableListTable;
-use HfH\Catalog\Plugin;
 use HfH\Catalog\Repository\Catalogs;
 
 /**
@@ -17,16 +16,6 @@ class CatalogsPage extends AdminPage
     const ACTION_DELETE = 'hfh_catalog_delete';
     const ACTION_TOGGLE_LISTED = 'hfh_catalog_toggle_listed';
     const ACTION_MOVE = 'hfh_catalog_move';
-
-    const NOTICE_CREATED = 'hfh_catalog_created';
-    const NOTICE_DELETED = 'hfh_catalog_deleted';
-    const NOTICE_LISTED = 'hfh_catalog_listed';
-
-    const NOTICES = [
-        self::NOTICE_CREATED,
-        self::NOTICE_DELETED,
-        self::NOTICE_LISTED,
-    ];
 
     public function page_title(): string
     {
@@ -56,9 +45,9 @@ class CatalogsPage extends AdminPage
             self::ERROR_DB => __('Your changes could not be saved.', 'hfh-catalog'),
         ];
         $successes = [
-            self::NOTICE_CREATED => __('Catalog created.', 'hfh-catalog'),
-            self::NOTICE_DELETED => __('Catalog deleted.', 'hfh-catalog'),
-            self::NOTICE_LISTED => __('Catalog index updated.', 'hfh-catalog'),
+            NewCatalogPage::ACTION_CREATE => __('Catalog created.', 'hfh-catalog'),
+            self::ACTION_DELETE           => __('Catalog deleted.', 'hfh-catalog'),
+            self::ACTION_TOGGLE_LISTED    => __('Catalog index updated.', 'hfh-catalog'),
         ];
 ?>
         <div class="wrap">
@@ -84,7 +73,7 @@ class CatalogsPage extends AdminPage
             return;
         }
 
-        $this->redirect(self::url(), self::NOTICE_LISTED);
+        $this->redirect_with_notice(self::url());
     }
 
     protected function move_catalog(): void
@@ -97,7 +86,7 @@ class CatalogsPage extends AdminPage
             return;
         }
 
-        $this->redirect(self::url() . '#' . SortableListTable::row_element_id(Catalogs::SORTABLE_TYPE, (int) $catalog->id));
+        $this->redirect(self::url(), SortableListTable::row_element_id(Catalogs::SORTABLE_TYPE, (int) $catalog->id));
     }
 
     protected function delete_catalog(): void
@@ -109,7 +98,7 @@ class CatalogsPage extends AdminPage
             return;
         }
 
-        $this->redirect(self::url(), self::NOTICE_DELETED);
+        $this->redirect_with_notice(self::url());
     }
 
     /**

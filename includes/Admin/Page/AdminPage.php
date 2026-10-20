@@ -2,8 +2,6 @@
 
 namespace HfH\Catalog\Admin\Page;
 
-use HfH\Catalog\Plugin;
-
 /**
  * One screen in Network Admin: its markup, its form handlers, its own state.
  *
@@ -17,11 +15,11 @@ abstract class AdminPage
     /** Page slug, i.e. the "page" query parameter. */
     const SLUG = '';
 
-    /** Query parameters this page uses for success notices. */
-    const NOTICES = [];
+    const NOTICE_QUERY_ARG = 'hfh_notice';
 
     const ERROR_DB = 'db';
 
+    protected string $action = '';
     protected string $error = '';
     protected array $values = [];
 
@@ -35,6 +33,14 @@ abstract class AdminPage
      * @return array [hfh_action => method name]
      */
     protected function handlers(): array
+    {
+        return [];
+    }
+
+    /**
+     * @return array [spot => [hfh_action, …]]
+     */
+    protected function notice_spots(): array
     {
         return [];
     }
@@ -58,6 +64,7 @@ abstract class AdminPage
             wp_die(esc_html__('Sorry, you are not allowed to execute this action.', 'hfh-catalog'), 403);
         }
 
+        $this->action = $action;
         $this->{$handlers[$action]}();
     }
 
@@ -77,29 +84,75 @@ abstract class AdminPage
         return wp_nonce_url(static::url(['hfh_action' => $action] + $args), $action);
     }
 
-    protected function redirect(string $url, string $notice = ''): void
+    protected function redirect(string $url, string $anchor = ''): void
     {
-        wp_safe_redirect($notice ? add_query_arg($notice, 1, $url) : $url);
+        if ($anchor !== '') {
+            $url .= '#' . $anchor;
+        }
+        wp_safe_redirect($url);
         exit;
+    }
+
+    protected function redirect_with_notice(string $url, string $anchor = ''): void
+    {
+        $this->redirect(add_query_arg(self::NOTICE_QUERY_ARG, $this->action, $url), $anchor);
     }
 
     /**
      * Shows the current error, or the success notice named in the URL.
      */
-    protected function render_notices(array $errors, array $successes = []): void
+    protected function render_notices(array $errors, array $successes = [], string $spot = ''): bool
     {
+        $notice_action = $this->notice_action();
+
         if ($this->error !== '') {
+            $type = 'error';
             $message = $errors[$this->error] ?? __('Something went wrong.', 'hfh-catalog');
-            printf('<div class="notice notice-error"><p>%s</p></div>', esc_html($message));
-            return;
+        } else {
+            $type = 'success';
+            $message = $successes[$notice_action] ?? '';
         }
 
-        foreach ($successes as $flag => $message) {
-            if (isset($_GET[$flag])) {
-                printf('<div class="notice notice-success is-dismissible"><p>%s</p></div>', esc_html($message));
-                return;
+        if ($message === '' || $this->notice_spot_for_action($notice_action) !== $spot) {
+            return false;
+        }
+
+        $this->render_notice($type, $message, $spot !== '');
+        return true;
+    }
+
+    protected function notice_action(): string
+    {
+        if ($this->error !== '') {
+            return $this->action;
+        }
+        return sanitize_key($_GET[self::NOTICE_QUERY_ARG] ?? '');
+    }
+
+    protected function notice_spot_for_action(string $action): string
+    {
+        foreach ($this->notice_spots() as $spot => $actions) {
+            if (in_array($action, $actions, true)) {
+                return $spot;
             }
         }
+        return '';
+    }
+
+    protected function render_notice(string $type, string $message, bool $inline = false): void
+    {
+        $classes = ['notice', 'notice-' . $type];
+        if ($type === 'success') {
+            $classes[] = 'is-dismissible';
+        }
+        if ($inline) {
+            $classes[] = 'inline';
+        }
+?>
+        <div class="<?= esc_attr(implode(' ', $classes)); ?>">
+            <p><?= esc_html($message); ?></p>
+        </div>
+<?php
     }
 
     protected function not_found(string $message): void

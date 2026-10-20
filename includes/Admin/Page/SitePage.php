@@ -2,7 +2,6 @@
 
 namespace HfH\Catalog\Admin\Page;
 
-use HfH\Catalog\Plugin;
 use HfH\Catalog\Repository\Catalogs;
 use HfH\Catalog\Repository\FilterOptions;
 use HfH\Catalog\Repository\Filters;
@@ -109,7 +108,7 @@ class SitePage extends AdminPage
             return;
         }
 
-        $this->redirect(CatalogPage::url(['id' => $catalog->id]), CatalogPage::NOTICE_SITE_UPDATED);
+        $this->redirect_with_notice(CatalogPage::url(['id' => $catalog->id]), CatalogPage::NOTICE_SPOT_SITES);
     }
 
     /**

@@ -4,7 +4,6 @@ namespace HfH\Catalog\Admin\Page;
 
 use HfH\Catalog\Admin\Table\FilterOptionsListTable;
 use HfH\Catalog\Admin\Table\SortableListTable;
-use HfH\Catalog\Plugin;
 use HfH\Catalog\Repository\Catalogs;
 use HfH\Catalog\Repository\FilterOptions;
 use HfH\Catalog\Repository\Filters;
@@ -21,17 +20,7 @@ class FilterPage extends AdminPage
     const ACTION_DELETE_OPTION = 'hfh_filter_option_delete';
     const ACTION_MOVE_OPTION = 'hfh_filter_option_move';
 
-    const NOTICE_UPDATED = 'hfh_filter_updated';
-    const NOTICE_OPTION_ADDED = 'hfh_filter_option_added';
-    const NOTICE_OPTION_UPDATED = 'hfh_filter_option_updated';
-    const NOTICE_OPTION_DELETED = 'hfh_filter_option_deleted';
-
-    const NOTICES = [
-        self::NOTICE_UPDATED,
-        self::NOTICE_OPTION_ADDED,
-        self::NOTICE_OPTION_UPDATED,
-        self::NOTICE_OPTION_DELETED,
-    ];
+    const NOTICE_SPOT_FILTER_OPTIONS = 'hfh-filter-section-filter-options';
 
     const ERROR_INVALID = 'invalid';
     const ERROR_FILTER_EXISTS = 'filter_exists';
@@ -58,6 +47,17 @@ class FilterPage extends AdminPage
         ];
     }
 
+    protected function notice_spots(): array
+    {
+        return [
+            self::NOTICE_SPOT_FILTER_OPTIONS => [
+                self::ACTION_ADD_OPTION,
+                self::ACTION_DELETE_OPTION,
+                FilterOptionPage::ACTION_UPDATE,
+            ],
+        ];
+    }
+
     public function render(): void
     {
         $filter = $this->current_filter();
@@ -79,10 +79,10 @@ class FilterPage extends AdminPage
             self::ERROR_DB             => __('Your changes could not be saved.', 'hfh-catalog'),
         ];
         $successes = [
-            self::NOTICE_UPDATED        => __('Filter updated.', 'hfh-catalog'),
-            self::NOTICE_OPTION_ADDED   => __('Option added.', 'hfh-catalog'),
-            self::NOTICE_OPTION_UPDATED => __('Option updated.', 'hfh-catalog'),
-            self::NOTICE_OPTION_DELETED => __('Option deleted.', 'hfh-catalog'),
+            self::ACTION_UPDATE             => __('Filter updated.', 'hfh-catalog'),
+            self::ACTION_ADD_OPTION         => __('Option added.', 'hfh-catalog'),
+            FilterOptionPage::ACTION_UPDATE => __('Option updated.', 'hfh-catalog'),
+            self::ACTION_DELETE_OPTION      => __('Option deleted.', 'hfh-catalog'),
         ];
 ?>
         <div class="wrap">
@@ -111,15 +111,17 @@ class FilterPage extends AdminPage
                 <?php submit_button(__('Update', 'hfh-catalog')); ?>
             </form>
 
-            <h2><?php esc_html_e('Options', 'hfh-catalog'); ?></h2>
+            <h2 id="<?= esc_attr(self::NOTICE_SPOT_FILTER_OPTIONS); ?>" class="hfh-scroll-target"><?php esc_html_e('Options', 'hfh-catalog'); ?></h2>
+            <?php $this->render_notices($errors, $successes, self::NOTICE_SPOT_FILTER_OPTIONS); ?>
             <div class="tablenav top">
-                <form method="post" action="<?= esc_url($filter_url); ?>" class="alignleft actions">
+                <form method="post" action="<?= esc_url($filter_url . '#' . self::NOTICE_SPOT_FILTER_OPTIONS); ?>" class="alignleft actions">
                     <?php wp_nonce_field(self::ACTION_ADD_OPTION); ?>
                     <input type="hidden" name="hfh_action" value="<?= esc_attr(self::ACTION_ADD_OPTION); ?>">
                     <label for="hfh-option-name" class="screen-reader-text"><?php esc_html_e('New option name', 'hfh-catalog'); ?></label>
                     <input type="text" id="hfh-option-name" name="filter_option_name" required
                         placeholder="<?php esc_attr_e('New option name', 'hfh-catalog'); ?>"
-                        value="<?= esc_attr($this->values['filter_option_name'] ?? ''); ?>">
+                        value="<?= esc_attr($this->values['filter_option_name'] ?? ''); ?>"
+                        <?= $this->notice_action() === self::ACTION_ADD_OPTION ? 'autofocus' : ''; ?>>
                     <?php submit_button(__('Add option', 'hfh-catalog'), '', 'submit', false); ?>
                 </form>
                 <br class="clear">
@@ -154,7 +156,7 @@ class FilterPage extends AdminPage
         }
 
         if ($this->error === '') {
-            $this->redirect(self::url(['id' => $filter->id]), self::NOTICE_UPDATED);
+            $this->redirect_with_notice(self::url(['id' => $filter->id]));
         }
     }
 
@@ -175,7 +177,7 @@ class FilterPage extends AdminPage
         }
 
         if ($this->error === '') {
-            $this->redirect(self::url(['id' => $filter->id]), self::NOTICE_OPTION_ADDED);
+            $this->redirect_with_notice(self::url(['id' => $filter->id]), self::NOTICE_SPOT_FILTER_OPTIONS);
         }
     }
 
@@ -188,7 +190,7 @@ class FilterPage extends AdminPage
             return;
         }
 
-        $this->redirect(self::url(['id' => $filter->id]), self::NOTICE_OPTION_DELETED);
+        $this->redirect_with_notice(self::url(['id' => $filter->id]), self::NOTICE_SPOT_FILTER_OPTIONS);
     }
 
     protected function move_filter_option(): void
@@ -202,7 +204,7 @@ class FilterPage extends AdminPage
             return;
         }
 
-        $this->redirect(self::url(['id' => $filter->id]) . '#' . SortableListTable::row_element_id(FilterOptions::SORTABLE_TYPE, $filter_option_id));
+        $this->redirect(self::url(['id' => $filter->id]), SortableListTable::row_element_id(FilterOptions::SORTABLE_TYPE, $filter_option_id));
     }
 
     protected function current_filter(): object
