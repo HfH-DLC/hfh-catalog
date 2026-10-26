@@ -1,0 +1,36 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+
+      - name: Check version
+        run: |
+          tag_version="${GITHUB_REF_NAME#v}"
+          header_version=$(sed -n -E 's/^[[:space:]/*#@]*Version:(.*)$/\1/Ip' hfh-catalog.php | head -n 1 | sed -E 's/\*\/.*$//; s/^[[:space:]]+//; s/[[:space:]]+$//')
+          if [ -z "$header_version" ]; then
+            echo "::error::No Version header found in hfh-catalog.php"
+            exit 1
+          fi
+          if [ "$header_version" != "$tag_version" ]; then
+            echo "::error::Tag $GITHUB_REF_NAME does not match Version $header_version in hfh-catalog.php"
+            exit 1
+          fi
+
+      - name: Build zip
+        run: git archive --format=zip --prefix=hfh-catalog/ --output=hfh-catalog.zip HEAD
+
+      - name: Create release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh release create "$GITHUB_REF_NAME" hfh-catalog.zip --title "$GITHUB_REF_NAME" --generate-notes

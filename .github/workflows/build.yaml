@@ -1,0 +1,22 @@
+name: Build
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+
+      - name: Build zip
+        run: git archive --format=zip --prefix=hfh-catalog/ --output=hfh-catalog.zip HEAD
+
+      - name: Upload zip
+        uses: actions/upload-artifact@v7
+        with:
+          path: hfh-catalog.zip
+          archive: false
