@@ -82,31 +82,32 @@ get_header();
                 <div class="hfh-catalog__sidebar">
                     <form class="hfh-catalog__filters" method="get" action="<?= esc_url($catalog_url); ?>">
                         <div class="hfh-catalog__filters-title"><?php esc_html_e('Filter by', 'hfh-catalog'); ?></div>
-
-                        <?php foreach ($filters as $filter) : ?>
-                            <?php if ($filter->options) : ?>
-                                <fieldset class="hfh-catalog__filter">
-                                    <legend class="hfh-catalog__filter-legend"><?= esc_html($filter->name); ?></legend>
-                                    <div class="hfh-catalog__filter-options">
-                                        <?php foreach ($filter->options as $option) :
-                                            $id = 'hfh-catalog-option-' . $option->id;
-                                            $checked = in_array($option->slug, $selection[$filter->slug] ?? [], true);
-                                        ?>
-                                            <div class="hfh-catalog__filter-option">
-                                                <input type="checkbox" class="hfh-catalog__checkbox"
-                                                    id="<?= esc_attr($id); ?>"
-                                                    name="<?= esc_attr($frontend->filter_param($filter->slug)); ?>[]"
-                                                    value="<?= esc_attr($option->slug); ?>"
-                                                    <?php checked($checked); ?>>
-                                                <label class="hfh-catalog__checkbox-label" for="<?= esc_attr($id); ?>">
-                                                    <?= esc_html($option->name); ?>
-                                                </label>
-                                            </div>
-                                        <?php endforeach; ?>
-                                    </div>
-                                </fieldset>
-                            <?php endif; ?>
-                        <?php endforeach; ?>
+                        <div class="hfh-catalog__filters-fieldsets">
+                            <?php foreach ($filters as $filter) : ?>
+                                <?php if ($filter->options) : ?>
+                                    <fieldset class="hfh-catalog__filter">
+                                        <legend class="hfh-catalog__filter-legend"><?= esc_html($filter->name); ?></legend>
+                                        <div class="hfh-catalog__filter-options">
+                                            <?php foreach ($filter->options as $option) :
+                                                $id = 'hfh-catalog-option-' . $option->id;
+                                                $checked = in_array($option->slug, $selection[$filter->slug] ?? [], true);
+                                            ?>
+                                                <div class="hfh-catalog__filter-option">
+                                                    <input type="checkbox" class="hfh-catalog__checkbox"
+                                                        id="<?= esc_attr($id); ?>"
+                                                        name="<?= esc_attr($frontend->filter_param($filter->slug)); ?>[]"
+                                                        value="<?= esc_attr($option->slug); ?>"
+                                                        <?php checked($checked); ?>>
+                                                    <label class="hfh-catalog__checkbox-label" for="<?= esc_attr($id); ?>">
+                                                        <?= esc_html($option->name); ?>
+                                                    </label>
+                                                </div>
+                                            <?php endforeach; ?>
+                                        </div>
+                                    </fieldset>
+                                <?php endif; ?>
+                            <?php endforeach; ?>
+                        </div>
 
                         <input type="hidden" class="hfh-catalog__view-input"
                             name="<?= esc_attr(Frontend::VIEW_PARAM); ?>"
