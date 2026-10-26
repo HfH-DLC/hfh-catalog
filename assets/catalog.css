@@ -514,6 +514,7 @@
   font-size: 1.5rem;
   line-height: 2rem;
   transition: color 0.25s ease 0s;
+  word-break: break-word;
 }
 
 .hfh-catalog__list--list .hfh-catalog__card:hover .hfh-catalog__title,
